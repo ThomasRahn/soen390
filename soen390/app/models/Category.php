@@ -2,9 +2,9 @@
 
 class Category extends Eloquent{
 
-	protected $table = "Categroy";
+	protected $table = "Category";
 	public $timestamps = false;
-	
+ public static $key = 'CategoryID';	
 	
 
 }

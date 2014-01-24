@@ -8,9 +8,9 @@ class Comment extends Eloquent{
 	public $timestamps = false;
 
 	public function narrative(){
-		return $this->belongsTo("Narrative", "NarrativeID");
+		return $this->belongsTo("Narrative", "NarrativeID","NarrativeID");
 	}
 	public function comment(){
-		return $this->belongsTo("Comment", "CommentParentID");
+		return $this->belongsTo("Comment", "CommentParentID", "CommentParentID");
 	}
 }

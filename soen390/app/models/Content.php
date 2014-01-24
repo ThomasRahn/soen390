@@ -6,12 +6,12 @@ class Content extends Eloquent {
 	public $timestamps = false;
 	
 	public function narrative(){
-		return $this->belongsTo('Narrative', 'NarrativeID');
+		return $this->belongsTo('Narrative', 'NarrativeID', 'NarrativeID');
 	}
 	public function category(){
-		return $this->belongsTo('Category', 'CategoryID');
+		return $this->belongsTo('Category', 'CategoryID', 'CategoryID');
 	}
 	public function comment(){
-		return $this->belongsTo('Comment','CommentID');
+		return $this->belongsTo('Comment','CommentID', 'CommentID');
 	}
 }
