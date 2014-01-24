@@ -1,6 +1,6 @@
 <?php
 
-class NarrativeController extends \BaseController {
+class JSONController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -9,9 +9,7 @@ class NarrativeController extends \BaseController {
 	 */
 	public function index()
 	{
-		$narratives = Narrative::all();
-		return View::make("dashboard")
-			->with('narratives',$narratives);
+		//
 	}
 
 	/**
@@ -43,18 +41,19 @@ class NarrativeController extends \BaseController {
 	public function show($id)
 	{
 		$narrative = Narrative::where('NarrativeID',$id)->first();
-		return View::make("narrative")
-			->with("narrative",$narrative);
-	}
-
-	/**
-		Get JSON response for a particular narrative
-
-	*/
-	public function getNarrativeAjax($id)
-	{
-		$narrative = Narrative::where('NarrativeID',$id)->first();
-
+		$content = $narrative->content()->get();	
+		$audio_path = Config::get('narrativePath.paths.audio');
+                $picture_path = Config::get('narrativePath.paths.picture');
+		$narrative_paths = array();
+		foreach($content as $path){
+			$temp_audio = $audio_path . $path->AudioPath;
+			if($path->PicturePath != 0)
+				$temp_pic = $picture_path  . $path->PicturePath;
+			$narrative_paths[$path->ContentID] = 
+					array("title"=>$path->ContentID,"mp3"=>$temp_audio,
+						"poster"=>$temp_pic);
+		} 
+		return json_encode($narrative_paths);
 	}
 
 	/**

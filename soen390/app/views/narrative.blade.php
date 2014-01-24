@@ -3,39 +3,39 @@
 @section('content')
 
 <script type="text/javascript">
-var playlist;
+function printObject(o) {
+  var out = '';
+  for (var p in o) {
+    out += p + ': ' + o[p] + '\n';
+  }
+  alert(out);
+}
  $(document).ready(function(){
-	playlist = new jPlayerPlaylist({
-		jPlayer: "#jquery_jplayer_1",
-		cssSelectorAncestor: "#jp_container_1"
-		}, [
-		{
-			title:"Tswift",
-			mp3:"audio/Tswift.mp3",
-			poster: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQrkkouUIfWXRIRhKVKp5UN1cbR1U_gKgAr50TvvQpr4sFKUHm8"
-		},
-		{
-			title:"Breaking Ben",
-			mp3:"audio/untilTheEnd.mp3",
-			poster: "http://freefever.com/stock/latest-funny-jokes-for-kids-picture-of-a-funny-joke-kids-who-were.jpg",
-		}], {
-		swfPath: "jplayer/",
-		supplied: " mp3",
-		wmode: "window",
-		smoothPlayBar: true,
-		keyEnabled: true,
+	var cssSelector = {
+	        jPlayer: "#jquery_jplayer_1", 
+	        cssSelectorAncestor: "#jp_container_1"
+	};
+	var playlist = []; // Empty playlist
+	var options = {
+	        swfPath: "./js", 
+	        supplied: "mp3",
 		play: function(element){
-	         var current  = playlist.current, playlist1 = playlist.playlist;
-	       	 jQuery.each(playlist1, function (index, obj){
-	       		if (index == current){
-				$(".audio_poster").attr("src",obj.poster);
-	        	    } // if condition end
-	        	});
-		}
-	});
-
-
-	});
+			var current  = myPlaylist.current;	
+			var temp = myPlaylist.playlist;
+	                jQuery.each(temp, function (index, obj){
+	      	       	        if (index == current){
+        	     	       	     	$(".audio_poster").attr("src",obj.poster);
+	                	} // if condition end
+                 	});
+              	}
+	};
+	var myPlaylist = new jPlayerPlaylist(cssSelector, playlist, options);	
+	$.getJSON("/jsonNarrative/1",function(data){  // get the JSON array produced by my PHP
+	        $.each(data,function(index,value){
+	            myPlaylist.add(value); // add each element in data in myPlaylist
+	        })
+	    }); 
+});
 </script>
 
 <div id="jquery_jplayer_1" class="jp-jplayer"></div>
