@@ -1,10 +1,8 @@
-<html>
-<head></head>
-<body>
+@extends('master')
 
-{{ $narratives->first()->Name }}
-<br/>
-{{ $narratives->first()->category()->first()->Name }} 
-</body>
+@section('content')
 
-</html>
+
+ADD STUFF HERE FOR INDEX PAGE~!!!
+
+@stop
