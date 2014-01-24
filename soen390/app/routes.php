@@ -17,3 +17,4 @@ Route::get('/', function()
 });
 
 Route::get('/login', 'UserController@index');
+Route::get('/dashboard', 'NarrativeController@index' );
