@@ -9,7 +9,7 @@ class UserController extends \BaseController {
 	 */
 	public function index()
 	{
-		return View::make("login"); 
+		return View::make('login');
 	}
 
 	/**
