@@ -8,7 +8,7 @@ class AuthController extends BaseController{
 		echo $email . " " . $password;
 		if(Auth::attempt(array('email' => $email, 'password' => $password)))
 		{
-			return Redirect::intended('/dashboard');
+			return Redirect::intended('/admin');
 		}else
 		{
 			return View::make('/login')->with('msg', "Incorrect user name and password");
@@ -16,7 +16,7 @@ class AuthController extends BaseController{
 	}
 	public function getLogout(){
 		Auth::logout();
-		return Redirect::intended('');
+		return Redirect::intended('/login');
 	}
 
 }

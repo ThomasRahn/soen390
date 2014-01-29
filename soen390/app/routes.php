@@ -15,11 +15,20 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+Route::filter('auth',function()
+{
+        if(Auth::guest()){
+                return Redirect::guest('/login');
+        }
+});
 
 Route::get('/login', 'UserController@index');
-Route::get('/dashboard', 'NarrativeController@index' );
+
+Route::get('/admin', 'AdminController@index' );
+
 Route::resource('/narrative', 'NarrativeController@show');
 Route::post('/login', 'AuthController@postLogin');
 
 Route::get('/logout', 'AuthController@getLogout');
 Route::resource('/jsonNarrative','JSONController@show');
+
