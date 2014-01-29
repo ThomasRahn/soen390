@@ -2,28 +2,29 @@
 
 @section('content')
  <style>
-            body {
-                padding-top: 50px;
-                padding-bottom: 70px;
-            }
-            .navbar .progress {
-                background-color: #5a5a5a;
-            }
-            .jp-controls {
-                padding-left: 8px;
-            }
-            .jp-pause {
-                display: none;
-            }
-            .jp-playlist-current {
-                font-weight: 600;
-            }
+    body {
+        padding-top: 50px;
+        padding-bottom: 70px;
+        min-width: 1000px;
+    }
+    .navbar .progress {
+        background-color: #5a5a5a;
+    }
+    .jp-controls {
+        padding-left: 8px;
+    }
+    .jp-pause {
+        display: none;
+    }
+    .jp-playlist-current {
+        font-weight: 600;
+    }
 
-            #uploadModal {
-                padding-top: 50px;
-                background: rgba(255,255,255,0.3);
-            }
-        </style>
+    #uploadModal {
+        padding-top: 50px;
+        background: rgba(255,255,255,0.3);
+    }
+</style>
 
 <script type="text/javascript">
 function printObject(o) {
@@ -60,18 +61,26 @@ function printObject(o) {
         },
   	  	timeupdate: function(event) {
             var progress = event.jPlayer.status.currentPercentAbsolute;
-          //  $('#prog_'+myPlaylist.current).css('width', (progress + '%'));
-           // $('#container_'+myPlaylist.current).css('width', ((100-progress) + '%'));
+
             var current_time = 0;
             for(var i = 0; i < myPlaylist.current; i++){
                 current_time += durations[i]
             }
-            current_time += progress * (durations[myPlaylist.current] / 100);
 
+            current_time += progress * (durations[myPlaylist.current] / 100);
+            $("#jp-current").html(current_time.toFixed(0));
             current_perc = (current_time / total_duration)*100;
             current_perc = (current_perc/100) * parseInt($(".personal_prog_bar").css("width"));
             $(".temp_progress").css("width", current_perc+"px");
+
+
             //$('.jp-progress').css('width', (progress + '%'));
+        },
+        ended: function(event){
+            if(durations.length-1 == myPlaylist.current){
+                myPlaylist.play(0);
+                myPlaylist.pause();
+            }
         },
         pause: function(event) {
            	$('.jp-play').show();
@@ -90,33 +99,20 @@ function printObject(o) {
                 durations.push(parseFloat(value.duration));
 	            myPlaylist.add(value); // add each element in data in myPlaylist
 	        }); 
+            $("#jp-total").html(total_duration.toFixed(0));
             var len = durations.length;
             $.each(durations, function(index,value){
                     var element = $(".clone").clone();
-                 //   var container = element.find(".progress_clone");
-                  //  var progress = element.find(".temp");
 
                     element.removeClass("clone");
-                  //  container.removeClass("progress_clone");
-                   // progress.removeClass("temp");
-
                     element.addClass("pull-left");
-                    //container.addClass("pull-left");
-                    //progress.addClass("pull-left");
-
+                   
 
                     percentage = (value / total_duration) * 100;
                     element.css("width", (percentage)+"%");
-                   // container.css("width","100%");
-                   // progress.css("width","0%");
-
+                   
                     element.css("border", "solid black 1px");
                     element.css("display","block");
-                    //container.css("display","block");
-                    //progress.css("display","block");
-                    
-                    //container.attr("id", "container_"+index);
-                    //progress.attr("id", "prog_"+index);
                     element.data("jpp-index",index);
                     $(".personal_prog_bar").append(element);
             });
@@ -151,19 +147,12 @@ function printObject(o) {
             if(!done){
                 if(total_time >= value){
                     total_time -= value;
-           //         $("#container_"+index).css("width","0%");
-        //        $("#prog_"+index).css("width","100%");
                 }else{
                     remaning_time = 100-(((value - total_time) / value) * 100);
-            //        $("#container_"+index).css("width",remaning_time+"%");
-             //       $("#prog_"+index).css("width",(100-remaning_time)+"%");
                     myPlaylist.play(index);
                     done = true;   
                 }
-            }else{//
-          //      $("#container_"+index).css("width","100%");
-           //     $("#prog_"+index).css("width","0%");
-            }   
+            } 
         });
 
        
@@ -177,58 +166,6 @@ function printObject(o) {
 
 </script>
 <img class="audio_poster" height="500px" width="500px" src=""/>
-<!-- 
-<div id="jquery_jplayer_1" class="jp-jplayer"></div>
-		
-		<div id="jp_container_1" class="jp-audio">
-		    <div class="jp-type-playlist">
-			<div id="jquery_jplayer_N" class="jp-jplayer"></div>
-
-		        <div class="jp-gui jp-interface">
-				<div class="jp-title">
-							<ul>
-								<li></li>
-							</ul>
-						</div>
-
-		            <ul class="jp-controls">
-		                <li><a href="javascript:;" class="jp-previous" tabindex="1">Previous</a></li>
-		                <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-		                <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
-		                <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
-		                <li><a href="javascript:;" class="jp-next" tabindex="1">next</a></li>
-		                <li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
-		                <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
-		                <li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
-		            </ul>
-		            
-		            
-		            <div class="jp-progress">
-		                <div class="jp-seek-bar">
-		                    <div class="jp-play-bar"></div>
-		                </div>
-		            </div>
-		            <div class="jp-volume-bar">
-		                <div class="jp-volume-bar-value"></div>
-		            </div>
-		            <div class="jp-current-time"></div>
-		            <div class="jp-duration"></div>                   
-		        </div>
-			<div class="jp-playlist">
-					<ul>
-						<li></li>
-					</ul>
-				</div>
-
-		        <div class="jp-title">
-		            <ul>
-		                <li>T Swift BABY!!!!</li>
-		            </ul>
-		        </div>
-		    </div>
-		</div>
-	-->
-
    <!-- Playlist -->
         <div id="jp-container" class="container pull-right" style="right:0px; width:200px;">
             <section class="jp-playlist">
@@ -257,28 +194,22 @@ function printObject(o) {
                     </li>
                 </ul>
 
-                <div class="nav navbar-text" style="width:100px;">
+                <div class="nav navbar-text" style="width:110px;">
                     <i id="spinner" class="fa fa-spinner fa-spin" style="display:none"></i>
                     <span class="jp-title">Play something.</span>
                 </div>
-
+                
+                <div class="nav navbar-text" style="width:20px;">
+                    <span id="jp-current"></span>
+                </div>
                 <div class="nav navbar-text personal_prog_bar progress" style="width:600px;background-color:#5a5a5a;height:30px;">
-                    
-                      <!--  <div class="progress-bar progress-bar-warning jp-progress temp" style="width:0%"></div>
-                        <div class="jp-progress jp-load-progress progress_clone" style="width:0%"></div>-->
                     
                     <div class="temp_progress" style="width:0%;background-color:lime;z-index:0;height:30px;position:absolute;"></div>
                     <div class="progress_container clone" style="display:none;height:30px;z-index:5;position:relative;"></div>
                 </div>
                    
-            <!--
-                    <div class="nav navbar-text progress" style="width:400px;margin-bottom:-10px;">
-                        <div class="progress-bar progress-bar-warning jp-progress" style="width:0%"></div>
-                        <div class="progress-bar jp-load-progress" style="width:0%"></div>
-                    </div>
-                -->
                 <div class="nav navbar-text">
-                    <span id="jp-msg"></span>
+                    <span id="jp-total"></span>
                 </div>
 
             </div>
