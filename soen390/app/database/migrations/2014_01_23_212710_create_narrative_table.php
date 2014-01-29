@@ -15,11 +15,11 @@ class CreateNarrativeTable extends Migration {
 		{
 			$table->increments('NarrativeID');
 			$table->integer('CategoryID');
+			$table->integer('FlagID');
 			$table->integer('LanguageID');
 			$table->timestamp('DateCreated');
 			$table->timestamp('DateModified')->nullable();
 			$table->string('Name', 30)->nullable();
-			$table->integer('Flags')->default(0);
 			$table->integer('Views')->default(0);
 			$table->integer('Agrees')->default(0);
 			$table->integer('Disagrees')->default(0);
