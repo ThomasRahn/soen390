@@ -51,7 +51,7 @@ class JSONController extends \BaseController {
 				$temp_pic = $picture_path  . $path->PicturePath;
 			$narrative_paths[$path->ContentID] = 
 					array("title"=>$path->ContentID,"mp3"=>$temp_audio,
-						"poster"=>$temp_pic);
+						"poster"=>$temp_pic, "duration"=>$path->duration);
 		} 
 		return json_encode($narrative_paths);
 	}

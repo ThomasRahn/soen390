@@ -1,4 +1,4 @@
-@extend('master')
+@extends('master')
 
 @section('content')
 
@@ -8,7 +8,7 @@
 	    	<h3 class="panel-title">Login</h3>
 	  	</div>
 	  	<div class="panel-body">
-				<form class="form-horizontal" role="form">
+				<form class="form-horizontal" method="POST">
 			  		<div class="form-group">
 			    		<label for="email" class="col-sm-2 control-label">Email</label>
 			    		<div class="col-sm-10">

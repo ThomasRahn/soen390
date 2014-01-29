@@ -19,6 +19,7 @@ Route::get('/', function()
 Route::get('/login', 'UserController@index');
 Route::get('/dashboard', 'NarrativeController@index' );
 Route::resource('/narrative', 'NarrativeController@show');
-Route::post('/', 'AuthController@postLogin');
+Route::post('/login', 'AuthController@postLogin');
+
 Route::get('/logout', 'AuthController@getLogout');
 Route::resource('/jsonNarrative','JSONController@show');
