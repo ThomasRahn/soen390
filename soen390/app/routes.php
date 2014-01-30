@@ -13,7 +13,7 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return View::make('cards/listing');
 });
 Route::filter('auth',function()
 {
@@ -21,6 +21,18 @@ Route::filter('auth',function()
                 return Redirect::guest('/login');
         }
 });
+
+// Routes for JSON API.
+Route::group(
+  array(
+    'prefix' => 'api'
+  ),
+  function() {
+
+    Route::resource('narrative', 'ApiNarrativeController');
+
+  }
+);
 
 Route::get('/login', 'UserController@index');
 
