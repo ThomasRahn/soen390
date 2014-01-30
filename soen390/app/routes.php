@@ -15,12 +15,6 @@ Route::get('/', function()
 {
 	return View::make('cards/listing');
 });
-Route::filter('auth',function()
-{
-        if(Auth::guest()){
-                return Redirect::guest('/login');
-        }
-});
 
 // Routes for JSON API.
 Route::group(
@@ -36,11 +30,13 @@ Route::group(
 
 Route::get('/login', 'UserController@index');
 
-Route::get('/admin', 'AdminController@index' );
 
 Route::resource('/narrative', 'NarrativeController@show');
 Route::post('/login', 'AuthController@postLogin');
 
 Route::get('/logout', 'AuthController@getLogout');
 Route::resource('/jsonNarrative','JSONController@show');
+Route::get('/admin/upload','UploadNarrativeController@index');
+Route::post('/admin/upload/store','UploadNarrativeController@store');
+Route::get('/admin','AdminController@index');
 

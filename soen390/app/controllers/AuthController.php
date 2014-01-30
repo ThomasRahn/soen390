@@ -7,7 +7,7 @@ class AuthController extends BaseController{
 		$password = Input::get('password');
 		if(Auth::attempt(array('email' => $email, 'password' => $password)))
 		{
-			return Redirect::intended('/admin');
+			return Redirect::to('/admin');
 		}else
 		{
 			return View::make('/login')->with('msg', "Incorrect user name and password");
