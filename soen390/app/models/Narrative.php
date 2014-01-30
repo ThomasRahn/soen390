@@ -17,12 +17,12 @@ class Narrative extends Eloquent{
 	}
 	public static function transcode(){
 
-		return Queue::push(function($job) use(){
+		return Queue::push(function($job){
 
 			// add transcoding stuff here
 
 
-		}
+		});
 
 	}
 
