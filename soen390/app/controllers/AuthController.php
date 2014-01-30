@@ -5,7 +5,6 @@ class AuthController extends BaseController{
 	public function postLogin(){
 		$email = Input::get('email');
 		$password = Input::get('password');
-		echo $email . " " . $password;
 		if(Auth::attempt(array('email' => $email, 'password' => $password)))
 		{
 			return Redirect::intended('/admin');
