@@ -15,9 +15,14 @@ class ApiNarrativeController extends \BaseController {
 		foreach ($narratives as $narrative) {
 			$formattedNarratives[] = array(
 					'id' => $narrative->NarrativeID,
-					'start_year' => $narrative->category()->first()->Name,
-					'image_link' => asset('pictures/' . $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first()->PicturePath),
-					'language' => $narrative->langauge()->first()->Description,
+					'stance' => $narrative->category()->first()->Name,
+					'lang' => $narrative->langauge()->first()->Description,
+					'views' => $narrative->Views,
+					'yays' => $narrative->Agrees,
+					'nays' => $narrative->Disagrees,
+					'mehs' => $narrative->Indifferents,
+					'createdAt' => $narrative->DateCreated,
+					'imageLink' => asset('pictures/' . $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first()->PicturePath),
 				);
 		}
 
