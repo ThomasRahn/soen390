@@ -9,7 +9,9 @@ class UploadNarrativeController extends \BaseController {
 	 */
 	public function index()
 	{
-		return View::make("admin/upload");
+		$category = Category::all();		
+		return View::make("admin/upload")
+			->with('category',$category);
 	}
 
 	/**
@@ -30,7 +32,10 @@ class UploadNarrativeController extends \BaseController {
 	public function store()
 	{
 		$file = Input::file('narrative');
-		
+		$category = Input::get('category');
+		$datetime = new DateTime();		
+
+	
 		$destination = "/home/r_thomas/narratives/test/";
                 $zip = new ZipArchive();
 
@@ -42,15 +47,24 @@ class UploadNarrativeController extends \BaseController {
                         $zip->extractTo($destination);
                         $zip->close();
                 }
-
-		//get information from XML file
-
+		unlink($destination . $filename);	
+		$directories = scandir($destination);
+		for($i = 2; $i< count($directories); $i++){
+			foreach(scandir($destination . $directories[$i]) as $name) {
+			    if(substr($name,-4) == ".xml"){
+				    $xml_file = file_get_contents($destination . $directories[$i] ."/". $name, FILE_TEXT);
+		        	    $xmlcont = new SimpleXMLElement($xml_file);
+				    $language = DB::table('Language')->where("Description","like",$xmlcont->language)->first();
+				    $narrative = Narrative::create(array('Name'=>$xmlcont->narrativeName, 'CategoryID'=>$category, 'LanguageID'=>$language->LanguageID, 'DateCreated'=>$datetime));
+			    }
+			 } 
+		}
 		//Transcode mp3 files and change names
-
-		
-		return View::make("admin/upload")
-				->with("msg", "got it");	
-			
+		$category = Category::all();
+                return View::make("admin/upload")
+                        ->with('category',$category);
+	
+	
 	}
 	/**
 	 * Display the specified resource.

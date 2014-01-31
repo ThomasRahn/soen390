@@ -3,7 +3,7 @@
 class Narrative extends Eloquent{
 	
 	protected $table = "Narrative";
-
+	public static $unguarded = true;
 	public $timestamps = false;
 
 	public function category(){

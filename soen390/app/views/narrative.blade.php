@@ -204,7 +204,7 @@ function printObject(o) {
                 </div>
                 <div class="nav navbar-text personal_prog_bar progress" style="width:600px;background-color:#5a5a5a;height:30px;">
                     
-                    <div class="temp_progress" style="width:0%;background-color:lime;z-index:0;height:30px;position:absolute;"></div>
+                    <div class="temp_progress" style="width:0%;background-color:lime;z-index:0;height:30px;position:absolute;transition-duration: 0.6s;"></div>
                     <div class="progress_container clone" style="display:none;height:30px;z-index:5;position:relative;"></div>
                 </div>
                    

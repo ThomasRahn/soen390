@@ -23,8 +23,15 @@
       		{{ Form::open(array('url' => 'admin/upload/store', "method" => "POST",'files'=>true)) }}
       			{{ Form::label('narrative', 'Narrative'); }}
     			{{ Form::file('narrative'); }}
-
+			<br/>
+			{{ Form::label('category','Category'); }}
+			<select name="category">
+				@foreach ($category as $cat)
+					<option value="{{ $cat->CategoryID }}"> {{ $cat->Name }}</option>
+				@endforeach
+			</select>
     			<br/>
+			<br/>
     			{{ Form::submit('Upload'); }}
 		{{ Form::close() }}
       </div>
