@@ -13,6 +13,8 @@ class ApiNarrativeController extends \BaseController {
 		$formattedNarratives = array();
 
 		foreach ($narratives as $narrative) {
+			$narrativePhoto = $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first();
+
 			$formattedNarratives[] = array(
 					'id' => $narrative->NarrativeID,
 					'stance' => $narrative->category()->first()->Name,
@@ -22,7 +24,7 @@ class ApiNarrativeController extends \BaseController {
 					'nays' => $narrative->Disagrees,
 					'mehs' => $narrative->Indifferents,
 					'createdAt' => $narrative->DateCreated,
-					'imageLink' => asset('pictures/' . $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first()->PicturePath),
+					'imageLink' => isset($narrativePhoto) ? asset('pictures/' . $narrativePhoto->PicturePath) : asset('img/default_narrative.jpg'),
 				);
 		}
 
