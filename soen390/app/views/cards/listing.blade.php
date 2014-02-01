@@ -26,13 +26,6 @@
                 -webkit-text-stroke: 0.2px;
                 text-stroke: 0.2px;
             }
-            #filter-nav {
-                transition-duration: 0.5s;
-                opacity: 0.5;
-            }
-            #filter-nav:hover {
-                opacity: 1;
-            }
             #filter-nav button {
                 text-transform: uppercase;
                 font-weight: 300;
@@ -66,14 +59,14 @@
 
             <nav id="filter-nav" class="row">
                 <div class="col-sm-6">
-                    <div class="btn-group btn-group-xs lang-btn-group">
+                    <div class="btn-group btn-group-sm lang-btn-group">
                         <button type="button" class="btn btn-default" data-lang="en"><img src="img/gb.png"></button>
                         <button type="button" class="btn btn-default" data-lang="fr"><img src="img/fr.png"></button>
                     </div>
 
-                    <button type="button" class="btn btn-xs btn-default stance-btn"><i class="fa fa-thumbs-up"></i> <span class="stance">Stance</span> <i class="fa fa-thumbs-down"></i></button>
+                    <button type="button" class="btn btn-sm btn-default stance-btn"><i class="fa fa-thumbs-up"></i> <span class="stance">Stance</span> <i class="fa fa-thumbs-down"></i></button>
 
-                    <button type="button" class="btn btn-xs btn-default popularity-btn"><i class="fa fa-signal"></i> <span class="popularity">Popularity</span></button>
+                    <button type="button" class="btn btn-sm btn-default popularity-btn"><i class="fa fa-signal"></i> <span class="popularity">Popularity</span></button>
                 </div>
             </nav>
         </div>
