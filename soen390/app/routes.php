@@ -13,6 +13,30 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return View::make('cards/listing');
 });
-Route::get('/dashboard', 'NarrativeController@index' );
+
+// Routes for JSON API.
+Route::group(
+  array(
+    'prefix' => 'api'
+  ),
+  function() {
+
+    Route::resource('narrative', 'ApiNarrativeController');
+
+  }
+);
+
+Route::get('/login', 'UserController@index');
+
+
+Route::resource('/narrative', 'NarrativeController@show');
+Route::post('/login', 'AuthController@postLogin');
+
+Route::get('/logout', 'AuthController@getLogout');
+Route::resource('/jsonNarrative','JSONController@show');
+Route::get('/admin/upload','UploadNarrativeController@index');
+Route::post('/admin/upload/store','UploadNarrativeController@store');
+Route::get('/admin','AdminController@index');
+

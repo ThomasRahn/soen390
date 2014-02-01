@@ -19,10 +19,10 @@ class CreateNarrativeTable extends Migration {
 			$table->timestamp('DateCreated');
 			$table->timestamp('DateModified')->nullable();
 			$table->string('Name', 30)->nullable();
-			$table->integer('Flags');
-			$table->integer('Views');
-			$table->integer('Agrees');
-			$table->integer('Disagrees');
+			$table->integer('Views')->default(0);
+			$table->integer('Agrees')->default(0);
+			$table->integer('Disagrees')->default(0);
+			$table->integer('Indifferents')->default(0);
 		});
 	}
 

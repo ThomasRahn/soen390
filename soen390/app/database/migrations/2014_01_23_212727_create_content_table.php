@@ -19,6 +19,7 @@ class CreateContentTable extends Migration {
 			$table->integer('CommentID')->nullable();
 			$table->string('AudioPath', 100)->nullable();
 			$table->string('PicturePath', 100)->nullable();
+			$table->float('Duration')->nullable();
 		});
 	}
 

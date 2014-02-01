@@ -1,0 +1,31 @@
+h1 {
+        text-shadow: 3px 5px 7px #C0C0C0;
+}
+
+.mainContainer {
+        perspective: 750px;
+        -webkit-perspective: 750px;
+}
+
+.images.active {
+        transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
+}
+
+.images {
+        transition: all 0.7s;
+        -webkit-transition: all 0.7s;
+}
+
+/*.images {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+}*/
+
+.cards.back {
+        background-color: #aaa;
+        color: white;
+        transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
+        text-align: center;
+}

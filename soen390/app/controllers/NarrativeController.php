@@ -42,7 +42,19 @@ class NarrativeController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		$narrative = Narrative::where('NarrativeID',$id)->first();
+		return View::make("narrative")
+			->with("narrative",$narrative);
+	}
+
+	/**
+		Get JSON response for a particular narrative
+
+	*/
+	public function getNarrativeAjax($id)
+	{
+		$narrative = Narrative::where('NarrativeID',$id)->first();
+
 	}
 
 	/**
