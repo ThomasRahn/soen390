@@ -37,6 +37,25 @@
                 text-transform: uppercase;
                 font-weight: 300;
             }
+            #stance-heading {
+                display: none;
+            }
+            #stance-heading span {
+                position: absolute;
+                margin-top: 20px;
+                font-size: 32px;
+                -webkit-text-stroke: 0.2px;
+                text-stroke: 0.2px;
+            }
+            #yay-stance-heading {
+                left: 33%;
+            }
+            #meh-stance-heading {
+                left: 50%;
+            }
+            #nay-stance-heading {
+                left: 67%;
+            }
         </style>
     </head>
     <body>
@@ -60,6 +79,11 @@
         </div>
 
         <section id="cards-container">
+		<div id="stance-heading">
+			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-smile-o"></i></span>
+			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-meh-o"></i></span>
+			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-frown-o"></i></span>
+		</div>
         </section>
 
         <div class="container">
@@ -139,6 +163,11 @@
                      });
 
                 force.start();
+
+                if (enableSort)
+                    $('#stance-heading').css('display', 'block');
+                else
+                    $('#stance-heading').css('display', 'none');
             }
 
             /**
