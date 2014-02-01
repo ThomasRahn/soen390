@@ -13,15 +13,18 @@ class ApiNarrativeController extends \BaseController {
 		$formattedNarratives = array();
 		$picture_path = Config::get('narrativePath.paths.picture');
 		foreach ($narratives as $narrative) {
-			foreach($narrative->content() as $content){
-				dd($content);
-			}
+			$narrativePhoto = $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first();
 
 			$formattedNarratives[] = array(
 					'id' => $narrative->NarrativeID,
-					'start_year' => $narrative->category()->first()->Name,
-					'image_link' => $picture_path,
-					'language' => $narrative->langauge()->first()->Description,
+					'stance' => $narrative->category()->first()->Name,
+					'lang' => $narrative->langauge()->first()->Description,
+					'views' => $narrative->Views,
+					'yays' => $narrative->Agrees,
+					'nays' => $narrative->Disagrees,
+					'mehs' => $narrative->Indifferents,
+					'createdAt' => $narrative->DateCreated,
+					'imageLink' => isset($narrativePhoto) ? asset('pictures/' . $narrativePhoto->PicturePath) : asset('img/default_narrative.jpg'),
 				);
 		}
 
