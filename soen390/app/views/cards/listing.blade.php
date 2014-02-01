@@ -204,6 +204,10 @@
                 // Show cards
                 initializeCards();
 
+                $('input, button').focus(function() {
+                    this.blur();
+                });
+
                 /**
                  * Handle button click for language filter.
                  */
