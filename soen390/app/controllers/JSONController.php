@@ -40,7 +40,7 @@ class JSONController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		$narrative = Narrative::where('NarrativeID',$id)->first();
+		$narrative = Narrative::where('NarrativeID','=',$id)->first();
 		$content = $narrative->content()->get();	
 		$audio_path = Config::get('narrativePath.paths.audio');
                 $picture_path = Config::get('narrativePath.paths.picture');
