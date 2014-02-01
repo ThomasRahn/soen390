@@ -68,7 +68,16 @@ function printObject(o) {
             }
 
             current_time += progress * (durations[myPlaylist.current] / 100);
-            $("#jp-current").html(current_time.toFixed(0));
+	    var minutes = Math.floor((parseInt(current_time) / 60));
+                if(minutes < 10)
+                        minutues =  "0"+minutes;
+            var seconds = current_time.toFixed(0) % 60;
+                if(seconds < 10)
+                        seconds = "0"+seconds;
+
+            var current_str = minutes + ":" + seconds;
+
+            $("#jp-current").html(current_str);
             current_perc = (current_time / total_duration)*100;
             current_perc = (current_perc/100) * parseInt($(".personal_prog_bar").css("width"));
             $(".temp_progress").css("width", current_perc+"px");
@@ -83,14 +92,14 @@ function printObject(o) {
             }
         },
         pause: function(event) {
-           	$('.jp-play').show();
-            $('.jp-pause').hide();
+           $('.jp-play').show();
+           $('.jp-pause').hide();
         }
 
 
 	};
 	var myPlaylist = new jPlayerPlaylist(cssSelector, playlist, options);	
-	$.getJSON("/jsonNarrative/1",function(data){  // get the JSON array produced by my PHP
+	$.getJSON("/jsonNarrative/ {{ $narrative->NarrativeID}}",function(data){  // get the JSON array produced by my PHP
 	        $.each(data,function(index,value){
 	        	if(index == 1){
 	        		$(".audio_poster").attr("src", value.poster);
@@ -98,8 +107,16 @@ function printObject(o) {
                 total_duration += parseFloat(value.duration);
                 durations.push(parseFloat(value.duration));
 	            myPlaylist.add(value); // add each element in data in myPlaylist
-	        }); 
-            $("#jp-total").html(total_duration.toFixed(0));
+	        });
+	    var minutes = Math.floor((parseInt(total_duration) / 60));
+		if(minutes < 10)
+			minutues =  "0"+minutes; 
+	    var seconds = total_duration.toFixed(0) % 60;
+		if(seconds < 10)
+			seconds = "0"+seconds;
+
+	    var total_str = minutes + ":" + seconds;
+            $("#jp-total").html(total_str);
             var len = durations.length;
             $.each(durations, function(index,value){
                     var element = $(".clone").clone();
