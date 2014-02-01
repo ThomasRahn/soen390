@@ -11,12 +11,16 @@ class ApiNarrativeController extends \BaseController {
 	{
 		$narratives = Narrative::all();
 		$formattedNarratives = array();
-
+		$picture_path = Config::get('narrativePath.paths.picture');
 		foreach ($narratives as $narrative) {
+			foreach($narrative->content() as $content){
+				dd($content);
+			}
+
 			$formattedNarratives[] = array(
 					'id' => $narrative->NarrativeID,
 					'start_year' => $narrative->category()->first()->Name,
-					'image_link' => asset('pictures/' . $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first()->PicturePath),
+					'image_link' => $picture_path,
 					'language' => $narrative->langauge()->first()->Description,
 				);
 		}
