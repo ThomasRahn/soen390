@@ -101,6 +101,7 @@
         <script>
             var currentLanguage = '',
                 narrativeSource = '/api/narrative',
+                konamiMode      = false,
                 stanceGravityCenters  = {
                     'yay': { x: (width / 3), y: (height / 2) },
                     'meh': { x: (width / 2), y: (height / 2) },
@@ -258,7 +259,17 @@
                 });
 
                 // Handle Konami code.
-                var konami = new Konami(function() {document.getElementById('konami').src = 'http://momspaghetti.ytmnd.com/'});
+                var konami = new Konami(function() {
+                    if (konamiMode) {
+                        document.getElementById('konami').src = 'about:blank';
+                        $('.spaghetti').html(dictionary[currentLanguage].spaghetti);
+                        konamiMode = false;
+                    } else {
+                        document.getElementById('konami').src = 'http://momspaghetti.ytmnd.com/';
+                        $('.spaghetti').html(dictionary[currentLanguage].momSpaghetti);
+                        konamiMode = true;
+                    }
+                });
 
             });
         </script>
