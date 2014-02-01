@@ -11,7 +11,7 @@ class ApiNarrativeController extends \BaseController {
 	{
 		$narratives = Narrative::all();
 		$formattedNarratives = array();
-
+		$picture_path = Config::get('narrativePath.paths.picture');
 		foreach ($narratives as $narrative) {
 			$narrativePhoto = $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first();
 
