@@ -28,7 +28,7 @@ class CreateFlagTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::dropIfExists('Flag');
 	}
 
 }

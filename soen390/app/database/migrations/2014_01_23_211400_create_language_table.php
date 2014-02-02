@@ -25,7 +25,7 @@ class CreateLanguageTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::dropIfExists('Language');
 	}
 
 }
