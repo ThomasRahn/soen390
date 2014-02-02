@@ -33,7 +33,7 @@ class CreateNarrativeTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::dropIfExists('Narrative');
 	}
 
 }

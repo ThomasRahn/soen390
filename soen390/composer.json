@@ -8,6 +8,12 @@
 		"rafasamp/sonus": "dev-master",
 		"iron-io/iron_mq": "dev-master"
 	},
+	"require-dev": {
+		"pdepend/pdepend": "*",
+		"phploc/phploc": "*",
+		"phpunit/phpunit": "*",
+		"satooshi/php-coveralls": "*"
+	},
 	"autoload": {
 		"classmap": [
 			"app/commands",

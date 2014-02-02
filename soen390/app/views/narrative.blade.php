@@ -68,7 +68,7 @@ function printObject(o) {
             }
 
             current_time += progress * (durations[myPlaylist.current] / 100);
-	    var minutes = Math.floor((parseInt(current_time) / 60));
+	       var minutes = Math.floor((parseInt(current_time) / 60));
                 if(minutes < 10)
                         minutues =  "0"+minutes;
             var seconds = current_time.toFixed(0) % 60;
@@ -86,9 +86,11 @@ function printObject(o) {
             //$('.jp-progress').css('width', (progress + '%'));
         },
         ended: function(event){
-            if(durations.length-1 == myPlaylist.current){
+            var progress_bar = parseInt($(".personal_prog_bar").css("width"));
+            var total = parseInt($(".temp_progress").css("width"));
+            if( total > (progress_bar * 0.95)){
                 myPlaylist.play(0);
-                myPlaylist.pause();
+                myPlaylist.pause();     
             }
         },
         pause: function(event) {
