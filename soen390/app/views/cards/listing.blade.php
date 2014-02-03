@@ -41,13 +41,13 @@
                 text-stroke: 0.2px;
             }
             #yay-stance-heading {
-                left: 33%;
+                left: 25%;
             }
             #meh-stance-heading {
                 left: 50%;
             }
             #nay-stance-heading {
-                left: 67%;
+                left: 75%;
             }
         </style>
     </head>
@@ -96,9 +96,9 @@
                 narrativeSource = '/api/narrative',
                 konamiMode      = false,
                 stanceGravityCenters  = {
-                    'yay': { x: (width / 3), y: (height / 2) },
+                    'yay': { x: (width / 4), y: (height / 2) },
                     'meh': { x: (width / 2), y: (height / 2) },
-                    'nay': { x: (2 * (width / 3)), y: (height / 2) }
+                    'nay': { x: (3 * (width / 4)), y: (height / 2) }
                 };
 
             /**
