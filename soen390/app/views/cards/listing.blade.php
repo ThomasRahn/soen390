@@ -5,24 +5,24 @@
         <title>You Deliberate</title>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Crete+Round|Lato:300,400">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Lato:300,400">
         <style>
             body {
                 padding-bottom: 70px;
-                font-family: "Lato", "Helvetica Neue", Helvetica, sans-serif;
+                font-family: Lato, "Helvetica Neue", Helvetica, sans-serif;
                 font-weight: 400;
             }
             header {
-                border-bottom: 1px solid #ccc;
+                border-bottom: 1px solid #e5e5e5;
                 margin-bottom: 20px;
             }
             h1.brand {
-                font-family: "Crete Round", "Garamond", "Times New Roman", serif;
+                font-family: Cinzel, Garamond, "Times New Roman", serif;
                 font-weight: 400;
                 text-transform: uppercase;
                 letter-spacing: 5px;
                 padding-bottom: 10px;
-                color: #b5b5b5;
+                color: #ccc;
                 -webkit-text-stroke: 0.2px;
                 text-stroke: 0.2px;
             }
