@@ -98,7 +98,7 @@
                 stanceGravityCenters  = {
                     'yay': { x: (width / 4), y: (height / 2) },
                     'meh': { x: (width / 2), y: (height / 2) },
-                    'nay': { x: (3 * (width / 4)), y: (height / 2) }
+                    'nay': { x: (2.83 * (width / 4)), y: (height / 2) }
                 };
 
             /**
