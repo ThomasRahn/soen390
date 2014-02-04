@@ -131,7 +131,7 @@
              */
             function setLanguageFilter(langCode) {
                 rectangles.transition()
-                          .duration(750)
+                          .duration(500)
                           .style('opacity', function(node) {
                               return (langCode === null || langCode === node.lang) ? 1 : 0.2;
                           });
