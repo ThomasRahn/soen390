@@ -81,7 +81,7 @@
 
         <div class="container">
             <footer class="navbar navbar-fixed-bottom">
-                <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <span class="spaghetti">Arm Spaghetti</span> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
+                <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <a class="text-muted" href="mailto:support@youdeliberate.org" title="Email us for support."><i class="fa fa-envelope-o"></i></a> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
             </footer>
         </div>
 
