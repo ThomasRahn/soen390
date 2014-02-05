@@ -14,10 +14,7 @@ class CreateCategoryTable extends Migration {
 		Schema::create('Category', function($table)
 		{
 			$table->increments('CategoryID');
-			$table->timestamp('DateCreated');
-			$table->timestamp('DateModified')->nullable();
-			$table->string('Name', 50)->nullable();
-			$table->string('Description', 100);
+			$table->string('Description', 20);
 		});
 	}
 

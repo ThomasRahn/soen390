@@ -15,7 +15,7 @@ class CreateContentTable extends Migration {
 		{
 			$table->increments('ContentID');
 			$table->integer('NarrativeID')->nullable();
-			$table->integer('CategoryID')->nullable();
+			$table->integer('TopicID')->nullable();
 			$table->integer('CommentID')->nullable();
 			$table->string('AudioPath', 100)->nullable();
 			$table->string('PicturePath', 100)->nullable();
