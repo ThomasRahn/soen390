@@ -68,7 +68,16 @@ function printObject(o) {
             }
 
             current_time += progress * (durations[myPlaylist.current] / 100);
-            $("#jp-current").html(current_time.toFixed(0));
+	       var minutes = Math.floor((parseInt(current_time) / 60));
+                if(minutes < 10)
+                        minutues =  "0"+minutes;
+            var seconds = current_time.toFixed(0) % 60;
+                if(seconds < 10)
+                        seconds = "0"+seconds;
+
+            var current_str = minutes + ":" + seconds;
+
+            $("#jp-current").html(current_str);
             current_perc = (current_time / total_duration)*100;
             current_perc = (current_perc/100) * parseInt($(".personal_prog_bar").css("width"));
             $(".temp_progress").css("width", current_perc+"px");
@@ -77,20 +86,22 @@ function printObject(o) {
             //$('.jp-progress').css('width', (progress + '%'));
         },
         ended: function(event){
-            if(durations.length-1 == myPlaylist.current){
+            var progress_bar = parseInt($(".personal_prog_bar").css("width"));
+            var total = parseInt($(".temp_progress").css("width"));
+            if( total > (progress_bar * 0.95)){
                 myPlaylist.play(0);
-                myPlaylist.pause();
+                myPlaylist.pause();     
             }
         },
         pause: function(event) {
-           	$('.jp-play').show();
-            $('.jp-pause').hide();
+           $('.jp-play').show();
+           $('.jp-pause').hide();
         }
 
 
 	};
 	var myPlaylist = new jPlayerPlaylist(cssSelector, playlist, options);	
-	$.getJSON("/jsonNarrative/1",function(data){  // get the JSON array produced by my PHP
+	$.getJSON("/jsonNarrative/ {{ $narrative->NarrativeID}}",function(data){  // get the JSON array produced by my PHP
 	        $.each(data,function(index,value){
 	        	if(index == 1){
 	        		$(".audio_poster").attr("src", value.poster);
@@ -98,8 +109,16 @@ function printObject(o) {
                 total_duration += parseFloat(value.duration);
                 durations.push(parseFloat(value.duration));
 	            myPlaylist.add(value); // add each element in data in myPlaylist
-	        }); 
-            $("#jp-total").html(total_duration.toFixed(0));
+	        });
+	    var minutes = Math.floor((parseInt(total_duration) / 60));
+		if(minutes < 10)
+			minutues =  "0"+minutes; 
+	    var seconds = total_duration.toFixed(0) % 60;
+		if(seconds < 10)
+			seconds = "0"+seconds;
+
+	    var total_str = minutes + ":" + seconds;
+            $("#jp-total").html(total_str);
             var len = durations.length;
             $.each(durations, function(index,value){
                     var element = $(".clone").clone();
@@ -204,7 +223,7 @@ function printObject(o) {
                 </div>
                 <div class="nav navbar-text personal_prog_bar progress" style="width:600px;background-color:#5a5a5a;height:30px;">
                     
-                    <div class="temp_progress" style="width:0%;background-color:lime;z-index:0;height:30px;position:absolute;"></div>
+                    <div class="temp_progress" style="width:0%;background-color:lime;z-index:0;height:30px;position:absolute;transition-duration: 0.6s;"></div>
                     <div class="progress_container clone" style="display:none;height:30px;z-index:5;position:relative;"></div>
                 </div>
                    

@@ -1,6 +1,6 @@
 <?php
 
-class JSONController extends \BaseController {
+class ApiNarrativeController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -9,8 +9,28 @@ class JSONController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		$narratives = Narrative::all();
+		$formattedNarratives = array();
+		$picture_path = Config::get('narrativePath.paths.picture');
+		foreach ($narratives as $narrative) {
+			$narrativePhoto = $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first();
+
+			$formattedNarratives[] = array(
+					'id' => $narrative->NarrativeID,
+					'stance' => $narrative->category()->first()->Name,
+					'lang' => $narrative->langauge()->first()->Description,
+					'views' => $narrative->Views,
+					'yays' => $narrative->Agrees,
+					'nays' => $narrative->Disagrees,
+					'mehs' => $narrative->Indifferents,
+					'createdAt' => $narrative->DateCreated,
+					'imageLink' => isset($narrativePhoto) ? asset('pictures/' . $narrativePhoto->PicturePath) : asset('img/default_narrative.jpg'),
+				);
+		}
+
+		return Response::json($formattedNarratives);
 	}
+
 
 	/**
 	 * Show the form for creating a new resource.
@@ -40,20 +60,7 @@ class JSONController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		$narrative = Narrative::where('NarrativeID','=',$id)->first();
-		$content = $narrative->content()->get();	
-		$audio_path = Config::get('narrativePath.paths.audio');
-                $picture_path = Config::get('narrativePath.paths.picture');
-		$narrative_paths = array();
-		foreach($content as $path){
-			$temp_audio = $audio_path . $path->AudioPath;
-			if($path->PicturePath != 0)
-				$temp_pic = $picture_path  . $path->PicturePath;
-			$narrative_paths[$path->ContentID] = 
-					array("title"=>$path->ContentID,"mp3"=>$temp_audio,
-						"poster"=>$temp_pic, "duration"=>$path->duration);
-		} 
-		return json_encode($narrative_paths);
+		//
 	}
 
 	/**

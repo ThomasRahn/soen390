@@ -4,7 +4,15 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.1.*"
+		"laravel/framework": "4.1.*",
+		"rafasamp/sonus": "dev-master",
+		"iron-io/iron_mq": "dev-master"
+	},
+	"require-dev": {
+		"pdepend/pdepend": "*",
+		"phploc/phploc": "*",
+		"phpunit/phpunit": "*",
+		"satooshi/php-coveralls": "*"
 	},
 	"autoload": {
 		"classmap": [
@@ -18,6 +26,7 @@
 	},
 	"scripts": {
 		"post-install-cmd": [
+			"php artisan config:publish rafasamp/sonus",
 			"php artisan clear-compiled",
 			"php artisan optimize"
 		],

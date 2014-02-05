@@ -34,7 +34,7 @@ class CreateCommentTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::dropIfExists('Comment');
 	}
 
 }

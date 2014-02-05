@@ -16,7 +16,6 @@ class CreateNarrativeTable extends Migration {
 			$table->increments('NarrativeID');
 			$table->integer('CategoryID');
 			$table->integer('TopicID');
-			$table->integer('FlagID');
 			$table->integer('LanguageID');
 			$table->timestamp('DateCreated');
 			$table->timestamp('DateModified')->nullable();
@@ -35,7 +34,7 @@ class CreateNarrativeTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::dropIfExists('Narrative');
 	}
 
 }
