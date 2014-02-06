@@ -65,6 +65,10 @@ class CommentControllerTest extends TestCase
         testCommentCreationComment($insertedId);//Make this comment the parent of the next test case
 
         $commentFetched->delete();
+
+        $commentFetched = Comment::find($insertedId);
+
+        $this->assertNull($commentFetched);
     }
     /**
      * Ensure comment get created (for a Comment).
@@ -98,6 +102,10 @@ class CommentControllerTest extends TestCase
         $this->assertEquals("Test", $commentFetched->Comment);
 
         $commentFetched->delete();
+
+        $commentFetched = Comment::find($insertedId);
+
+        $this->assertNull($commentFetched);
 
     }
 

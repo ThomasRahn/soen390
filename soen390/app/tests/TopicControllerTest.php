@@ -53,6 +53,10 @@ class TopicControllerTest extends TestCase
 
         $topicFetched->delete();
 
+        $topicFetched = Topic::find($insertedId);
+
+        $this->assertNull($topicFetched);
+
     }
 
 }

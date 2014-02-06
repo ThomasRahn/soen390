@@ -59,6 +59,10 @@ class UserControllerTest extends TestCase
 
         $userFetched->delete();
 
+        $userFetched = User::find($insertedId);
+
+        $this->assertNull($userFetched);
+
     }
     /**
      * Ensure User gets created. With nulls
@@ -88,6 +92,10 @@ class UserControllerTest extends TestCase
         $this->assertEquals(NULL, $userFetched->Name);
 
         $userFetched->delete();
+
+        $userFetched = User::find($insertedId);
+
+        $this->assertNull($userFetched);
     }
 
 

@@ -51,6 +51,10 @@ class LanguageControllerTest extends TestCase
 
         $languageFetched->delete();
 
+        $languageFetched = Language::find($insertedId);
+
+        $this->assertNull($languageFetched);
+
     }
 
 }
