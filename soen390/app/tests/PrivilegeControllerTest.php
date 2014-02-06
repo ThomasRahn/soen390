@@ -51,6 +51,10 @@ class PrivilegeControllerTest extends TestCase
 
         $privilegeFetched->delete();
 
+        $privilegeFetched = Privilege::find($insertedId);
+
+        $this->assertNull($privilegeFetched);
+
     }
 
 }
