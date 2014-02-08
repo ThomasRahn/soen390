@@ -5,11 +5,11 @@
         <title>You Deliberate</title>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Lato:300,400">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic|Roboto+Condensed:300,400,700">
         <style>
             body {
                 padding-bottom: 70px;
-                font-family: Lato, "Helvetica Neue", Helvetica, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
                 font-weight: 400;
             }
             header {
@@ -28,6 +28,7 @@
             }
             #filter-nav button {
                 text-transform: uppercase;
+                font-family: "Roboto Condensed", "Helvetica Neue", Helvetica, "Arial Narrow", "Arial", sans-serif;
                 font-weight: 300;
             }
             #stance-heading {
