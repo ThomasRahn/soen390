@@ -15,7 +15,7 @@
     <div class="options span2">
       <ul class="nav nav-pills nav-stacked">
         <li class="active"><a class="glyphicon glyphicon-home" href="#"> Home</a></li>
-        <li><a href="#" class="glyphicon glyphicon-list"> Narratives</a></li>
+        <li><a href="/admin/manage" class="glyphicon glyphicon-list"> Narratives</a></li>
         <li><a href="admin/upload" class="glyphicon glyphicon-upload"> Upload</a></li>
         <li><a href="#" class="glyphicon glyphicon-cog"> Configurations</a></li>
         <li><a href="#" class="glyphicon glyphicon-ban-circle"> Reported</a></li>
