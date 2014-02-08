@@ -15,6 +15,7 @@ class CreateNarrativeTable extends Migration {
 		{
 			$table->increments('NarrativeID');
 			$table->integer('CategoryID');
+			$table->integer('TopicID');
 			$table->integer('LanguageID');
 			$table->timestamp('DateCreated');
 			$table->timestamp('DateModified')->nullable();

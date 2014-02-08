@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoryTable extends Migration {
+class CreateTopicTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -11,9 +11,9 @@ class CreateCategoryTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('Category', function($table)
+		Schema::create('Topic', function($table)
 		{
-			$table->increments('CategoryID');
+			$table->increments('TopicID');
 			$table->timestamp('DateCreated');
 			$table->timestamp('DateModified')->nullable();
 			$table->string('Name', 50)->nullable();
