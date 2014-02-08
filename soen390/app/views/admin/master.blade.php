@@ -101,7 +101,7 @@
             <nav class="navbar navbar-default navbar-fixed-top">
                 <div class="container-fluid">
                     <a href="#" class="navbar-brand brand">You <i class="fa fa-comments"></i> Deliberate</a>
-                    <span class="navbar-right navbar-text admin-int-text">Hello, {{{ Auth::user()->name }}}! <i class="fa fa-rocket fa-fw"></i></span>
+                    <span class="navbar-right navbar-text admin-int-text">Hello, {{{ Auth::user()->Name }}}! <i class="fa fa-rocket fa-fw"></i></span>
                 </div>
             </nav>
         </header>
