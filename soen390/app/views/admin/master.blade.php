@@ -62,7 +62,7 @@
                 bottom: 0;
                 padding: 70px 0 0;
                 background-color: #f0f0f0;
-                background-image: url('greyzz.png');
+                background-image: url('{{ asset('img/greyzz.png') }}');
                 border-right: 1px solid #e5e5e5;
                 font-weight: 300;
             }
