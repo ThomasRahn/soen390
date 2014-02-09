@@ -1,6 +1,6 @@
 <?php
 
-class PrivilegeControllerTest extends TestCase
+class LanguageDbTest extends TestCase
 {
     
     /**
@@ -19,11 +19,11 @@ class PrivilegeControllerTest extends TestCase
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
     }
     /**
-     * Ensure Privileges get fetched.
+     * Ensure Languages get fetched.
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testPrivilegeRetrieval()
+    public function testTopicRetrieval()
     {
         /*$narratives = Narrative::all();
 
@@ -31,29 +31,29 @@ class PrivilegeControllerTest extends TestCase
 
     }
     /**
-     * Ensure Privileges gets created.
+     * Ensure Languages gets created.
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testPrivilegeCreation()
+    public function testLanguageCreation()
     {
-        $privilegeCreated = new Privilege;
+        $languageCreated = new Language;
 
-        $privilegeCreated->Description = "Test";
+        $languageCreated->Description = "Test";
 
-        $privilegeCreated->save();
+        $languageCreated->save();
 
-        $insertedId = $privilegeCreated->id;
+        $insertedId = $languageCreated->LanguageID;
 
-        $privilegeFetched = Privilege::find($insertedId);
+        $languageFetched = Language::find($insertedId);
 
-        $this->assertEquals("Test", $privilegeFetched->Description);
+        $this->assertEquals("Test", $languageFetched->Description);
 
-        $privilegeFetched->delete();
+        $languageFetched->delete();
 
-        $privilegeFetched = Privilege::find($insertedId);
+        $languageFetched = Language::find($insertedId);
 
-        $this->assertNull($privilegeFetched);
+        $this->assertNull($languageFetched);
 
     }
 

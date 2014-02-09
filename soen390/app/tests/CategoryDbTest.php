@@ -1,6 +1,6 @@
 <?php
 
-class TopicControllerTest extends TestCase
+class CategoryDbTest extends TestCase
 {
     
     /**
@@ -19,7 +19,7 @@ class TopicControllerTest extends TestCase
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
     }
     /**
-     * Ensure topics get fetched.
+     * Ensure Categories get fetched.
      *
      * @covers ApiNarrativeControllerTest::index
      */
@@ -31,31 +31,29 @@ class TopicControllerTest extends TestCase
 
     }
     /**
-     * Ensure topic gets created.
+     * Ensure Category gets created.
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testTopicCreation()
+    public function testCategoryCreation()
     {
-        $topicCreated = new Topic;
+        $categoryCreated = new Category;
 
-        $topicCreated->Description = "Test";
-        $topicCreated->Name = "Test";
+        $categoryCreated->Description = "Test";
 
-        $topicCreated->save();
+        $categoryCreated->save();
 
-        $insertedId = $topicCreated->id;
+        $insertedId = $categoryCreated->CategoryID;
 
-        $topicFetched = Topic::find($insertedId);
+        $categoryFetched = Category::find($insertedId);
 
-        $this->assertEquals("Test", $topicFetched->Description);
-        $this->assertEquals("Test", $topicFetched->Name);
+        $this->assertEquals("Test", $categoryFetched->Description);
 
-        $topicFetched->delete();
+        $categoryFetched->delete();
 
-        $topicFetched = Topic::find($insertedId);
+        $categoryFetched = Category::find($insertedId);
 
-        $this->assertNull($topicFetched);
+        $this->assertNull($categoryFetched);
 
     }
 
