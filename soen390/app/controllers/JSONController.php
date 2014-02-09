@@ -47,11 +47,10 @@ class JSONController extends \BaseController {
 		$narrative_paths = array();
 		foreach($content as $path){
 			$temp_audio = $audio_path . $path->AudioPath;
-			if($path->PicturePath != 0)
+			if($path->PicturePath != 0){
 				$temp_pic = $picture_path  . $path->PicturePath;
-			$narrative_paths[$path->ContentID] = 
-					array("title"=>$path->ContentID,"mp3"=>$temp_audio,
-						"poster"=>$temp_pic, "duration"=>$path->duration);
+			}
+			$narrative_paths[$path->ContentID] = array("title"=>$path->ContentID,"mp3"=>$temp_audio,"poster"=>$temp_pic, "duration"=>$path->Duration);
 		} 
 		return json_encode($narrative_paths);
 	}

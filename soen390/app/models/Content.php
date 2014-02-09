@@ -4,6 +4,7 @@ class Content extends Eloquent {
 
 	protected $table = "Content";
 	public $timestamps = false;
+	protected $primaryKey = 'ContentID';
 	
 	public function narrative(){
 		return $this->belongsTo('Narrative', 'NarrativeID', 'NarrativeID');

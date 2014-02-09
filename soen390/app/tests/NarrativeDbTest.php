@@ -1,6 +1,6 @@
 <?php
 
-class ApiNarrativeControllerTest extends TestCase
+class NarrativeDbTest extends TestCase
 {
     
     /**
@@ -39,30 +39,37 @@ class ApiNarrativeControllerTest extends TestCase
     {
         $narrativeCreated = new Narrative;
 
+        $date = date_create_from_format('j-M-Y', '1-Jan-2000');
+
         $narrativeCreated->TopicID = 1;
         $narrativeCreated->CategoryID = 1;
+        $narrativeCreated->LanguageID = 1;
+        $narrativeCreated->DateCreated = $date;
         $narrativeCreated->Name = "Test";
-        $narrativeCreated->Flags = 1;
         $narrativeCreated->Agrees = 1;
         $narrativeCreated->Disagrees = 1;
         $narrativeCreated->Indifferents = 1;
 
         $narrativeCreated->save();
 
-        $insertedId = $narrativeCreated->id;
+        $insertedId = $narrativeCreated->NarrativeID;
 
         $narrativeFetched = Narrative::find($insertedId);
 
         $this->assertEquals(1, $narrativeFetched->TopicID);
         $this->assertEquals(1, $narrativeFetched->CategoryID);
+        $this->assertEquals(1, $narrativeFetched->LanguageID);
         $this->assertEquals("Test", $narrativeFetched->Name);
-        $this->assertEquals(1, $narrativeFetched->Flags);
         $this->assertEquals(1, $narrativeFetched->Agrees);
         $this->assertEquals(1, $narrativeFetched->Disagrees);
         $this->assertEquals(1, $narrativeFetched->Indifferents);
         $this->assertEquals(0, $narrativeFetched->Views);//Test for default value
 
         $narrativeFetched->delete();
+
+        $narrativeFetched = Narrative::find($insertedId);
+
+        $this->assertNull($narrativeFetched);
 
     }
 

@@ -28,15 +28,16 @@ Route::group(
   }
 );
 
-Route::get('/login', 'UserController@index');
+Route::get('/login','UserController@index');
 
 
 Route::resource('/narrative', 'NarrativeController@show');
+Route::get('/admin/manage', array("before"=>"auth", "uses"=>'NarrativeController@index'));
 Route::post('/login', 'AuthController@postLogin');
 
 Route::get('/logout', 'AuthController@getLogout');
 Route::resource('/jsonNarrative','JSONController@show');
-Route::get('/admin/upload','UploadNarrativeController@index');
-Route::post('/admin/upload/store','UploadNarrativeController@store');
-Route::get('/admin','AdminController@index');
+Route::get('/admin/upload',array("before"=>"auth", "uses"=>'UploadNarrativeController@index'));
+Route::post('/admin/upload/store',array("before"=>"auth", "uses"=>'UploadNarrativeController@store'));
+Route::get('/admin',array("before"=>"auth", "uses"=>'AdminController@index'));
 

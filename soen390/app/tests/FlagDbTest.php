@@ -1,6 +1,6 @@
 <?php
 
-class FlagControllerTest extends TestCase
+class FlagDbTest extends TestCase
 {
     
     /**
@@ -46,7 +46,7 @@ class FlagControllerTest extends TestCase
 
         $flagCreated->save();
 
-        $insertedId = $flagCreated->id;
+        $insertedId = $flagCreated->FlagID;
 
         $flagFetched = Flag::find($insertedId);
 
@@ -56,6 +56,10 @@ class FlagControllerTest extends TestCase
         $this->assertEquals("Test", $flagFetched->Comment);
 
         $flagFetched->delete();
+
+        $flagFetched = Flag::find($insertedId);
+
+        $this->assertNull($flagFetched);
 
     }
     /**
@@ -74,7 +78,7 @@ class FlagControllerTest extends TestCase
 
         $flagCreated->save();
 
-        $insertedId = $flagCreated->id;
+        $insertedId = $flagCreated->FlagID;
 
         $flagFetched = Flag::find($insertedId);
 
@@ -84,6 +88,10 @@ class FlagControllerTest extends TestCase
         $this->assertEquals("Test", $flagFetched->Comment);
 
         $flagFetched->delete();
+
+        $flagFetched = Flag::find($insertedId);
+
+        $this->assertNull($flagFetched);
 
     }
 

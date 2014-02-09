@@ -1,6 +1,6 @@
 <?php
 
-class TopicControllerTest extends TestCase
+class PrivilegeDbTest extends TestCase
 {
     
     /**
@@ -19,11 +19,11 @@ class TopicControllerTest extends TestCase
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
     }
     /**
-     * Ensure topics get fetched.
+     * Ensure Privileges get fetched.
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testTopicRetrieval()
+    public function testPrivilegeRetrieval()
     {
         /*$narratives = Narrative::all();
 
@@ -31,27 +31,29 @@ class TopicControllerTest extends TestCase
 
     }
     /**
-     * Ensure topic gets created.
+     * Ensure Privileges gets created.
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testTopicCreation()
+    public function testPrivilegeCreation()
     {
-        $topicCreated = new Topic;
+        $privilegeCreated = new Privilege;
 
-        $topicCreated->Description = "Test";
-        $topicCreated->Name = "Test";
+        $privilegeCreated->Description = "Test";
 
-        $topicCreated->save();
+        $privilegeCreated->save();
 
-        $insertedId = $topicCreated->id;
+        $insertedId = $privilegeCreated->PrivilegeID;
 
-        $topicFetched = Topic::find($insertedId);
+        $privilegeFetched = Privilege::find($insertedId);
 
-        $this->assertEquals("Test", $topicFetched->Description);
-        $this->assertEquals("Test", $topicFetched->Name);
+        $this->assertEquals("Test", $privilegeFetched->Description);
 
-        $topicFetched->delete();
+        $privilegeFetched->delete();
+
+        $privilegeFetched = Privilege::find($insertedId);
+
+        $this->assertNull($privilegeFetched);
 
     }
 
