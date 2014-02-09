@@ -13,7 +13,7 @@
 	  <div class="options span2">
 	      <ul class="nav nav-pills nav-stacked">
 	        <li><a class="glyphicon glyphicon-home" href="/admin"> Home</a></li>
-	        <li><a href="#" class="glyphicon glyphicon-list"> Narratives</a></li>
+	        <li><a href="/admin/manage" class="glyphicon glyphicon-list"> Narratives</a></li>
 	        <li class="active"><a href="#" class="glyphicon glyphicon-upload"> Upload</a></li>
 	        <li><a href="#" class="glyphicon glyphicon-cog"> Configurations</a></li>
 	        <li><a href="#" class="glyphicon glyphicon-ban-circle"> Reported</a></li>
@@ -27,7 +27,7 @@
 			{{ Form::label('category','Category'); }}
 			<select name="category">
 				@foreach ($category as $cat)
-					<option value="{{ $cat->CategoryID }}"> {{ $cat->Name }}</option>
+					<option value="{{ $cat->CategoryID }}"> {{ $cat->Description }}</option>
 				@endforeach
 			</select>
     			<br/>

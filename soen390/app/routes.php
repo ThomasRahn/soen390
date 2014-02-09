@@ -25,6 +25,10 @@ Route::group(array('prefix' => 'api'), function() {
 
 });
 
+// Routes for player.
+Route::resource('/narrative', 'NarrativeController@show');
+Route::resource('/jsonNarrative','JSONController@show');
+
 // Routes for administrative view.
 Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
 
