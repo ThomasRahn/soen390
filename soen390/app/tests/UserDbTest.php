@@ -1,6 +1,6 @@
 <?php
 
-class UserControllerTest extends TestCase
+class UserDbTest extends TestCase
 {
     
     /**
@@ -47,7 +47,7 @@ class UserControllerTest extends TestCase
 
         $userCreated->save();
 
-        $insertedId = $userCreated->id;
+        $insertedId = $userCreated->UserID;
 
         $userFetched = User::find($insertedId);
 
@@ -81,7 +81,7 @@ class UserControllerTest extends TestCase
 
         $userCreated->save();
 
-        $insertedId = $userCreated->id;
+        $insertedId = $userCreated->UserID;
 
         $userFetched = User::find($insertedId);
 

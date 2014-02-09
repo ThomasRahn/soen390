@@ -4,6 +4,7 @@
 class Comment extends Eloquent{
 
 	protected $table = "Comment";
+	protected $primaryKey = 'CommentID';
 
 	public $timestamps = false;
 
