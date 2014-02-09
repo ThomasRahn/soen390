@@ -43,14 +43,14 @@ class CommentControllerTest extends TestCase
         $commentCreated->NarrativeID = 1;
         $commentCreated->CommentParentID = NULL;
         $commentCreated->Name = "Test";
-        //agrees will be check for default value
+        $commentCreated->Agrees = 0;
         $commentCreated->Indifferents = 1;
         $commentCreated->Disagrees = 1;
         $commentCreated->Comment = "Test";
 
         $commentCreated->save();
 
-        $insertedId = $commentCreated->id;
+        $insertedId = $commentCreated->CommentId;
 
         $commentFetched = Comment::find($insertedId);
 
@@ -75,21 +75,21 @@ class CommentControllerTest extends TestCase
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testCommentCreationComment(int $id)
+    private function testCommentCreationComment($id)
     {
         $commentCreated = new Comment;
 
         $commentCreated->NarrativeID = 1;
         $commentCreated->CommentParentID = $id;
         $commentCreated->Name = "Test";
-        //agrees will be check for default value
+        $commentCreated->Agrees = 0;
         $commentCreated->Indifferents = 1;
         $commentCreated->Disagrees = 1;
         $commentCreated->Comment = "Test";
 
         $commentCreated->save();
 
-        $insertedId = $commentCreated->id;
+        $insertedId = $commentCreated->CommentId;
 
         $commentFetched = Comment::find($insertedId);
 

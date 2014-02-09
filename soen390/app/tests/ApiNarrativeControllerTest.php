@@ -49,7 +49,7 @@ class ApiNarrativeControllerTest extends TestCase
 
         $narrativeCreated->save();
 
-        $insertedId = $narrativeCreated->id;
+        $insertedId = $narrativeCreated->NarrativeID;
 
         $narrativeFetched = Narrative::find($insertedId);
 

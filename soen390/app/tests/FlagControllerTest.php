@@ -46,7 +46,7 @@ class FlagControllerTest extends TestCase
 
         $flagCreated->save();
 
-        $insertedId = $flagCreated->id;
+        $insertedId = $flagCreated->FlagID;
 
         $flagFetched = Flag::find($insertedId);
 
@@ -78,7 +78,7 @@ class FlagControllerTest extends TestCase
 
         $flagCreated->save();
 
-        $insertedId = $flagCreated->id;
+        $insertedId = $flagCreated->FlagID;
 
         $flagFetched = Flag::find($insertedId);
 

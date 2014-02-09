@@ -43,7 +43,7 @@ class PrivilegeControllerTest extends TestCase
 
         $privilegeCreated->save();
 
-        $insertedId = $privilegeCreated->id;
+        $insertedId = $privilegeCreated->PrivilegeID;
 
         $privilegeFetched = Privilege::find($insertedId);
 

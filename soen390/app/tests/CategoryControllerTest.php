@@ -1,6 +1,6 @@
 <?php
 
-class LanguageControllerTest extends TestCase
+class CategoryControllerTest extends TestCase
 {
     
     /**
@@ -19,7 +19,7 @@ class LanguageControllerTest extends TestCase
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
     }
     /**
-     * Ensure Languages get fetched.
+     * Ensure Categories get fetched.
      *
      * @covers ApiNarrativeControllerTest::index
      */
@@ -31,29 +31,31 @@ class LanguageControllerTest extends TestCase
 
     }
     /**
-     * Ensure Languages gets created.
+     * Ensure Category gets created.
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testLanguageCreation()
+    public function testCategoryCreation()
     {
-        $languageCreated = new Language;
+        $categoryCreated = new Category;
 
-        $languageCreated->Description = "Test";
+        $categoryCreated->Description = "Test";
+        $categoryCreated->Name = "Test";
 
-        $languageCreated->save();
+        $categoryCreated->save();
 
-        $insertedId = $languageCreated->LanguageID;
+        $insertedId = $categoryCreated->TopicID;
 
-        $languageFetched = Language::find($insertedId);
+        $categoryFetched = Topic::find($insertedId);
 
-        $this->assertEquals("Test", $languageFetched->Description);
+        $this->assertEquals("Test", $categoryFetched->Description);
+        $this->assertEquals("Test", $categoryFetched->Name);
 
-        $languageFetched->delete();
+        $categoryFetched->delete();
 
-        $languageFetched = Language::find($insertedId);
+        $categoryFetched = Topic::find($insertedId);
 
-        $this->assertNull($languageFetched);
+        $this->assertNull($categoryFetched);
 
     }
 

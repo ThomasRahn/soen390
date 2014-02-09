@@ -19,7 +19,7 @@ class TopicControllerTest extends TestCase
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
     }
     /**
-     * Ensure topics get fetched.
+     * Ensure Topics get fetched.
      *
      * @covers ApiNarrativeControllerTest::index
      */
@@ -31,20 +31,24 @@ class TopicControllerTest extends TestCase
 
     }
     /**
-     * Ensure topic gets created.
+     * Ensure Topic gets created.
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testTopicCreation()
+    public function testCategoryCreation()
     {
         $topicCreated = new Topic;
 
+        $date = date_create_from_format('j-M-Y', '1-Jan-2000');
+
         $topicCreated->Description = "Test";
+        $topicCreated->DateCreated = $date;
+        $topicCreated->DateModified = $date;
         $topicCreated->Name = "Test";
 
         $topicCreated->save();
 
-        $insertedId = $topicCreated->id;
+        $insertedId = $topicCreated->TopicID;
 
         $topicFetched = Topic::find($insertedId);
 
