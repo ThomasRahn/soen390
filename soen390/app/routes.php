@@ -33,6 +33,17 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
         return View::make('admin/dashboard/index');
     }));
 
+    // Narrative routes.
+    Route::group(array('prefix' => 'narrative'), function() {
+
+        // Narrative Listing
+        Route::get('/', array('uses' => 'AdminNarrativeController@getIndex'));
+
+        // Narrative Upload
+        Route::get('upload', array('uses' => 'AdminNarrativeController@getUpload'));
+
+    });
+
 });
 
 // Routes for authentication views.
