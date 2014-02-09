@@ -10,7 +10,7 @@ class NarrativeController extends \BaseController {
 	public function index()
 	{
 		$narratives = Narrative::all();
-		return View::make("dashboard")
+		return View::make("admin/manage")
 			->with('narratives',$narratives);
 	}
 
@@ -45,8 +45,8 @@ class NarrativeController extends \BaseController {
 		$narrative = Narrative::where('NarrativeID',$id)->first();
 		return View::make("narrative")
 			->with("narrative",$narrative);
+	
 	}
-
 	/**
 		Get JSON response for a particular narrative
 

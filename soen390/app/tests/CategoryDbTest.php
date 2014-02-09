@@ -40,20 +40,18 @@ class CategoryControllerTest extends TestCase
         $categoryCreated = new Category;
 
         $categoryCreated->Description = "Test";
-        $categoryCreated->Name = "Test";
 
         $categoryCreated->save();
 
-        $insertedId = $categoryCreated->TopicID;
+        $insertedId = $categoryCreated->CategoryID;
 
-        $categoryFetched = Topic::find($insertedId);
+        $categoryFetched = Category::find($insertedId);
 
         $this->assertEquals("Test", $categoryFetched->Description);
-        $this->assertEquals("Test", $categoryFetched->Name);
 
         $categoryFetched->delete();
 
-        $categoryFetched = Topic::find($insertedId);
+        $categoryFetched = Category::find($insertedId);
 
         $this->assertNull($categoryFetched);
 
