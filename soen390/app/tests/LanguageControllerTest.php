@@ -1,6 +1,6 @@
 <?php
 
-class TopicControllerTest extends TestCase
+class LanguageControllerTest extends TestCase
 {
     
     /**
@@ -19,7 +19,7 @@ class TopicControllerTest extends TestCase
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
     }
     /**
-     * Ensure topics get fetched.
+     * Ensure Languages get fetched.
      *
      * @covers ApiNarrativeControllerTest::index
      */
@@ -31,31 +31,29 @@ class TopicControllerTest extends TestCase
 
     }
     /**
-     * Ensure topic gets created.
+     * Ensure Languages gets created.
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testTopicCreation()
+    public function testLanguageCreation()
     {
-        $topicCreated = new Topic;
+        $languageCreated = new Language;
 
-        $topicCreated->Description = "Test";
-        $topicCreated->Name = "Test";
+        $languageCreated->Description = "Test";
 
-        $topicCreated->save();
+        $languageCreated->save();
 
-        $insertedId = $topicCreated->id;
+        $insertedId = $languageCreated->id;
 
-        $topicFetched = Topic::find($insertedId);
+        $languageFetched = Language::find($insertedId);
 
-        $this->assertEquals("Test", $topicFetched->Description);
-        $this->assertEquals("Test", $topicFetched->Name);
+        $this->assertEquals("Test", $languageFetched->Description);
 
-        $topicFetched->delete();
+        $languageFetched->delete();
 
-        $topicFetched = Topic::find($insertedId);
+        $languageFetched = Language::find($insertedId);
 
-        $this->assertNull($topicFetched);
+        $this->assertNull($languageFetched);
 
     }
 

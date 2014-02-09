@@ -57,6 +57,10 @@ class FlagControllerTest extends TestCase
 
         $flagFetched->delete();
 
+        $flagFetched = Flag::find($insertedId);
+
+        $this->assertNull($flagFetched);
+
     }
     /**
      * Ensure flags get created (for a Comment).
@@ -84,6 +88,10 @@ class FlagControllerTest extends TestCase
         $this->assertEquals("Test", $flagFetched->Comment);
 
         $flagFetched->delete();
+
+        $flagFetched = Flag::find($insertedId);
+
+        $this->assertNull($flagFetched);
 
     }
 

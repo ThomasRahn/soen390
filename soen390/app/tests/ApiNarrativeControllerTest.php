@@ -64,6 +64,10 @@ class ApiNarrativeControllerTest extends TestCase
 
         $narrativeFetched->delete();
 
+        $narrativeFetched = Narrative::find($insertedId);
+
+        $this->assertNull($narrativeFetched);
+
     }
 
 }

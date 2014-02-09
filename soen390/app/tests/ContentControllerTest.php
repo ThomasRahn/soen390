@@ -59,6 +59,10 @@ class ContentControllerTest extends TestCase
         $this->assertEquals("Test", $contentFetched->PicturePath);
 
         $contentFetched->delete();
+
+        $contentFetched = Content::find($insertedId);
+
+        $this->assertNull($contentFetched);
     }
     /**
      * Ensure content get created (for a Comment).
@@ -89,6 +93,10 @@ class ContentControllerTest extends TestCase
 
         $contentFetched->delete();
 
+        $contentFetched = Content::find($insertedId);
+
+        $this->assertNull($contentFetched);
+
     }
     /**
      * Ensure content get created (for a Topic).
@@ -118,6 +126,10 @@ class ContentControllerTest extends TestCase
         $this->assertEquals("Test", $contentFetched->PicturePath);
 
         $contentFetched->delete();
+
+        $contentFetched = Content::find($insertedId);
+
+        $this->assertNull($contentFetched);
 
     }
 

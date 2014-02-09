@@ -5,29 +5,30 @@
         <title>You Deliberate</title>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Crete+Round|Lato:300,400">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic|Roboto+Condensed:300,400,700">
         <style>
             body {
                 padding-bottom: 70px;
-                font-family: "Lato", "Helvetica Neue", Helvetica, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
                 font-weight: 400;
             }
             header {
-                border-bottom: 1px solid #ccc;
+                border-bottom: 1px solid #e5e5e5;
                 margin-bottom: 20px;
             }
             h1.brand {
-                font-family: "Crete Round", "Garamond", "Times New Roman", serif;
+                font-family: Cinzel, Garamond, "Times New Roman", serif;
                 font-weight: 400;
                 text-transform: uppercase;
                 letter-spacing: 5px;
                 padding-bottom: 10px;
-                color: #b5b5b5;
+                color: #ccc;
                 -webkit-text-stroke: 0.2px;
                 text-stroke: 0.2px;
             }
             #filter-nav button {
                 text-transform: uppercase;
+                font-family: "Roboto Condensed", "Helvetica Neue", Helvetica, "Arial Narrow", "Arial", sans-serif;
                 font-weight: 300;
             }
             #stance-heading {
@@ -81,7 +82,7 @@
 
         <div class="container">
             <footer class="navbar navbar-fixed-bottom">
-                <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <span class="spaghetti">Arm Spaghetti</span> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
+                <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <a class="text-muted" href="mailto:support@youdeliberate.org" title="Email us for support."><i class="fa fa-envelope-o"></i></a> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
             </footer>
         </div>
 
@@ -98,7 +99,7 @@
                 stanceGravityCenters  = {
                     'yay': { x: (width / 4), y: (height / 2) },
                     'meh': { x: (width / 2), y: (height / 2) },
-                    'nay': { x: (3 * (width / 4)), y: (height / 2) }
+                    'nay': { x: (2.83 * (width / 4)), y: (height / 2) }
                 };
 
             /**
@@ -131,7 +132,7 @@
              */
             function setLanguageFilter(langCode) {
                 rectangles.transition()
-                          .duration(750)
+                          .duration(500)
                           .style('opacity', function(node) {
                               return (langCode === null || langCode === node.lang) ? 1 : 0.2;
                           });
