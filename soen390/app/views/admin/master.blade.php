@@ -24,6 +24,10 @@
             small {
                 font-weight: 300;
             }
+            .btn {
+                font-weight: 300;
+                font-size: 16px;
+            }
             h1,
             h2,
             h3,
@@ -31,7 +35,9 @@
             h5,
             h6,
             .admin-int-text,
-            .sidebar {
+            .sidebar,
+            button,
+            label {
                 font-family: "Roboto Condensed", "Helvetica Neue", Helvetica, "Arial Narrow", "Arial", sans-serif;
                 letter-spacing: 0.3px;
                 text-transform: uppercase;
@@ -41,7 +47,9 @@
             h3,
             h4,
             h5,
-            h6 {
+            h6,
+            label,
+            strong {
                 font-weight: 400;
             }
             .brand {
@@ -75,15 +83,19 @@
             }
             .nav-sidebar a {
                 color: #777;
+                transition: 0.2s;
             }
             .nav-sidebar a:hover {
                 color: #333;
-                background-color: rgba(0,0,0,0.05) !important;
+                background-color: rgba(0,0,0,0.1) !important;
             }
             .nav-sidebar .active a, .nav-sidebar .active a:hover {
                 color: #f5f5f5;
                 background-color: rgba(0,0,0,0.5) !important;
                 z-index: 1000;
+            }
+            .navbar-brand {
+                transition: 0.2s;
             }
         </style>
 
@@ -110,18 +122,18 @@
             <div class="row">
                 <nav class="col-sm-3 col-md-2 sidebar">
                     <ul class="nav nav-sidebar">
-                        <li{{ Request::is('admin/narrative/create') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-upload fa-fw"></i> Upload Narrative(s)</a></li>
+                        <li{{ Request::is('admin/narrative/upload') ? ' class="active"' : '' }}><a href="{{ action('AdminNarrativeController@getUpload') }}"><i class="fa fa-upload fa-fw"></i> {{ trans('admin.sidebar.uploadNarratives') }}</a></li>
                     </ul>
                     <ul class="nav nav-sidebar">
-                        <li{{ Request::is('admin') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-                        <li{{ Request::is('admin/narrative/*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-bullhorn fa-fw"></i> Narratives</a></li>
-                        <li{{ Request::is('admin/category/*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-folder-open-o fa-fw"></i> Categories</a></li>
-                        <li{{ Request::is('admin/flag/*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-flag-o fa-fw"></i> Flag Reports</a></li>
-                        <li{{ Request::is('admin/configuration/*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-cogs fa-fw"></i> Configuration</a></li>
+                        <li{{ Request::is('admin') ? ' class="active"' : '' }}><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> {{ trans('admin.sidebar.dashboard') }}</a></li>
+                        <li{{ (Request::is('admin/narrative*') && ! Request::is('admin/narrative/upload')) ? ' class="active"' : '' }}><a href="{{ action('AdminNarrativeController@getIndex') }}"><i class="fa fa-bullhorn fa-fw"></i> {{ trans('admin.sidebar.narratives') }}</a></li>
+                        <li{{ Request::is('admin/category*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-folder-open-o fa-fw"></i> {{ trans('admin.sidebar.categories') }}</a></li>
+                        <li{{ Request::is('admin/flag*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-flag-o fa-fw"></i> {{ trans('admin.sidebar.flagReports') }}</a></li>
+                        <li{{ Request::is('admin/configuration*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-cogs fa-fw"></i> {{ trans('admin.sidebar.configuration') }}</a></li>
                     </ul>
                     <ul class="nav nav-sidebar">
-                        <li><a href="{{ url('/') }}" target="_blank"><i class="fa fa-eye fa-fw"></i> Open Main Site</a></li>
-                        <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+                        <li><a href="{{ url('/') }}" target="_blank"><i class="fa fa-eye fa-fw"></i> {{ trans('admin.sidebar.openMainSite') }}</a></li>
+                        <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> {{ trans('admin.sidebar.signOut') }}</a></li>
                     </ul>
                 </nav>
 
@@ -129,11 +141,6 @@
                     <article>
                         @yield('content', '<h1>View not implemented.</h1>')
                     </article>
-
-                    <footer>
-                        <hr>
-                        <p class="text-muted"><small>Copyright &copy; You Deliberate.</small></p>
-                    </footer>
                 </section>
             </div>
         </div>
