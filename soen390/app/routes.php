@@ -11,33 +11,53 @@
 |
 */
 
+// Route for main front-end view.
 Route::get('/', function()
 {
 	return View::make('cards/listing');
 });
 
 // Routes for JSON API.
-Route::group(
-  array(
-    'prefix' => 'api'
-  ),
-  function() {
+Route::group(array('prefix' => 'api'), function() {
 
+    // Narrative API.
     Route::resource('narrative', 'ApiNarrativeController');
 
-  }
-);
+});
 
-Route::get('/login','UserController@index');
-
-
+// Routes for player.
 Route::resource('/narrative', 'NarrativeController@show');
-Route::get('/admin/manage', array("before"=>"auth", "uses"=>'NarrativeController@index'));
-Route::post('/login', 'AuthController@postLogin');
-
-Route::get('/logout', 'AuthController@getLogout');
 Route::resource('/jsonNarrative','JSONController@show');
-Route::get('/admin/upload',array("before"=>"auth", "uses"=>'UploadNarrativeController@index'));
-Route::post('/admin/upload/store',array("before"=>"auth", "uses"=>'UploadNarrativeController@store'));
-Route::get('/admin',array("before"=>"auth", "uses"=>'AdminController@index'));
 
+// Routes for administrative view.
+Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
+
+    // Dashboard route.
+    Route::get('/', array('as' => 'dashboard', function() {
+        return View::make('admin/dashboard/index');
+    }));
+
+    // Narrative routes.
+    Route::group(array('prefix' => 'narrative'), function() {
+
+        // Narrative Listing
+        Route::get('/', array('uses' => 'AdminNarrativeController@getIndex'));
+
+        // Narrative Upload
+        Route::get('upload', array('uses' => 'AdminNarrativeController@getUpload'));
+
+    });
+
+});
+
+// Routes for authentication views.
+Route::group(array('prefix' => 'auth'), function() {
+
+    // Login form
+    Route::get('login', array('before' => 'guest', 'uses' => 'AuthController@getLogin', 'as' => 'login'));
+    Route::post('login', array('before' => 'guest', 'uses' => 'AuthController@postLogin'));
+
+    // Logout action
+    Route::get('logout', array('uses' => 'AuthController@getLogout', 'as' => 'logout'));
+
+});
