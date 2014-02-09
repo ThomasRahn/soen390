@@ -1,6 +1,6 @@
 <?php
 
-class TopicControllerTest extends TestCase
+class TopicDbTest extends TestCase
 {
     
     /**

@@ -1,6 +1,6 @@
 <?php
 
-class CategoryControllerTest extends TestCase
+class CategoryDbTest extends TestCase
 {
     
     /**

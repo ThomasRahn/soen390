@@ -1,6 +1,6 @@
 <?php
 
-class FlagControllerTest extends TestCase
+class FlagDbTest extends TestCase
 {
     
     /**

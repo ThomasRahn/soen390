@@ -1,6 +1,6 @@
 <?php
 
-class PrivilegeControllerTest extends TestCase
+class PrivilegeDbTest extends TestCase
 {
     
     /**

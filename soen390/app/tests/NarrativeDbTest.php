@@ -1,6 +1,6 @@
 <?php
 
-class ApiNarrativeControllerTest extends TestCase
+class NarrativeDbTest extends TestCase
 {
     
     /**

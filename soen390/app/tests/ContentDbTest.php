@@ -1,6 +1,6 @@
 <?php
 
-class ContentControllerTest extends TestCase
+class ContentDbTest extends TestCase
 {
     
     /**

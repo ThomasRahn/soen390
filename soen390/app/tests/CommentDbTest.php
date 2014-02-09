@@ -1,6 +1,6 @@
 <?php
 
-class CommentControllerTest extends TestCase
+class CommentDbTest extends TestCase
 {
     
     /**

@@ -1,6 +1,6 @@
 <?php
 
-class LanguageControllerTest extends TestCase
+class LanguageDbTest extends TestCase
 {
     
     /**
