@@ -126,9 +126,9 @@
                     </ul>
                     <ul class="nav nav-sidebar">
                         <li{{ Request::is('admin') ? ' class="active"' : '' }}><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> {{ trans('admin.sidebar.dashboard') }}</a></li>
-                        <li{{ (Request::is('admin/narrative*') && ! Request::is('admin/narrative/upload')) ? ' class="active"' : '' }}><a href="{{ action('AdminNarrativeController@getIndex') }}"><i class="fa fa-bullhorn fa-fw"></i> {{ trans('admin.sidebar.narratives') }}</a></li>
+                        <li{{ (Request::is('admin/narrative') && ! Request::is('admin/narrative/upload')) ? ' class="active"' : '' }}><a href="{{ action('AdminNarrativeController@getIndex') }}"><i class="fa fa-bullhorn fa-fw"></i> {{ trans('admin.sidebar.narratives') }}</a></li>
                         <li{{ Request::is('admin/category*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-folder-open-o fa-fw"></i> {{ trans('admin.sidebar.categories') }}</a></li>
-                        <li{{ Request::is('admin/flag*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-flag-o fa-fw"></i> {{ trans('admin.sidebar.flagReports') }}</a></li>
+                        <li{{ Request::is('admin/narrative/flag*') ? ' class="active"' : '' }}><a href="{{ action('AdminFlagController@getIndex')}}"><i class="fa fa-flag-o fa-fw"></i> {{ trans('admin.sidebar.flagReports') }}</a></li>
                         <li{{ Request::is('admin/configuration*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-cogs fa-fw"></i> {{ trans('admin.sidebar.configuration') }}</a></li>
                     </ul>
                     <ul class="nav nav-sidebar">

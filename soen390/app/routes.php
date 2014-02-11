@@ -42,7 +42,9 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
 
         // Narrative Listing
         Route::get('/', array('uses' => 'AdminNarrativeController@getIndex'));
-
+	
+	// Narrative flags
+	Route::get('flag', array('uses'=>'AdminFlagController@getIndex'));
         // Narrative Upload
         Route::get('upload', array('uses' => 'AdminNarrativeController@getUpload'));
 
