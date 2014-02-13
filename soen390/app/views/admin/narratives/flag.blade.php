@@ -20,12 +20,9 @@ Flagged Narrative(s)
     <thead>
         <tr>
             <th>#</th>
-            <th>{{ trans('admin.narratives.table.name') }}</th>
-            <th>{{ trans('admin.narratives.table.views') }}</th>
-            <th>{{ trans('admin.narratives.table.comments') }}</th>
-            <th>{{ trans('admin.narratives.table.category') }}</th>
-            <th>{{ trans('admin.narratives.table.uploadedOn') }}</th>
-            <th>{{ trans('admin.narratives.table.manage') }}</th>
+            <th>{{ trans('admin.narratives.table.narrativeName') }}</th>
+            <th>{{ trans('admin.narratives.table.comment') }}</th>
+	    <th>{{ trans('admin.narratives.table.manage') }}</th>
         </tr>
     </thead>
     <tfoot>
@@ -49,7 +46,7 @@ Flagged Narrative(s)
     $(document).ready(function () {
 
         var narratives = $.getJSON(
-            "{{ action('ApiNarrativeController@index') }}",
+            "{{ action('ApiFlagController@index') }}",
             function (data) {
                 var rows = [];
 
@@ -57,11 +54,8 @@ Flagged Narrative(s)
                     rows.push("<tr>"
                         + "<td>" + narrative.id + "</td>"
                         + "<td>" + narrative.name + "</td>"
-                        + "<td>" + narrative.views + "</td>"
-                        + "<td>" + 0 + "</td>"
-                        + "<td>" + narrative.stance + "</td>"
-                        + "<td>" + narrative.createdAt + "</td>"
-                        + "<td>" + "&mdash;" + "</td>"
+			+ "<td>" + narrative.comment + "</td>"
+			+ "<td><a class='glyphicon glyphicon-trash' href='#'></a> <a href='' class='' ></a></td>"
                         + "</tr>");
                 });
 
@@ -79,4 +73,5 @@ Flagged Narrative(s)
 
     });
 </script>
+
 @stop

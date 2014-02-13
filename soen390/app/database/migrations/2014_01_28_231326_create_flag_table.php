@@ -17,7 +17,6 @@ class CreateFlagTable extends Migration {
 			$table->integer('NarrativeID')->nullable();
 			$table->integer('CommentID')->nullable();
 			$table->string('Comment', 200)->nullable();
-			$table->integer('Flags')->default(0);
 		});
 	}
 

@@ -21,10 +21,11 @@ return array(
                     'category' => 'Category',
                     'uploadedOn' => 'Uploaded On',
                     'manage' => 'Manage',
-
+		    'comment'=> 'Comment',
                     'empty' => 'You need to upload some narratives first!',
                     'loading' => 'Loading narratives...',
                     'inTotal' => 'narrative(s) in total.',
+		    'narrativeName'=>'Narrative Name'
                 ),
 
             'upload' => array(

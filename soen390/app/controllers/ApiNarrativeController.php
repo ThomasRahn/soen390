@@ -38,7 +38,6 @@ class ApiNarrativeController extends \BaseController {
 
 		return Response::json($formattedNarratives);
 	}
-
 	/**
 	 * Display the specified resource.
 	 *

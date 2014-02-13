@@ -6,5 +6,4 @@ class AdminFlagController extends BaseController {
     {
         return View::make('admin.narratives.flag');
     }
-    
 }

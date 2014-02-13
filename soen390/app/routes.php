@@ -22,6 +22,7 @@ Route::group(array('prefix' => 'api'), function() {
 
     // Narrative API.
     Route::resource('narrative', 'ApiNarrativeController');
+    Route::resource('flags','ApiFlagController');
 
 });
 
