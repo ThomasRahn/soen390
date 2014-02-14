@@ -16,7 +16,9 @@ Flagged Narrative(s)
 @stop
 
 @section('content')
-<table class="table narrative-table table-hover">
+<div class="message">
+</div>
+<table class="table narrative-table table-hover flag-table">
     <thead>
         <tr>
             <th>#</th>
@@ -29,10 +31,8 @@ Flagged Narrative(s)
         <tr class="active">
             <td colspan="7"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
         </tr>
-        <tr class="empty" style="display:none;">
-            <td colspan="7"><span class="text-center">{{ trans('admin.narratives.table.empty') }}</span></td>
-        </tr>
     </tbody>
+
 </table>
 @stop
 
@@ -49,7 +49,7 @@ Flagged Narrative(s)
                 var rows = [];
 
                 $.each(data, function(index, narrative) {
-                    rows.push("<tr id='"+ narrative.id + "'>"
+                    rows.push("<tr class='flag' id='"+ narrative.id + "' data-NarrativeID='"+narrative.narrativeID+"'>"
                         + "<td>" + narrative.id + "</td>"
                         + "<td>" + narrative.name + "</td>"
 		              	+ "<td>" + narrative.comment + "</td>"
@@ -59,8 +59,10 @@ Flagged Narrative(s)
                         + "</tr>");
                 });
 
-                if (rows.length === 0)
-                    $(".empty").show();
+                if(rows.length == 0){
+                    $(".message").html("There are currently no reported narratives");
+                    $(".flag-table").remove();
+                }
 
                 $(".table-spinner").remove();
 
@@ -85,7 +87,10 @@ Flagged Narrative(s)
             url:'flag/'+id,
             success:function(data){//
                 $("tr#"+id).remove();
-                $(".empty").show();
+                if($(".flag").length == 0){
+                    $(".flag-table").remove();
+                    $(".message").html("There are currently no reported narratives");
+                }
             }
         });
     }
@@ -94,7 +99,11 @@ Flagged Narrative(s)
             type:'DELETE',
             url:'narrative/'+id,
             success:function(data){//
-               
+               $("[data-NarrativeID="+id+"]").remove();
+                if($(".flag").length == 0){
+                    $(".flag-table").remove();
+                    $(".message").html("There are currently no reported narratives");
+                }
             }
         });
     }

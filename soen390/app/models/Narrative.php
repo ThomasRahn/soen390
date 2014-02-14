@@ -6,6 +6,7 @@ class Narrative extends Eloquent{
 	public static $unguarded = true;
 	public $timestamps = false;
 	protected $primaryKey = 'NarrativeID';
+	protected $softDelete = true;
 
 	public function category(){
 		return $this->belongsTo("Category", "CategoryID", "CategoryID");

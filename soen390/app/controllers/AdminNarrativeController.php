@@ -24,8 +24,11 @@ class AdminNarrativeController extends BaseController {
     */
     public function destroy($id)
     {
-        $narrative = Narrative::find($id);
-        $narrative->first()->delete();
+        //When removing narrative, we need to remove all Content, Flags and Comments related to it.
+        DB::table('Narrative')->where('NarrativeID',$id)->delete();
+        DB::table('Content')->where('NarrativeID',$id)->delete();
+        DB::table('Flag')->where('NarrativeID',$id)->delete();
+        DB::table('Comment')->where('NarrativeID',$id)->delete();
     }
     
 }

@@ -20,6 +20,7 @@ class CreateContentTable extends Migration {
 			$table->string('AudioPath', 100)->nullable();
 			$table->string('PicturePath', 100)->nullable();
 			$table->float('Duration')->nullable();
+			$table->timestamp('deleted_at')->nullable();
 		});
 	}
 

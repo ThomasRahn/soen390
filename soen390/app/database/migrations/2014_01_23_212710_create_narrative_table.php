@@ -19,6 +19,7 @@ class CreateNarrativeTable extends Migration {
 			$table->integer('LanguageID');
 			$table->timestamp('DateCreated');
 			$table->timestamp('DateModified')->nullable();
+			$table->timestamp('deleted_at')->nullable();
 			$table->string('Name', 30)->nullable();
 			$table->integer('Views')->default(0);
 			$table->integer('Agrees')->default(0);
