@@ -17,5 +17,15 @@ class AdminNarrativeController extends BaseController {
 
         return View::make('admin.narratives.upload')->with('categoryArray', $categoryArray);
     }
+    /**
+    *   remove a particular narrative
+    *
+    *   @para int $id (Narrative id)
+    */
+    public function destroy($id)
+    {
+        $narrative = Narrative::find($id);
+        $narrative->first()->delete();
+    }
     
 }

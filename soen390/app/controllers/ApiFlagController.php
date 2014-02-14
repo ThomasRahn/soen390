@@ -22,6 +22,7 @@ class ApiFlagController extends \BaseController {
 			$formattedFlags[] = array(
 					'id' => $flag->FlagID,
 					'name' => $flag->narrative()->first()->Name,
+					'narrativeID' => $flag->NarrativeID,
 					'comment' =>$flag->Comment,
 				);
 		}

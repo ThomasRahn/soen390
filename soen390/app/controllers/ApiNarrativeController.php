@@ -25,7 +25,7 @@ class ApiNarrativeController extends \BaseController {
 			$formattedNarratives[] = array(
 					'id' => $narrative->NarrativeID,
 					'name' => $narrative->Name,
-					'stance' => $narrative->category()->first()->Name,
+					'stance' => $narrative->category()->first()->Description,
 					'lang' => $narrative->langauge()->first()->Description,
 					'views' => $narrative->Views,
 					'yays' => $narrative->Agrees,

@@ -25,6 +25,7 @@ return array(
                     'empty' => 'You need to upload some narratives first!',
                     'loading' => 'Loading narratives...',
                     'inTotal' => 'narrative(s) in total.',
+		    'totalFlags' => 'flag(s) in total.',
 		    'narrativeName'=>'Narrative Name'
                 ),
 

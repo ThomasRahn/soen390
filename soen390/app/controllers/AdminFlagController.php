@@ -6,4 +6,15 @@ class AdminFlagController extends BaseController {
     {
         return View::make('admin.narratives.flag');
     }
+
+    /**
+	*	remove a particular flag
+	*
+	*	@para int $id (flag id)
+	*/
+	public function destroy($id)
+	{
+		$flag = Flag::find($id);
+		$flag->first()->delete();
+	}
 }

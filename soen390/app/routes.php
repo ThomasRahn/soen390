@@ -44,10 +44,17 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
         // Narrative Listing
         Route::get('/', array('uses' => 'AdminNarrativeController@getIndex'));
 	
-	// Narrative flags
-	Route::get('flag', array('uses'=>'AdminFlagController@getIndex'));
+        // Narrative flags
+        Route::get('flag', array('uses'=>'AdminFlagController@getIndex'));
+
+        //Remove Narrative flag
+        Route::delete('flag/{id}', array('uses'=>'AdminFlagController@destroy'));
+
         // Narrative Upload
         Route::get('upload', array('uses' => 'AdminNarrativeController@getUpload'));
+
+        //Remove Narrative
+        Route::delete('narrative/{id}', array('uses'=>'AdminNarrativeController@destroy'));
 
     });
 
