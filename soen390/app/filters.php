@@ -44,6 +44,17 @@ Route::filter('auth.basic', function()
 	return Auth::basic();
 });
 
+Route::filter('auth.api', function()
+{
+	if (Auth::guest()) return Response::json(
+			array(
+				'success' => false,
+				'error' => 'Must be authenticated to access this action.',
+			),
+			401
+		);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Filter
