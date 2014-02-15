@@ -19,7 +19,7 @@ Upload Narrative(s)
             <div class="form-group">
                 {{ Form::label('archive', 'Archive File', array('class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
-                    {{ Form::file('archive', array('class' => 'form-control')) }}
+                    {{ Form::file('archive', array('class' => 'form-control', 'accept' => 'application/zip', 'required' => 'required')) }}
                     <span class="help-block"><small>{{ Lang::get('admin.narratives.upload.help.archive', array('limit' => ini_get('post_max_size'))) }}</small></span>
                 </div>
             </div>
@@ -27,7 +27,7 @@ Upload Narrative(s)
             <div class="form-group">
                 {{ Form::label('category', 'Default Category', array('class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
-                    {{ Form::select('category', $categoryArray, null, array('class' => 'form-control')) }}
+                    {{ Form::select('category', $categoryArray, null, array('class' => 'form-control', 'required' => 'required')) }}
                     <span class="help-block"><small>{{ trans('admin.narratives.upload.help.category') }}</small></span>
                 </div>
             </div>
