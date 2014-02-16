@@ -34,6 +34,17 @@ return array(
                             'publish' => 'Would you like the uploaded narratives to be published and made available on the site immediately? You can publish/unpublish each narrative individually later.',
                         ),
                     'submit' => 'Upload Narrative(s)',
+                    'close' => 'Close',
+                    'uploading' => array(
+                            'pleaseWait' => 'Uploading, please wait...',
+                            'mayTakeAWhile' => 'This may take a while based on how large the selected file is.',
+                        ),
+                    'uploaded' => array(
+                            'success' => 'Your archive has been uploaded!',
+                            'successQueued' => 'It\'s currently queued for further processing and will be available soon.',
+                            'failed' => 'An error occured during the upload process.',
+                            'failedSorry' => ' We\'re sorry for any inconvenience caused. The following is the error message:',
+                        ),
                 ),
         ),
 
