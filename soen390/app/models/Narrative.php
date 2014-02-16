@@ -17,15 +17,5 @@ class Narrative extends Eloquent{
 	public function content(){
 		return $this->hasMany("Content", "NarrativeID","NarrativeID");
 	}
-	public static function transcode(){
-
-		return Queue::push(function($job){
-
-			// add transcoding stuff here
-
-
-		});
-
-	}
 
 }
