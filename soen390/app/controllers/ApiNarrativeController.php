@@ -25,7 +25,7 @@ class ApiNarrativeController extends \BaseController {
 			$formattedNarratives[] = array(
 					'id' => $narrative->NarrativeID,
 					'name' => $narrative->Name,
-					'stance' => $narrative->category()->first()->Name,
+					'stance' => $narrative->category()->first()->Description,
 					'lang' => $narrative->langauge()->first()->Description,
 					'views' => $narrative->Views,
 					'yays' => $narrative->Agrees,
@@ -38,7 +38,6 @@ class ApiNarrativeController extends \BaseController {
 
 		return Response::json($formattedNarratives);
 	}
-
 	/**
 	 * Display the specified resource.
 	 *
