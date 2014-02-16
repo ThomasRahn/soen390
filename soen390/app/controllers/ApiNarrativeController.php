@@ -4,7 +4,7 @@ class ApiNarrativeController extends \BaseController {
 
 	public function __construct()
 	{
-		$this->beforeFilter('auth', array(
+		$this->beforeFilter('auth.api', array(
 			'except' => array('index', 'show'))
 		);
 	}
@@ -57,7 +57,30 @@ class ApiNarrativeController extends \BaseController {
 	 */
 	public function store()
 	{
+		$validator = Validator::make(Input::all(), array(
+				'archive' => 'required|mimes:zip',
+				'category' => 'required|exists:Category,CategoryID'
+			));
 
+		if ($validator->fails())
+			return Response::json(array(
+					'success' => false,
+					'error' => $validator->errors()->toJson()
+				), 400);
+
+		$file = Input::file('archive');
+
+		$originalName = $file->getClientOriginalName();
+		$hashedName = hash('sha256', Session::getId() . $originalName . time());
+		$hashedFullName = $hashedName . '.' . $file->getClientOriginalExtension();
+
+		$file->move(Config::get('media.paths.uploads'), $hashedFullName);
+
+		$destinationPath = Config::get('media.paths.uploads') . '/' . $hashedFullName;
+
+		return Response::json(array(
+			'success' => true,
+			'return' => 'Upload is queued for processing.',
+		));
 	}
-
 }
