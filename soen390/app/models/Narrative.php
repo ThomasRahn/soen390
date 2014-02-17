@@ -188,7 +188,11 @@ class Narrative extends Eloquent
 
 				// If the file is an 'audio', then process it further.
 				if (strpos($fileMime, 'audio/') === 0) {
-					//
+					// Queue file for processing
+					Queue::push('TranscodeAudio', array(
+						'sourceFilePath' => $filePath,
+						'narrativeID' => $narrative->NarrativeID,
+					), 'transcoding');
 				}
 			}
 		}
