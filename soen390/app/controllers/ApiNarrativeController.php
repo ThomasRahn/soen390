@@ -80,6 +80,9 @@ class ApiNarrativeController extends \BaseController {
 		// Determine the destination of where the archive has been moved to.
 		$destinationPath = Config::get('media.paths.uploads') . '/' . $hashedFullName;
 
+		// Process the archive
+		Narrative::addArchive($hashedName, $destinationPath);
+
 		return Response::json(array(
 			'success' => true,
 			'return' => 'Upload is queued for processing.',
