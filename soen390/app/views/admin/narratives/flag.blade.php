@@ -53,10 +53,12 @@ Flagged Narrative(s)
                         + "<td>" + narrative.id + "</td>"
                         + "<td>" + narrative.name + "</td>"
 		              	+ "<td>" + narrative.comment + "</td>"
-		              	+ "<td><a class='glyphicon glyphicon-trash' href='#' data-toggle='tooltip' data-placement='bottom' title='Remove Narrative' onclick='remove_narrative("+ narrative.narrativeID+")'></a>"
-                        + " <a href='#' onclick='play_narrative("+ narrative.narrativeID +")'class='glyphicon glyphicon-play' data-toggle='tooltip' data-placement='bottom' title='Play Narrative'></a>"
-                        + " <a class='glyphicon glyphicon-remove' href='#' data-toggle='tooltip' data-placement='bottom' title='Remove Flag' onclick='remove_flag("+ narrative.id+")'></a></td>"
-                        + "</tr>");
+                        + "<td>"
+                        + "<div class=\"btn-group btn-group-xs\">"
+                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"remove_narrative("+ narrative.narrativeID+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"play_narrative("+ narrative.narrativeID +")\"><i class=\"fa fa-play fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"remove_flag("+ narrative.id+")\"><i class=\"fa fa-times fa-fw\"></i></button>"
+                        + "</td></tr>");
                 });
 
                 if(rows.length == 0){
@@ -73,7 +75,7 @@ Flagged Narrative(s)
             });
        
     });
-    function play_narrative(id){//
+    function play_narrative(id){//65
         var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
             left = (screen.width / 2) - (popupWidth / 2),

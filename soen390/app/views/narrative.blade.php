@@ -90,7 +90,10 @@ function printObject(o) {
             var total = parseInt($(".temp_progress").css("width"));
             if( total > (progress_bar * 0.95)){
                 myPlaylist.play(0);
-                myPlaylist.pause();     
+                myPlaylist.pause();
+
+                //show upvote, downvote     
+                $(".option-bar").show();
             }
         },
         pause: function(event) {
@@ -183,6 +186,23 @@ function printObject(o) {
 	});
 });
 
+function reportNarrative(){
+    var form = $("#reported-narrative").serialize();
+    $.ajax({//
+        url:"/flag",
+        type:"POST",
+        data:form,
+        success:function(data){//
+            alert("Thank you for the report, we will be looking into it shortly.");
+        }
+
+    });
+    $("#report-narrative").modal("hide");
+   
+}
+function expressOpinion(stance){
+    //ajax call with stance to increase agree or disagree
+}
 </script>
 <img class="audio_poster" height="500px" width="500px" src=""/>
    <!-- Playlist -->
@@ -226,11 +246,45 @@ function printObject(o) {
                     <div class="temp_progress" style="width:0%;background-color:lime;z-index:0;height:30px;position:absolute;transition-duration: 0.6s;"></div>
                     <div class="progress_container clone" style="display:none;height:30px;z-index:5;position:relative;"></div>
                 </div>
-                   
                 <div class="nav navbar-text">
                     <span id="jp-total"></span>
                 </div>
+                <div class="nav navbar-text option-bar" style="display:none; width:200px;">
+                    <div class="opinion pull-left">
+                        <button type="button" class="btn btn-default" onclick="expressOpinion(1);" ><i class="fa fa-hand-o-up fa-fw"></i></button>
+                        <button type="button" class="btn btn-default" onclick="expressOpinion(2);" ><i class="fa fa-hand-o-down fa-fw"></i></button>
+                        <button type="button" class="btn btn-default" onclick="expressOpinion(2);" ><i class="fa fa-hand-o-right fa-fw"></i></button>
+                    </div>
+                    <div class="report pull-right">
+                        <button type="button" class="btn btn-default" onclick="" data-toggle="modal" data-target="#report-narrative"><i class="fa fa-exclamation fa-fw"></i></button>
+                    </div>
+                </div>
 
             </div>
-
+    </footer>
+      <div class="modal" id="report-narrative">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Report Narrative</h4>
+              </div>
+              <div class="modal-body">
+                <p>You are currently reporting this narrative, tell us why</p>
+                <form class="reported-Narrative">
+            
+                </form>
+                <form id='reported-narrative'>
+                    {{ Form::token()}}
+                    {{ Form::textarea('report-comment')}}
+                    <input type="hidden" name="NarrativeID" value="{{ $narrative->NarrativeID}}"/>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="reportNarrative()">Report</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 @stop
