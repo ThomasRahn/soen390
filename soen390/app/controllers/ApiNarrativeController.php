@@ -82,7 +82,7 @@ class ApiNarrativeController extends \BaseController {
 
 		// Process the archive
 		try {
-			Narrative::addArchive($hashedName, $destinationPath);
+			Narrative::addArchive($hashedName, $destinationPath, Input::get('category'));
 		} catch (Exception $e) {
 			return Response::json(array(
 				'success' => false,
