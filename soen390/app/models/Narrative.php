@@ -89,6 +89,17 @@ class Narrative extends Eloquent
 		return $destPath;
 	}
 
+	/**
+	 * Processes an archive that has been extracted.
+	 *
+	 * This will go through the directory structure, creating the necessary
+	 * Narrative objects and any associated Content. Narratives will be
+	 * associated with a default Category that is specified.
+	 *
+	 * @param  $extractedPath   string
+	 * @param  $defaultCategory int
+	 * @return void
+	 */
 	private static function processExtractedArchive($extractedPath, $defaultCategory)
 	{
 		// Get all subdirectories, which should each be a self-contained
