@@ -152,6 +152,11 @@ class Narrative extends Eloquent
 				'DateCreated' => DateTime::createFromFormat('Y-m-d H-i-s', ($metaXmlElement->submitDate . ' ' . $metaXmlElement->time))->getTimestamp(),
 			));
 
+			// Delete the metafile unless application is in debug mode.
+			if (Config::get('app.debug') === false)
+				if (File::delete($metaFilePath) === false)
+					Log::error('Unable to delete metafile.', array('context' => $metaFilePath));
+
 			// Create a directory to hold all processed media associated with this narrative.
 			$processedPath = Config::get('media.paths.processed') . DIRECTORY_SEPARATOR . $narrative->NarrativeID;
 
