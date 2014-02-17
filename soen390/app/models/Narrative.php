@@ -42,14 +42,18 @@ class Narrative extends Eloquent
 	 * unique to its particular instance. Multiple instances of the
 	 * same archive should each have their own $name values.
 	 *
-	 * @param  $name        string
-	 * @param  $archivePath string
+	 * @param  $name            string
+	 * @param  $archivePath     string
+	 * @param  $defaultCategory int
 	 * @return void
 	 */
-	public static function addArchive($name, $archivePath)
+	public static function addArchive($name, $archivePath, $defaultCategory)
 	{
 		// Extract the archive into folder named by $name
 		$extractedPath = self::extractArchive($name, $archivePath);
+
+		// Go through the extracted contents and process them.
+		self::processExtractedArchive($extractedPath, $defaultCategory);
 	}
 
 	/**
@@ -63,7 +67,7 @@ class Narrative extends Eloquent
 	private static function extractArchive($name, $archivePath)
 	{
 		// Create containing directory.
-		$destPath = Config::get('media.paths.extracted') . '/' . escapeshellcmd($name);
+		$destPath = Config::get('media.paths.extracted') . DIRECTORY_SEPARATOR . escapeshellcmd($name);
 
 		if (mkdir($destPath, 0775, true) === false)
 			throw new RuntimeException('Unable to create directory: "' . $destPath . '"');
@@ -83,5 +87,94 @@ class Narrative extends Eloquent
 			unlink($archivePath);
 
 		return $destPath;
+	}
+
+	private static function processExtractedArchive($extractedPath, $defaultCategory)
+	{
+		// Get all subdirectories, which should each be a self-contained
+		// narrative.
+		$narratives = File::directories($extractedPath);
+
+		if (count($narratives) === 0) {
+			Log::info('Empty archive.', array('context' => 'Archive path: "' . $extractedPath . '"'));
+			return;
+		}
+
+		// Process each narrative individually
+		foreach ($narratives as $narPath) {
+			// Get all files in the narrative
+			$files = File::files($narPath);
+
+			// The narrative identifier should be the value of the subdirectory.
+			$narId = basename($narPath);
+
+			// Based on the identifier, there should be an associated XML file within.
+			$metaFilePath = $narPath . DIRECTORY_SEPARATOR . $narId . '.xml';
+
+			if (! File::exists($metaFilePath)) {
+				Log::error(
+					'Narrative is missing appropriate metadata file.',
+					array('context' => $narPath)
+				);
+				continue;
+			}
+
+			if (count($files) < 2) { // Make sure that there's more than just a metafile.
+				Log::error(
+					'Narrative is missing media files.',
+					array('context' => $narPath)
+				);
+				continue;
+			}
+
+			// Retrieve the metadata file and parse it.
+			$metaFile = File::get($metaFilePath);
+			$metaXmlElement = new SimpleXMLElement($metaFile);
+
+			// Create a new Narrative based on the metadata.
+			$language = Language::where('Description', 'like', $metaXmlElement->language)->first(); // Retrieve the associated language
+			$narrative = Narrative::create(array(
+				'Name' => $metaXmlElement->narrativeName,
+				'TopicID' => Topic::first()->TopicID,
+				'CategoryID' => $defaultCategory,
+				'LanguageID' => $language->LanguageID,
+				'DateCreated' => DateTime::createFromFormat('Y-m-d H-i-s', ($metaXmlElement->submitDate . ' ' . $metaXmlElement->time))->getTimestamp(),
+			));
+
+			// Create a directory to hold all processed media associated with this narrative.
+			$processedPath = Config::get('media.paths.processed') . DIRECTORY_SEPARATOR . $narrative->NarrativeID;
+
+			if (File::makeDirectory($processedPath, 0775, true) === false)
+				throw new RuntimeException('Unable to create directory: "' . $processedPath . '"');
+
+			$finfo = new finfo(FILEINFO_MIME_TYPE);
+
+			// Go through each file
+			foreach ($files as $filePath) {
+				// Skip the XML
+				if (File::extension($filePath) === 'xml') continue;
+
+				// Get the MIME type of the file
+				$fileMime = $finfo->file($filePath);
+
+				// If the file is an 'image', then move it.
+				if (strpos($fileMime, 'image/') === 0) {
+					$fileName = basename($filePath);
+					$fileDestPath = $processedPath . DIRECTORY_SEPARATOR . $fileName;
+					File::move($filePath, $fileDestPath);
+
+					// Create the associated Content
+					Content::create(array(
+						'NarrativeID' => $narrative->NarrativeID,
+						'PicturePath' => $fileName,
+					));
+				}
+
+				// If the file is an 'audio', then process it further.
+				if (strpos($fileMime, 'audio/') === 0) {
+					//
+				}
+			}
+		}
 	}
 }
