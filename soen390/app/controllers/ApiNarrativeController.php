@@ -81,7 +81,14 @@ class ApiNarrativeController extends \BaseController {
 		$destinationPath = Config::get('media.paths.uploads') . '/' . $hashedFullName;
 
 		// Process the archive
-		Narrative::addArchive($hashedName, $destinationPath);
+		try {
+			Narrative::addArchive($hashedName, $destinationPath);
+		} catch (Exception $e) {
+			return Response::json(array(
+				'success' => false,
+				'error' => $e->getMessage()
+			), 500);
+		}
 
 		return Response::json(array(
 			'success' => true,
