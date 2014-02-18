@@ -3,6 +3,7 @@
 class Content extends Eloquent {
 
 	protected $table = "Content";
+	protected $guarded = array('ContentID');
 	public $timestamps = false;
 	protected $primaryKey = 'ContentID';
 	

@@ -28,7 +28,7 @@ class CreateTopicTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('Category');
+		Schema::dropIfExists('Topic');
 	}
 
 }

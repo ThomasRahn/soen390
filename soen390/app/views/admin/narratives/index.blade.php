@@ -61,7 +61,12 @@ Narratives
                         + "<td>" + 0 + "</td>"
                         + "<td>" + narrative.stance + "</td>"
                         + "<td>" + narrative.createdAt + "</td>"
-                        + "<td>" + "&mdash;" + "</td>"
+                        + "<td>"
+                        + "<div class=\"btn-group btn-group-xs\">"
+                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-pencil fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-play fa-fw\"></i></button>"
+                        + "</td>"
                         + "</tr>");
                 });
 
