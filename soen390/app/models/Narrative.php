@@ -52,7 +52,7 @@ class Narrative extends Eloquent
 	 * @param  $published       boolean
 	 * @return void
 	 */
-	public static function addArchive($name, $archivePath, $defaultCategory, $published = false)
+	public static function addArchive($name, $archivePath, $defaultCategory, $published)
 	{
 		// Extract the archive into folder named by $name
 		$extractedPath = self::extractArchive($name, $archivePath);

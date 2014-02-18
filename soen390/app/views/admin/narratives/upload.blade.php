@@ -59,7 +59,7 @@ Upload Narrative(s)
                 {{ Form::label('publish', 'Publish on Upload?', array('class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
                     <div class="checkbox">
-                        {{ Form::checkbox('publish', '') }}
+                        {{ Form::checkbox('publish', 'publish') }}
                     </div>
                     <span class="help-block"><small>{{ trans('admin.narratives.upload.help.publish') }}</small></span>
                 </div>
