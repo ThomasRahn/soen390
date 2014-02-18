@@ -55,15 +55,13 @@ Narratives
                 var rows = [];
 
                 $.each(data, function(index, narrative) {
-                    var date = new Date(narrative.createdAt);
-
                     rows.push("<tr" + (narrative.published == false ? " class=\"warning\"" : "") + ">"
                         + "<td>" + narrative.id + "</td>"
                         + "<td>" + narrative.name + "</td>"
                         + "<td>" + narrative.views + "</td>"
                         + "<td>" + 0 + "</td>"
                         + "<td>" + narrative.stance + "</td>"
-                        + "<td>" + date.toLocaleString() + "</td>"
+                        + "<td>" + narrative.createdAt + "</td>"
                         + "<td><i class=\"fa fa-eye" + (narrative.published == false ? "-slash" : "") + " fa-fw\"></i></td>"
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
