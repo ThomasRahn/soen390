@@ -17,7 +17,15 @@ class ApiNarrativeController extends \BaseController {
 	 */
 	public function index()
 	{
-		$narratives = Narrative::all();
+		$narratives = null;
+
+		// Retrieve all published and unpublished narratives if user is
+		// authenticated and requests so.
+		if (Auth::check() && Input::get('withUnpublished', 0) == 1)
+			$narratives = Narrative::all();
+		else
+			$narratives = Narrative::where('Published', 1)->get();
+
 		$formattedNarratives = array();
 		$picture_path = Config::get('narrativePath.paths.picture');
 		foreach ($narratives as $narrative) {
@@ -33,6 +41,7 @@ class ApiNarrativeController extends \BaseController {
 					'nays' => $narrative->Disagrees,
 					'mehs' => $narrative->Indifferents,
 					'createdAt' => $narrative->DateCreated,
+					'published' => $narrative->Published,
 					'imageLink' => isset($narrativePhoto) ? asset('pictures/' . $narrativePhoto->PicturePath) : asset('img/default_narrative.jpg'),
 				);
 		}
@@ -82,7 +91,7 @@ class ApiNarrativeController extends \BaseController {
 
 		// Process the archive
 		try {
-			Narrative::addArchive($hashedName, $destinationPath, Input::get('category'));
+			Narrative::addArchive($hashedName, $destinationPath, Input::get('category'), Input::has('publish'));
 		} catch (Exception $e) {
 			return Response::json(array(
 				'success' => false,

@@ -25,6 +25,7 @@ class CreateNarrativeTable extends Migration {
 			$table->integer('Agrees')->default(0);
 			$table->integer('Disagrees')->default(0);
 			$table->integer('Indifferents')->default(0);
+			$table->boolean('Published');
 		});
 	}
 

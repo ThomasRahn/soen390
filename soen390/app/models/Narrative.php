@@ -42,18 +42,23 @@ class Narrative extends Eloquent
 	 * unique to its particular instance. Multiple instances of the
 	 * same archive should each have their own $name values.
 	 *
+	 * Optionally, there is a $published default attribute to determine
+	 * if all narratives under the specified archive should be published
+	 * upon complete creation.
+	 *
 	 * @param  $name            string
 	 * @param  $archivePath     string
 	 * @param  $defaultCategory int
+	 * @param  $published       boolean
 	 * @return void
 	 */
-	public static function addArchive($name, $archivePath, $defaultCategory)
+	public static function addArchive($name, $archivePath, $defaultCategory, $published = false)
 	{
 		// Extract the archive into folder named by $name
 		$extractedPath = self::extractArchive($name, $archivePath);
 
 		// Go through the extracted contents and process them.
-		self::processExtractedArchive($extractedPath, $defaultCategory);
+		self::processExtractedArchive($extractedPath, $defaultCategory, $published);
 	}
 
 	/**
@@ -98,9 +103,10 @@ class Narrative extends Eloquent
 	 *
 	 * @param  $extractedPath   string
 	 * @param  $defaultCategory int
+	 * @param  $published       boolean
 	 * @return void
 	 */
-	private static function processExtractedArchive($extractedPath, $defaultCategory)
+	private static function processExtractedArchive($extractedPath, $defaultCategory, $published)
 	{
 		// Get all subdirectories, which should each be a self-contained
 		// narrative.
@@ -150,6 +156,7 @@ class Narrative extends Eloquent
 				'CategoryID' => $defaultCategory,
 				'LanguageID' => $language->LanguageID,
 				'DateCreated' => DateTime::createFromFormat('Y-m-d H-i-s', ($metaXmlElement->submitDate . ' ' . $metaXmlElement->time)),
+				'Published' => $published,
 			));
 
 			// Delete the metafile unless application is in debug mode.
