@@ -149,7 +149,7 @@ class Narrative extends Eloquent
 				'TopicID' => Topic::first()->TopicID,
 				'CategoryID' => $defaultCategory,
 				'LanguageID' => $language->LanguageID,
-				'DateCreated' => DateTime::createFromFormat('Y-m-d H-i-s', ($metaXmlElement->submitDate . ' ' . $metaXmlElement->time))->getTimestamp(),
+				'DateCreated' => DateTime::createFromFormat('Y-m-d H-i-s', ($metaXmlElement->submitDate . ' ' . $metaXmlElement->time)),
 			));
 
 			// Delete the metafile unless application is in debug mode.
