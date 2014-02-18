@@ -28,7 +28,8 @@ Route::group(array('prefix' => 'api'), function() {
 
 // Routes for player.
 Route::resource('/narrative', 'NarrativeController@show');
-Route::resource('/flag','FlagController@getIndex');
+Route::resource('/flag','FlagStanceController@getIndex');
+Route::resource('/stance','FlagStanceController@setStance');
 Route::resource('/jsonNarrative','JSONController@show');
 
 // Routes for administrative view.

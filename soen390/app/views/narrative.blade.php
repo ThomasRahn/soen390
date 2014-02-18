@@ -201,7 +201,22 @@ function reportNarrative(){
    
 }
 function expressOpinion(stance){
-    //ajax call with stance to increase agree or disagree
+    //ajax call with stance to increase agree or disagree or indifferent
+    var token = $("#crsf_token").val();
+    var NarrativeID = $("#NarrativeID").val();
+    $.ajax({//
+        url:"/stance",
+        type:"POST",
+        data:{//
+            NarrativeID: NarrativeID,
+            _token : token,
+            stance: stance
+        },
+        success:function(data){//
+                $(".opinion").hide();
+               alert("Thank you for opinion.");
+        }
+    });
 }
 </script>
 <img class="audio_poster" height="500px" width="500px" src=""/>
@@ -251,9 +266,13 @@ function expressOpinion(stance){
                 </div>
                 <div class="nav navbar-text option-bar" style="display:none; width:200px;">
                     <div class="opinion pull-left">
-                        <button type="button" class="btn btn-default" onclick="expressOpinion(1);" ><i class="fa fa-hand-o-up fa-fw"></i></button>
-                        <button type="button" class="btn btn-default" onclick="expressOpinion(2);" ><i class="fa fa-hand-o-down fa-fw"></i></button>
-                        <button type="button" class="btn btn-default" onclick="expressOpinion(2);" ><i class="fa fa-hand-o-right fa-fw"></i></button>
+                        <form id='narrative-stance'>    
+                            <input type="hidden" name="NarrativeID" id="NarrativeID" value="{{ $narrative->NarrativeID}}"/>
+                            <input type="hidden" name="_token" id="crsf_token" value="<?php echo csrf_token(); ?>">
+                            <button type="button" class="btn btn-default" onclick="expressOpinion(1);" ><i class="fa fa-hand-o-up fa-fw"></i></button>
+                            <button type="button" class="btn btn-default" onclick="expressOpinion(2);" ><i class="fa fa-hand-o-down fa-fw"></i></button>
+                            <button type="button" class="btn btn-default" onclick="expressOpinion(3);" ><i class="fa fa-hand-o-right fa-fw"></i></button>
+                        </form>
                     </div>
                     <div class="report pull-right">
                         <button type="button" class="btn btn-default" onclick="" data-toggle="modal" data-target="#report-narrative"><i class="fa fa-exclamation fa-fw"></i></button>
