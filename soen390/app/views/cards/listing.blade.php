@@ -130,10 +130,16 @@
              * @param langCode string
              */
             function setLanguageFilter(langCode) {
+		var lang = null;
+
+		if (langCode == "en") lang = "English";
+
+		if (langCode == "fr") lang = "French";
+
                 rectangles.transition()
                           .duration(500)
                           .style('opacity', function(node) {
-                              return (langCode === null || langCode === node.lang) ? 1 : 0.2;
+                              return (lang === null || lang === node.lang) ? 1 : 0.2;
                           });
             }
 
