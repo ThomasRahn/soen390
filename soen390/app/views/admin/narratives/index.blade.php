@@ -81,7 +81,7 @@ Narratives
                     html: rows.join("")
                 }).appendTo(".narrative-table");
 
-                $(".row-count").html(rows.length);
+                $(".row-count").html(data['return'].length);
             });
 
     });
