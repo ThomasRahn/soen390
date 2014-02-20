@@ -46,7 +46,21 @@ class ApiNarrativeController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		if (Auth::check() && Input::get('withUnpublished', 0) == 1)
+			$narrative = Narrative::with('category', 'language')->find($id);
+		else
+			$narrative = Narrative::with('category', 'language')->where('Published', 1)->find($id);
+
+		if ($narrative == null)
+			return Response::json(array(
+				'success' => false,
+				'error' => 'Narrative not found.',
+			), 404);
+
+		return Response::json(array(
+			'success' => true,
+			'return' => $this->narrativeToArray($narrative),
+		));
 	}
 
 	/**
