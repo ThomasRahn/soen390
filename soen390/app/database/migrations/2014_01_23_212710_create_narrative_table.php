@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Filesystem\Filesystem;
 
 class CreateNarrativeTable extends Migration {
 
@@ -37,6 +38,10 @@ class CreateNarrativeTable extends Migration {
 	public function down()
 	{
 		Schema::dropIfExists('Narrative');
+
+		File::cleanDirectory(__DIR__ . '/../../storage/media/uploaded');
+		File::cleanDirectory(__DIR__ . '/../../storage/media/extracted');
+		File::cleanDirectory(__DIR__ . '/../../storage/media/processed');
 	}
 
 }
