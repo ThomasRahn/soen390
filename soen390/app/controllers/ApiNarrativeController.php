@@ -22,32 +22,53 @@ class ApiNarrativeController extends \BaseController {
 		// Retrieve all published and unpublished narratives if user is
 		// authenticated and requests so.
 		if (Auth::check() && Input::get('withUnpublished', 0) == 1)
-			$narratives = Narrative::all();
+			$narratives = Narrative::with('category', 'language')->get();
 		else
-			$narratives = Narrative::where('Published', 1)->get();
+			$narratives = Narrative::with('category', 'language')->where('Published', 1)->get();
 
-		$formattedNarratives = array();
-		$picture_path = Config::get('narrativePath.paths.picture');
-		foreach ($narratives as $narrative) {
-			$narrativePhoto = $narrative->content()->whereRaw('PicturePath IS NOT NULL')->first();
+		// Create an array to hold all the narratives. This array will be converted into a JSON object.
+		$narrativesArray = array();
 
-			$formattedNarratives[] = array(
-					'id' => $narrative->NarrativeID,
-					'name' => $narrative->Name,
-					'stance' => $narrative->category()->first()->Description,
-					'lang' => $narrative->langauge()->first()->Description,
-					'views' => $narrative->Views,
-					'yays' => $narrative->Agrees,
-					'nays' => $narrative->Disagrees,
-					'mehs' => $narrative->Indifferents,
-					'createdAt' => $narrative->DateCreated,
-					'published' => $narrative->Published,
-					'imageLink' => isset($narrativePhoto) ? asset('pictures/' . $narrativePhoto->PicturePath) : asset('img/default_narrative.jpg'),
-				);
+		foreach ($narratives as $n) {
+
+			// Get all the image content for this narrative.
+			$imagePaths = array();
+			$images = $n->content()->images()->orderBy('PicturePath')->get();
+
+			foreach ($images as $i)
+				$imagePaths[] = action('ContentController@getContent', array('id' => $i->ContentID));
+
+			// Get all the audio content for this narrative.
+			$audioPaths = array();
+			$audio = $n->content()->audio()->orderBy('AudioPath')->get();
+
+			foreach ($audio as $a)
+				$audioPaths[] = action('ContentController@getContent', array('id' => $a->ContentID));
+
+			// Put this narrative into the array.
+			$narrativesArray[] = array(
+				'id' => $n->NarrativeID,
+				'name' => $n->Name,
+				'stance' => $n->category()->first()->Description,
+				'lang' => $n->language()->first()->Description,
+				'views' => $n->Views,
+				'yays' => $n->Agrees,
+				'nays' => $n->Disagrees,
+				'mehs' => $n->Indifferents,
+				'createdAt' => $n->DateCreated,
+				'published' => $n->Published,
+				'images' => $imagePaths,
+				'audio' => $audioPaths,
+			);
+
 		}
 
-		return Response::json($formattedNarratives);
+		return Response::json(array(
+			'success' => true,
+			'return' => $narrativesArray,
+		));
 	}
+
 	/**
 	 * Display the specified resource.
 	 *

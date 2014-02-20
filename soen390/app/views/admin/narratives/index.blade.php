@@ -50,11 +50,11 @@ Narratives
     $(document).ready(function () {
 
         var narratives = $.getJSON(
-            "{{ action('ApiNarrativeController@index') }}/?withUnpublished=1",
+            "{{ action('ApiNarrativeController@index', array('withUnpublished' => 1)) }}",
             function (data) {
                 var rows = [];
 
-                $.each(data, function(index, narrative) {
+                $.each(data['return'], function(index, narrative) {
                     rows.push("<tr" + (narrative.published == false ? " class=\"warning\"" : "") + ">"
                         + "<td>" + narrative.id + "</td>"
                         + "<td>" + narrative.name + "</td>"

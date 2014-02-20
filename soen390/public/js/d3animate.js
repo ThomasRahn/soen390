@@ -17,10 +17,10 @@ var center = {
 
 function initializeCards() {
     d3.json("/api/narrative", function(error, json) {
-        if (error)
+        if (error || json['success'] == false)
             return console.log("JSON Error Occurred: " + error);
 
-        data = json;
+        data = json['return'];
 
         createNodes();
         createVisualization();
@@ -42,7 +42,7 @@ function createNodes() {
             nays:      narrative.nays,
             mehs:      narrative.mehs,
             createdAt: narrative.createdAt,
-            imageLink: narrative.imageLink,
+            imageLink: narrative.images[0],
             x:         Math.random() * width,
             y:         Math.random() * height,
         });

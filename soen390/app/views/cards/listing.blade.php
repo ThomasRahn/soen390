@@ -94,7 +94,6 @@
         <script src="{{ asset('js/dictionary.js') }}"></script>
         <script>
             var currentLanguage = '',
-                narrativeSource = '/api/narrative',
                 konamiMode      = false,
                 stanceGravityCenters  = {
                     'yay': { x: (width / 4), y: (height / 2) },
