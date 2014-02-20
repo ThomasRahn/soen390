@@ -13,7 +13,7 @@ class Narrative extends Eloquent
 		return $this->belongsTo('Category', 'CategoryID', 'CategoryID');
 	}
 
-	public function langauge()
+	public function language()
 	{
 		return $this->belongsTo('Language', 'LanguageID', 'LanguageID');
 	}
