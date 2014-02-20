@@ -29,39 +29,8 @@ class ApiNarrativeController extends \BaseController {
 		// Create an array to hold all the narratives. This array will be converted into a JSON object.
 		$narrativesArray = array();
 
-		foreach ($narratives as $n) {
-
-			// Get all the image content for this narrative.
-			$imagePaths = array();
-			$images = $n->content()->images()->orderBy('PicturePath')->get();
-
-			foreach ($images as $i)
-				$imagePaths[] = action('ContentController@getContent', array('id' => $i->ContentID));
-
-			// Get all the audio content for this narrative.
-			$audioPaths = array();
-			$audio = $n->content()->audio()->orderBy('AudioPath')->get();
-
-			foreach ($audio as $a)
-				$audioPaths[] = action('ContentController@getContent', array('id' => $a->ContentID));
-
-			// Put this narrative into the array.
-			$narrativesArray[] = array(
-				'id' => $n->NarrativeID,
-				'name' => $n->Name,
-				'stance' => $n->category()->first()->Description,
-				'lang' => $n->language()->first()->Description,
-				'views' => $n->Views,
-				'yays' => $n->Agrees,
-				'nays' => $n->Disagrees,
-				'mehs' => $n->Indifferents,
-				'createdAt' => $n->DateCreated,
-				'published' => $n->Published,
-				'images' => $imagePaths,
-				'audio' => $audioPaths,
-			);
-
-		}
+		foreach ($narratives as $n)
+			$narrativesArray[] = $this->narrativeToArray($n);
 
 		return Response::json(array(
 			'success' => true,
@@ -125,4 +94,50 @@ class ApiNarrativeController extends \BaseController {
 			'return' => 'Upload is queued for processing.',
 		));
 	}
+
+	/**
+	 * Given narrative $n, will return it in an array apporpiately
+	 * formatted for JSON responses.
+	 *
+	 * @param  Narrative  $n
+	 * @return array
+	 */
+	private function narrativeToArray($n)
+	{
+		// Get all the image content for this narrative.
+		$imagePaths = array();
+		$images = $n->content()->images()->orderBy('PicturePath')->get();
+
+		foreach ($images as $i)
+			$imagePaths[] = action('ContentController@getContent', array('id' => $i->ContentID));
+
+		if (count($imagePaths) == 0)
+			$imagePaths[] = asset('img/default_narrative.jpg');
+
+		// Get all the audio content for this narrative.
+		$audioPaths = array();
+		$audio = $n->content()->audio()->orderBy('AudioPath')->get();
+
+		foreach ($audio as $a)
+			$audioPaths[] = action('ContentController@getContent', array('id' => $a->ContentID));
+
+		// Put this narrative into the array.
+		$narrative = array(
+			'id' => $n->NarrativeID,
+			'name' => $n->Name,
+			'stance' => $n->category()->first()->Description,
+			'lang' => $n->language()->first()->Description,
+			'views' => $n->Views,
+			'yays' => $n->Agrees,
+			'nays' => $n->Disagrees,
+			'mehs' => $n->Indifferents,
+			'createdAt' => $n->DateCreated,
+			'published' => $n->Published,
+			'images' => $imagePaths,
+			'audio' => $audioPaths,
+		);
+
+		return $narrative;
+	}
+
 }
