@@ -96,9 +96,9 @@
             var currentLanguage = '',
                 konamiMode      = false,
                 stanceGravityCenters  = {
-                    'yay': { x: (width / 4), y: (height / 2) },
-                    'meh': { x: (width / 2), y: (height / 2) },
-                    'nay': { x: (2.83 * (width / 4)), y: (height / 2) }
+                    'For': { x: (width / 4), y: (height / 2) },
+                    'Indifferent': { x: (width / 2), y: (height / 2) },
+                    'Against': { x: (2.83 * (width / 4)), y: (height / 2) }
                 };
 
             /**
