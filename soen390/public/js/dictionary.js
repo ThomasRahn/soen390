@@ -2,10 +2,13 @@ var dictionary = {
                     "en": {
                         "brand": 'You <i class="fa fa-comments"></i> Deliberate',
                         "brandText": 'You Deliberate',
-                        "stance": 'Stance',
+                        "stance": 'Position',
                         "popularity": 'Popularity',
                         "spaghetti": "Arm Spaghetti",
-                        "momSpaghetti": "Mom Spaghetti"
+                        "momSpaghetti": "Mom Spaghetti",
+                        "agrees": "Agrees",
+                        "disagrees": "Disagrees",
+                        "indifferent": "Indifferent"
                     },
                     "fr": {
                         "brand": 'Vous <i class="fa fa-comments"></i> D&eacute;lib&eacute;r&eacute;z',
@@ -13,6 +16,9 @@ var dictionary = {
                         "stance": 'Position',
                         "popularity": 'Popularit&eacute;',
                         "spaghetti": "Spaghetti de bras",
-                        "momSpaghetti": "Spaghetti de maman"
+                        "momSpaghetti": "Spaghetti de maman",
+                        "agrees": "Approuver",
+                        "disagrees": "Pas concorder",
+                        "indifferent": "Neutre"
                     }
                 }
