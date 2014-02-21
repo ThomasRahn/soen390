@@ -181,7 +181,7 @@ class ApiNarrativeController extends \BaseController {
 		if ($narrative->save() === true)
 			return Response::json(array(
 				'success' => true,
-				'return'  => $narrative->toArray(),
+				'return'  => $this->narrativeToArray($narrative),
 			));
 
 		return Response::json(array(
