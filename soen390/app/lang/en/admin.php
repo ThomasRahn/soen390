@@ -31,6 +31,15 @@ return array(
 		    'narrativeName'=>'Narrative Name'
                 ),
 
+            'tips' => array(
+                    'tip' => 'Tip!',
+                    'togglePublication' => 'You can toggle the publication status of each narrative by clicking on the <i class="fa fa-eye"></i>-icon.',
+                ),
+
+            'update' => array(
+                    'error' => 'An error occured while attempting to update this narrative.',
+                ),
+
             'upload' => array(
                     'help' => array(
                             'archive' => 'Select the archive file which contains the narrative(s) that you want to upload. Only .ZIP files are supported at this moment. Archive file must be <strong>:limit</strong> or smaller.',
