@@ -45,7 +45,7 @@ function printObject(o) {
 	var playlist = []; // Empty playlist
 	var options = {
 	        swfPath: "./js", 
-	        supplied: "mp3",
+	        supplied: "oga, mp3",
 		play: function(element){
 			var current  = myPlaylist.current;	
 			var temp = myPlaylist.playlist;
@@ -104,7 +104,10 @@ function printObject(o) {
 
 	};
 	var myPlaylist = new jPlayerPlaylist(cssSelector, playlist, options);	
-	$.getJSON("/jsonNarrative/ {{ $narrative->NarrativeID}}",function(data){  // get the JSON array produced by my PHP
+	$.getJSON("{{ action('ApiNarrativeController@show', array('id' => $narrative->NarrativeID)) }}",function(data){  // get the JSON array produced by my PHP
+
+		data = data.return.audio;
+
 	        $.each(data,function(index,value){
 	        	if(index == 1){
 	        		$(".audio_poster").attr("src", value.poster);

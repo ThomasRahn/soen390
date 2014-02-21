@@ -153,9 +153,11 @@ class ApiNarrativeController extends \BaseController {
 			}
 
 			$audioArray[] = array(
+				'title' => $a->id,
 				'mp3' => action('ContentController@getContent', array('id' => $a_mpeg->id)),
 				'oga' => action('ContentController@getContent', array('id' => $a_ogg->id)),
 				'poster' => $posterPath,
+				'duration' => $a->audio_duration,
 			);
 		}
 
