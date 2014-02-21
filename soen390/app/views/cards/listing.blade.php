@@ -94,12 +94,11 @@
         <script src="{{ asset('js/dictionary.js') }}"></script>
         <script>
             var currentLanguage = '',
-                narrativeSource = '/api/narrative',
                 konamiMode      = false,
                 stanceGravityCenters  = {
-                    'yay': { x: (width / 4), y: (height / 2) },
-                    'meh': { x: (width / 2), y: (height / 2) },
-                    'nay': { x: (2.83 * (width / 4)), y: (height / 2) }
+                    'For': { x: (width / 4), y: (height / 2) },
+                    'Indifferent': { x: (width / 2), y: (height / 2) },
+                    'Against': { x: (2.83 * (width / 4)), y: (height / 2) }
                 };
 
             /**
@@ -131,10 +130,16 @@
              * @param langCode string
              */
             function setLanguageFilter(langCode) {
+		var lang = null;
+
+		if (langCode == "en") lang = "English";
+
+		if (langCode == "fr") lang = "French";
+
                 rectangles.transition()
                           .duration(500)
                           .style('opacity', function(node) {
-                              return (langCode === null || langCode === node.lang) ? 1 : 0.2;
+                              return (lang === null || lang === node.lang) ? 1 : 0.2;
                           });
             }
 

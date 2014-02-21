@@ -22,6 +22,12 @@ class TranscodeAudio
 			'mp3' => 'libmp3lame',
 		);
 
+		// Determine the duration of the source audio.
+		$durationString = Sonus::getMediaInfo($sourceFilePath)['format']['duration'];
+		sscanf($durationString, "%d:%d:%d.%s", $dHours, $dMinutes, $dSeconds, $dMicroseconds);
+		$dSeconds += ($dHours * 3600) + ($dMinutes * 60);
+		$parsedDuration = $dSeconds . '.' . $dMicroseconds;
+
 		// Create a version of the source file for each format specified.
 		foreach ($outputFormats as $extension => $codec) {
 			// Determine the output basename
@@ -41,9 +47,13 @@ class TranscodeAudio
 				->go('-acodec ' . $codec . ' -ab 64k -ar 44100');
 
 			// Once completed, create the Content object for the output.
-			Content::create(array(
-				'NarrativeID' => $narrativeID,
-				'AudioPath' => $baseName,
+			Media::create(array(
+				'narrative_id' => $narrativeID,
+				'type' => 'audio',
+				'filename' => $fileName,
+				'basename' => $baseName,
+				'audio_codec' => $extension,
+				'audio_duration' => $parsedDuration,
 			));
 		}
 

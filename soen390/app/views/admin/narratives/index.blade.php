@@ -25,17 +25,18 @@ Narratives
             <th>{{ trans('admin.narratives.table.comments') }}</th>
             <th>{{ trans('admin.narratives.table.category') }}</th>
             <th>{{ trans('admin.narratives.table.uploadedOn') }}</th>
+            <th>{{ trans('admin.narratives.table.published') }}</th>
             <th>{{ trans('admin.narratives.table.manage') }}</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <th colspan="7"><small><span class="row-count">0</span> {{ trans('admin.narratives.table.inTotal') }}</small></th>
+            <th colspan="8"><small><span class="row-count">0</span> {{ trans('admin.narratives.table.inTotal') }}</small></th>
         </tr>
     </tfoot>
     <tbody class="table-spinner">
         <tr class="active">
-            <td colspan="7"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
+            <td colspan="8"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
         </tr>
     </tbody>
 </table>
@@ -49,18 +50,19 @@ Narratives
     $(document).ready(function () {
 
         var narratives = $.getJSON(
-            "{{ action('ApiNarrativeController@index') }}",
+            "{{ action('ApiNarrativeController@index', array('withUnpublished' => 1)) }}",
             function (data) {
                 var rows = [];
 
-                $.each(data, function(index, narrative) {
-                    rows.push("<tr>"
+                $.each(data['return'], function(index, narrative) {
+                    rows.push("<tr" + (narrative.published == false ? " class=\"warning\"" : "") + ">"
                         + "<td>" + narrative.id + "</td>"
                         + "<td>" + narrative.name + "</td>"
                         + "<td>" + narrative.views + "</td>"
                         + "<td>" + 0 + "</td>"
                         + "<td>" + narrative.stance + "</td>"
                         + "<td>" + narrative.createdAt + "</td>"
+                        + "<td><i class=\"fa fa-eye" + (narrative.published == false ? "-slash" : "") + " fa-fw\"></i></td>"
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
                         + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-pencil fa-fw\"></i></button>"
@@ -71,7 +73,7 @@ Narratives
                 });
 
                 if (rows.length === 0)
-                    rows.push("<tr><td colspan=\"7\"><span class=\"text-center\">{{ trans('admin.narratives.table.empty') }}</span></td></tr>");
+                    rows.push("<tr><td colspan=\"8\"><span class=\"text-center\">{{ trans('admin.narratives.table.empty') }}</span></td></tr>");
 
                 $(".table-spinner").remove();
 
@@ -79,7 +81,7 @@ Narratives
                     html: rows.join("")
                 }).appendTo(".narrative-table");
 
-                $(".row-count").html(rows.length);
+                $(".row-count").html(data['return'].length);
             });
 
     });

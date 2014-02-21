@@ -26,6 +26,9 @@ Route::group(array('prefix' => 'api'), function() {
 
 });
 
+// Route for content handler
+Route::get('/content/{id}', 'ContentController@getContent');
+
 // Routes for player.
 Route::resource('/narrative', 'NarrativeController@show');
 Route::resource('/flag','FlagStanceController@getIndex');

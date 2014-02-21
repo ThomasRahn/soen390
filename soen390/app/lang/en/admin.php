@@ -20,6 +20,7 @@ return array(
                     'comments' => 'Comments',
                     'category' => 'Category',
                     'uploadedOn' => 'Uploaded On',
+                    'published' => 'Published?',
                     'manage' => 'Manage',
 		    'comment'=> 'Comment',
                     'empty' => 'You need to upload some narratives first!',
