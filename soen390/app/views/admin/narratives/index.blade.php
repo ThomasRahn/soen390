@@ -53,19 +53,30 @@ Narratives
 <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
 <script>
+    var editingRow = null;
+
     function togglePublished(narrativeID, currentStatus, narrativeRow) {
 	var toggledStatus = false == currentStatus;
 
         console.log("Toggle publication status for narrative " + narrativeID + " from " + (currentStatus) + " to " + (toggledStatus));
 
+        updateNarrative(narrativeID, { published : toggledStatus}, narrativeRow);
+    }
+
+    function updateNarrative(narrativeID, jsonData, narrativeRow) {
         $.ajax({
             type: "PUT",
             url: "/api/narrative/" + narrativeID,
-            data: { published: toggledStatus },
+            data: jsonData,
             success: function(data) {
                 var narrative = data.return;
 
-                if (narrative.Published == false) {
+                // Update category value
+                narrativeRow.children(".category").data("category", narrative.stance);
+                narrativeRow.children(".category").html(narrative.stance);
+
+                // Update publication status
+                if (narrative.published == false) {
                     narrativeRow.addClass("warning");
                     narrativeRow.children(".published").html("<i class=\"fa fa-eye-slash fa-fw\"></i>");
                     narrativeRow.children(".published").data("published", false);
@@ -75,11 +86,13 @@ Narratives
                     narrativeRow.children(".published").data("published", true);
                 }
 
+                editingRow = null;
+
                 console.log(narrative);
             },
             error: function(data) {
                 alert("{{ trans('admin.narratives.update.error') }}");
-		console.log(data);
+                console.log(data);
             },
             dataType: "json"
         });
@@ -99,7 +112,7 @@ Narratives
                         + "<td class=\"name\">" + narrative.name + "</td>"
                         + "<td class=\"views\">" + narrative.views + "</td>"
                         + "<td class=\"comments\">" + 0 + "</td>"
-                        + "<td class=\"category\">" + narrative.stance + "</td>"
+                        + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
                         + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa fa-eye" + (narrative.published == false ? "-slash" : "") + " fa-fw\"></i></td>"
                         + "<td>"
@@ -124,18 +137,50 @@ Narratives
             }
         );
 
-        // Handle clicking on table rows.
-        $(document).on("click", ".narrative-table td", function(e) {
+        // Handle clicking published column.
+        $(document).on("click", ".narrative-table td.published", function(e) {
             var column = $(this);
 
-            // Check to see if this is the published column.
-            if (column.hasClass("published")) {
-                // Retrieve the row details.
-                var narrativeID   = column.parent().data("narrative-id"),
-                    currentStatus = column.data("published");
+            // Retrieve the row details.
+            var narrativeID   = column.parent().data("narrative-id"),
+                currentStatus = column.data("published");
 
-                togglePublished(narrativeID, currentStatus, column.parent());
-            }
+            togglePublished(narrativeID, currentStatus, column.parent());
+        });
+
+        // Handle clicking on category column.
+        $(document).on("click", ".narrative-table td.category", function(e) {
+             var column = $(this);
+
+             if (editingRow === null) {
+                // Set the working row
+                editingRow = column.parent();
+
+                // Fetch available categories
+                $.getJSON("{{ action('ApiCategoryController@index') }}").done(function(data) {
+                    var select = "<select class=\"category-edit-select\">";
+
+                    $.each(data.return, function(i, e) {
+                        var currentCategory = column.data("category") == e.Description;
+                        select += "<option value=\"" + e.CategoryID + "\"" + (currentCategory ? " selected=\"selected\"" : "") + ">" + e.Description + "</option>";
+                    });
+
+                    select += "</select>";
+
+                    column.html(select);
+                });
+             }
+
+        });
+
+        // Handle change event on category selection.
+        $(document).on("change", ".narrative-table td.category select", function(e) {
+            var select = $(this),
+                row    = select.parent().parent();
+
+            console.log(row.data("narrative-id"));
+
+            updateNarrative(row.data("narrative-id"), { category: select.val() }, row);
         });
 
     });
