@@ -23,6 +23,11 @@ class Narrative extends Eloquent
 		return $this->hasMany('Content', 'NarrativeID', 'NarrativeID');
 	}
 
+	public function media()
+	{
+		return $this->hasMany('Media', 'narrative_id', 'NarrativeID');
+	}
+
 	/**
 	 * Processes raw narratives stored within a compressed archive.
 	 *
@@ -182,14 +187,21 @@ class Narrative extends Eloquent
 
 				// If the file is an 'image', then move it.
 				if (strpos($fileMime, 'image/') === 0) {
-					$fileName = basename($filePath);
+					$pathinfo = pathinfo($filePath);
+
+					$fileName = $pathinfo['filename'];
+					$baseName = basename($filePath);
+
 					$fileDestPath = $processedPath . DIRECTORY_SEPARATOR . $fileName;
+
 					File::move($filePath, $fileDestPath);
 
 					// Create the associated Content
-					Content::create(array(
-						'NarrativeID' => $narrative->NarrativeID,
-						'PicturePath' => $fileName,
+					Media::create(array(
+						'narrative_id' => $narrative->NarrativeID,
+						'type' => 'image',
+						'filename' => $fileName,
+						'basename' => $baseName,
 					));
 				}
 

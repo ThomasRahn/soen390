@@ -22,9 +22,9 @@ class ApiNarrativeController extends \BaseController {
 		// Retrieve all published and unpublished narratives if user is
 		// authenticated and requests so.
 		if (Auth::check() && Input::get('withUnpublished', 0) == 1)
-			$narratives = Narrative::with('category', 'language')->get();
+			$narratives = Narrative::with('category', 'language', 'media')->get();
 		else
-			$narratives = Narrative::with('category', 'language')->where('Published', 1)->get();
+			$narratives = Narrative::with('category', 'language', 'media')->where('Published', 1)->get();
 
 		// Create an array to hold all the narratives. This array will be converted into a JSON object.
 		$narrativesArray = array();
@@ -47,9 +47,9 @@ class ApiNarrativeController extends \BaseController {
 	public function show($id)
 	{
 		if (Auth::check() && Input::get('withUnpublished', 0) == 1)
-			$narrative = Narrative::with('category', 'language')->find($id);
+			$narrative = Narrative::with('category', 'language', 'media')->find($id);
 		else
-			$narrative = Narrative::with('category', 'language')->where('Published', 1)->find($id);
+			$narrative = Narrative::with('category', 'language', 'media')->where('Published', 1)->find($id);
 
 		if ($narrative == null)
 			return Response::json(array(
@@ -118,22 +118,46 @@ class ApiNarrativeController extends \BaseController {
 	 */
 	private function narrativeToArray($n)
 	{
-		// Get all the image content for this narrative.
-		$imagePaths = array();
-		$images = $n->content()->images()->orderBy('PicturePath')->get();
+		// Get all images for this narrative.
+		$images = $n->media()->images()->orderBy('filename')->get();
+		$imagesArray = array();
 
 		foreach ($images as $i)
-			$imagePaths[] = action('ContentController@getContent', array('id' => $i->ContentID));
+			$imagesArray[] = action('ContentController@getContent', array('id' => $i->id));
 
-		if (count($imagePaths) == 0)
-			$imagePaths[] = asset('img/default_narrative.jpg');
+		// Set default image if there are none.
+		if (count($imagesArray) == 0)
+			$imagesArray[] = asset('img/default_narrative.jpg');
 
-		// Get all the audio content for this narrative.
-		$audioPaths = array();
-		$audio = $n->content()->audio()->orderBy('AudioPath')->get();
+		// Get all the audio for this narrative, in a format compatible with JPlayer.
+		$audio = $n->media()->audio()->groupBy('filename')->orderBy('filename')->get();
+		$audioArray = array();
 
-		foreach ($audio as $a)
-			$audioPaths[] = action('ContentController@getContent', array('id' => $a->ContentID));
+		foreach ($audio as $a) {
+			$a_mpeg = $n->media()->audio()->where('filename', $a->filename)->where('audio_codec', 'mp3')->first();
+			$a_ogg  = $n->media()->audio()->where('filename', $a->filename)->where('audio_codec', 'ogg')->first();
+
+			// Determine an appropriate poster for this track.
+			$tracknumber = intval($a->filename);
+			$posterPath = asset('img/default_narrative.jpg');
+
+			while ($tracknumber > 0) {
+				$poster = $n->media()->images()->where('filename', $tracknumber)->first();
+
+				if ($poster != null) {
+					$posterPath = action('ContentController@getContent', array('id' => $poster->id));
+					break;
+				}
+
+				$tracknumber--;
+			}
+
+			$audioArray[] = array(
+				'mp3' => action('ContentController@getContent', array('id' => $a_mpeg->id)),
+				'oga' => action('ContentController@getContent', array('id' => $a_ogg->id)),
+				'poster' => $posterPath,
+			);
+		}
 
 		// Put this narrative into the array.
 		$narrative = array(
@@ -147,8 +171,8 @@ class ApiNarrativeController extends \BaseController {
 			'mehs' => $n->Indifferents,
 			'createdAt' => $n->DateCreated,
 			'published' => $n->Published,
-			'images' => $imagePaths,
-			'audio' => $audioPaths,
+			'images' => $imagesArray,
+			'audio' => $audioArray,
 		);
 
 		return $narrative;

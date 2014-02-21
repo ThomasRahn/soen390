@@ -47,10 +47,13 @@ class TranscodeAudio
 				->go('-acodec ' . $codec . ' -ab 64k -ar 44100');
 
 			// Once completed, create the Content object for the output.
-			Content::create(array(
-				'NarrativeID' => $narrativeID,
-				'AudioPath' => $baseName,
-				'Duration' => $parsedDuration,
+			Media::create(array(
+				'narrative_id' => $narrativeID,
+				'type' => 'audio',
+				'filename' => $fileName,
+				'basename' => $baseName,
+				'audio_codec' => $extension,
+				'audio_duration' => $parsedDuration,
 			));
 		}
 
