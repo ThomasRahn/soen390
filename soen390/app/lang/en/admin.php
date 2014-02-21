@@ -19,6 +19,7 @@ return array(
                     'views' => 'Views',
                     'comments' => 'Comments',
                     'category' => 'Category',
+                    'createdAt' => 'Recorded On',
                     'uploadedOn' => 'Uploaded On',
                     'published' => 'Published?',
                     'manage' => 'Manage',
