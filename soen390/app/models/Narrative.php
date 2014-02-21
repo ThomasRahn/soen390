@@ -192,7 +192,7 @@ class Narrative extends Eloquent
 					$fileName = $pathinfo['filename'];
 					$baseName = basename($filePath);
 
-					$fileDestPath = $processedPath . DIRECTORY_SEPARATOR . $fileName;
+					$fileDestPath = $processedPath . DIRECTORY_SEPARATOR . $baseName;
 
 					File::move($filePath, $fileDestPath);
 
