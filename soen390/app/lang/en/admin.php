@@ -19,6 +19,7 @@ return array(
                     'views' => 'Views',
                     'comments' => 'Comments',
                     'category' => 'Category',
+                    'createdAt' => 'Recorded On',
                     'uploadedOn' => 'Uploaded On',
                     'published' => 'Published?',
                     'manage' => 'Manage',
@@ -28,6 +29,15 @@ return array(
                     'inTotal' => 'narrative(s) in total.',
 		    'totalFlags' => 'flag(s) in total.',
 		    'narrativeName'=>'Narrative Name'
+                ),
+
+            'tips' => array(
+                    'tip' => 'Tip!',
+                    'updateNarrative' => 'You can toggle the publication status of each narrative by clicking on the <i class="fa fa-eye"></i>-icon. The Category can be changed by clicking on the current label.',
+                ),
+
+            'update' => array(
+                    'error' => 'An error occured while attempting to update this narrative.',
                 ),
 
             'upload' => array(

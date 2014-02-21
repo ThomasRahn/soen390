@@ -27,7 +27,6 @@
 	},
 	"scripts": {
 		"post-install-cmd": [
-			"php artisan config:publish rafasamp/sonus",
 			"php artisan clear-compiled",
 			"php artisan optimize"
 		],
