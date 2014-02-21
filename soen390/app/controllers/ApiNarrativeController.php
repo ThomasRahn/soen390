@@ -82,7 +82,7 @@ class ApiNarrativeController extends \BaseController {
 		if ($validator->fails())
 			return Response::json(array(
 					'success' => false,
-					'error' => $validator->errors()->toJson()
+					'error' => $validator->errors()->toArray()
 				), 400);
 
 		$file = Input::file('archive');
@@ -111,6 +111,83 @@ class ApiNarrativeController extends \BaseController {
 			'success' => true,
 			'return' => 'Upload is queued for processing.',
 		));
+	}
+
+	/**
+	 * Update the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+		$narrative = Narrative::find($id);
+
+		if ($narrative == null)
+			return Response::json(array(
+				'success' => false,
+				'error' => 'Unable to find the requested narrative.',
+			), 404);
+
+		$validator = Validator::make(Input::all(), array(
+			'category'     => 'exists:Category,CategoryID',
+			'topic'        => 'exists:Topic,TopicID',
+			'language'     => 'exists:Language,LanguageID',
+			'name'         => 'alpha_num|min:1',
+			'views'        => 'integer',
+			'agrees'       => 'integer',
+			'disagrees'    => 'integer',
+			'indifferents' => 'integer',
+			'published'    => 'in:0,1,true,false',
+		));
+
+		if ($validator->fails())
+			return Response::json(array(
+				'success' => false,
+				'error' => $validator->errors()->toArray(),
+			), 400);
+
+		if (Input::has('category'))
+			$narrative->CategoryID = Input::get('category');
+
+		if (Input::has('topic'))
+			$narrative->TopicID = Input::get('topic');
+
+		if (Input::has('language'))
+			$narrative->LanguageID = Input::get('language');
+
+		if (Input::has('name'))
+			$narrative->Name = Input::get('name');
+
+		if (Input::has('views'))
+			$narrative->Views = Input::get('views');
+
+		if (Input::has('agrees'))
+			$narrative->Agrees = Input::get('agrees');
+
+		if (Input::has('disagrees'))
+			$narrative->Disagrees = Input::get('disagrees');
+
+		if (Input::has('indifferents'))
+			$narrative->Indifferents = Input::get('indifferents');
+
+		if (Input::has('published')) {
+			if (Input::get('published') === 0 || Input::get('published') === "false")
+				$narrative->Published = false;
+			else
+				$narrative->Published = true;
+		}
+
+		if ($narrative->save() === true)
+			return Response::json(array(
+				'success' => true,
+				'return'  => $narrative->toArray(),
+			));
+
+		return Response::json(array(
+			'success' => false,
+			'error'   => 'Unable to save changes to narrative.',
+		), 500);
 	}
 
 	/**
