@@ -19,7 +19,7 @@ Narratives
 <div class="alert alert-info alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" arai-hidden="true">&times;</button>
     <p class="lead">{{ trans('admin.narratives.tips.tip') }}</p>
-    <p><small>{{ trans('admin.narratives.tips.togglePublication') }}</small></p>
+    <p><small>{{ trans('admin.narratives.tips.updateNarrative') }}</small></p>
 </div>
 
 <table class="table narrative-table">
