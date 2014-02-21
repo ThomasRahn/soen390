@@ -57,6 +57,10 @@ class ApiNarrativeController extends \BaseController {
 				'error' => 'Narrative not found.',
 			), 404);
 
+		// Increment the view count.
+		$narrative->Views = $narrative->Views + 1;
+		$narrative->save();
+
 		return Response::json(array(
 			'success' => true,
 			'return' => $this->narrativeToArray($narrative),
