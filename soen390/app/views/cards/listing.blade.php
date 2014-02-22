@@ -50,6 +50,52 @@
             #nay-stance-heading {
                 left: 75%;
             }
+            .meta-container {
+                display: none;
+                -webkit-transition-duration: 0.5s;
+                transition-duration: 0.5s;
+            }
+            .ratio-bar-container {
+                width: 100%;
+                height: 5px;
+                margin-top: 5px;
+                background-color: #ccc;
+                border-radius: 5px;
+                box-shadow: 0 0 2px 0 #888 inset;
+            }
+            .ratio-bar {
+                height: 100%;
+                width: 25%;
+                float: left;
+            }
+            .ratio-bar:first-of-type {
+                -webkit-border-top-left-radius: 5px;
+                -webkit-border-bottom-left-radius: 5px;
+                   -moz-border-radius-topleft: 5px;
+                   -moz-border-radius-bottomleft: 5px;
+                        border-top-left-radius: 5px;
+                        border-bottom-left-radius: 5px;
+            }
+            .ratio-bar.agrees {
+                background-color: #0c8;
+            }
+            .ratio-bar.disagrees {
+                background-color: #08d;
+            }
+            .narrative-ratios {
+                text-align: center;
+                font-family: "Roboto Condensed", Helvetica, "Arial Narrow", "Arial", sans-serif;
+                font-weight: 400;
+            }
+            .narrative-ratios .agrees {
+                color: #093;
+            }
+            .narrative-ratios .disagrees {
+                color: #08d;
+            }
+            .narrative-radios .indifferent {
+                color #333;
+            }
         </style>
     </head>
     <body>
@@ -68,6 +114,19 @@
                     <button type="button" class="btn btn-sm btn-default stance-btn"><i class="fa fa-thumbs-up"></i> <span class="stance">Stance</span> <i class="fa fa-thumbs-down"></i></button>
 
                     <button type="button" class="btn btn-sm btn-default popularity-btn"><i class="fa fa-signal"></i> <span class="popularity">Popularity</span></button>
+                </div>
+                <div class="col-sm-6 meta-container">
+                    <div class="row-fluid">
+                        <div class="ratio-bar-container">
+                            <div class="ratio-bar agrees"></div>
+                            <div class="ratio-bar disagrees"></div>
+                        </div>
+                    </div>
+                    <div class="row-fluid narrative-ratios">
+                        <div class="col-md-4"><span class="agrees">Agrees</span> <span class="agrees-percent">25</span>%</div>
+                        <div class="col-md-4"><span class="disagrees">Disagrees</span> <span class="disagrees-percent">25</span>%</div>
+                        <div class="col-md-4"><span class="indifferent">Indifferent</span> <span class="indifferent-percent">50</span>%</div>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -122,6 +181,11 @@
 
                 // Set Spaghetti
                 $('.spaghetti').html(dictionary[langCode].spaghetti);
+
+                // Agree/Disagree/Indifferent
+                $('span.agrees').html(dictionary[langCode].agrees);
+                $('span.disagrees').html(dictionary[langCode].disagrees);
+                $('span.indifferent').html(dictionary[langCode].indifferent);
             }
 
             /**
