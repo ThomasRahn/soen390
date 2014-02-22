@@ -67,7 +67,7 @@ class CommentDbTest extends TestCase
     /**
      * Ensure comment get created (for a Comment).
      */
-    private function testCommentCreationComment($id)
+    public function testCommentCreationComment($id)
     {
         $commentCreated = new Comment;
 
