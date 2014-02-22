@@ -38,7 +38,6 @@ Route::get('/content/{id}', 'ContentController@getContent');
 Route::resource('/narrative', 'NarrativeController@show');
 Route::resource('/flag','FlagStanceController@getIndex');
 Route::resource('/stance','FlagStanceController@setStance');
-Route::resource('/jsonNarrative','JSONController@show');
 
 // Routes for administrative view.
 Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
