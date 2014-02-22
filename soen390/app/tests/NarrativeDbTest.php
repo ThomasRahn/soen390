@@ -6,7 +6,6 @@ class NarrativeDbTest extends TestCase
     /**
      * Test the API's index and ensures that response is valid JSON.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {
@@ -21,7 +20,6 @@ class NarrativeDbTest extends TestCase
     /**
      * Ensure narratives get fetched.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testNarrativeRetrieval()
     {
@@ -33,7 +31,6 @@ class NarrativeDbTest extends TestCase
     /**
      * Ensure narratives get created.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testNarrativeCreation()
     {

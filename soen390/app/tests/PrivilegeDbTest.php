@@ -6,7 +6,6 @@ class PrivilegeDbTest extends TestCase
     /**
      * Test the API's index and ensures that response is valid JSON.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {
@@ -21,7 +20,6 @@ class PrivilegeDbTest extends TestCase
     /**
      * Ensure Privileges get fetched.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testPrivilegeRetrieval()
     {
@@ -33,7 +31,6 @@ class PrivilegeDbTest extends TestCase
     /**
      * Ensure Privileges gets created.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testPrivilegeCreation()
     {
