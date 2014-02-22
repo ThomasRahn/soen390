@@ -3,15 +3,34 @@
 class Content extends Eloquent {
 
 	protected $table = "Content";
+	protected $guarded = array('ContentID');
 	public $timestamps = false;
+	protected $primaryKey = 'ContentID';
 	
-	public function narrative(){
+	public function narrative()
+	{
 		return $this->belongsTo('Narrative', 'NarrativeID', 'NarrativeID');
 	}
-	public function category(){
+
+	public function category()
+	{
 		return $this->belongsTo('Category', 'CategoryID', 'CategoryID');
 	}
-	public function comment(){
-		return $this->belongsTo('Comment','CommentID', 'CommentID');
+
+	public function comment()
+	{
+		return $this->belongsTo('Comment', 'CommentID', 'CommentID');
 	}
+
+	public function scopeImages($query)
+	{
+		return $query->whereRaw('PicturePath IS NOT NULL');
+	}
+
+	public function scopeAudio($query)
+	{
+		return $query->whereRaw('AudioPath IS NOT NULL');
+	}
+
 }
+

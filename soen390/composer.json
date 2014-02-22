@@ -12,7 +12,8 @@
 		"pdepend/pdepend": "*",
 		"phploc/phploc": "*",
 		"phpunit/phpunit": "*",
-		"satooshi/php-coveralls": "*"
+		"satooshi/php-coveralls": "*",
+		"mockery/mockery": "dev-master@dev"
 	},
 	"autoload": {
 		"classmap": [
@@ -26,7 +27,6 @@
 	},
 	"scripts": {
 		"post-install-cmd": [
-			"php artisan config:publish rafasamp/sonus",
 			"php artisan clear-compiled",
 			"php artisan optimize"
 		],

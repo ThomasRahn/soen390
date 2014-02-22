@@ -5,29 +5,30 @@
         <title>You Deliberate</title>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Crete+Round|Lato:300,400">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic|Roboto+Condensed:300,400,700">
         <style>
             body {
                 padding-bottom: 70px;
-                font-family: "Lato", "Helvetica Neue", Helvetica, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
                 font-weight: 400;
             }
             header {
-                border-bottom: 1px solid #ccc;
+                border-bottom: 1px solid #e5e5e5;
                 margin-bottom: 20px;
             }
             h1.brand {
-                font-family: "Crete Round", "Garamond", "Times New Roman", serif;
+                font-family: Cinzel, Garamond, "Times New Roman", serif;
                 font-weight: 400;
                 text-transform: uppercase;
                 letter-spacing: 5px;
                 padding-bottom: 10px;
-                color: #b5b5b5;
+                color: #ccc;
                 -webkit-text-stroke: 0.2px;
                 text-stroke: 0.2px;
             }
             #filter-nav button {
                 text-transform: uppercase;
+                font-family: "Roboto Condensed", "Helvetica Neue", Helvetica, "Arial Narrow", "Arial", sans-serif;
                 font-weight: 300;
             }
             #stance-heading {
@@ -49,6 +50,52 @@
             #nay-stance-heading {
                 left: 75%;
             }
+            .meta-container {
+                display: none;
+                -webkit-transition-duration: 0.5s;
+                transition-duration: 0.5s;
+            }
+            .ratio-bar-container {
+                width: 100%;
+                height: 5px;
+                margin-top: 5px;
+                background-color: #ccc;
+                border-radius: 5px;
+                box-shadow: 0 0 2px 0 #888 inset;
+            }
+            .ratio-bar {
+                height: 100%;
+                width: 25%;
+                float: left;
+            }
+            .ratio-bar:first-of-type {
+                -webkit-border-top-left-radius: 5px;
+                -webkit-border-bottom-left-radius: 5px;
+                   -moz-border-radius-topleft: 5px;
+                   -moz-border-radius-bottomleft: 5px;
+                        border-top-left-radius: 5px;
+                        border-bottom-left-radius: 5px;
+            }
+            .ratio-bar.agrees {
+                background-color: #0c8;
+            }
+            .ratio-bar.disagrees {
+                background-color: #08d;
+            }
+            .narrative-ratios {
+                text-align: center;
+                font-family: "Roboto Condensed", Helvetica, "Arial Narrow", "Arial", sans-serif;
+                font-weight: 400;
+            }
+            .narrative-ratios .agrees {
+                color: #093;
+            }
+            .narrative-ratios .disagrees {
+                color: #08d;
+            }
+            .narrative-radios .indifferent {
+                color #333;
+            }
         </style>
     </head>
     <body>
@@ -68,6 +115,19 @@
 
                     <button type="button" class="btn btn-sm btn-default popularity-btn"><i class="fa fa-signal"></i> <span class="popularity">Popularity</span></button>
                 </div>
+                <div class="col-sm-6 meta-container">
+                    <div class="row-fluid">
+                        <div class="ratio-bar-container">
+                            <div class="ratio-bar agrees"></div>
+                            <div class="ratio-bar disagrees"></div>
+                        </div>
+                    </div>
+                    <div class="row-fluid narrative-ratios">
+                        <div class="col-md-4"><span class="agrees">Agrees</span> <span class="agrees-percent">25</span>%</div>
+                        <div class="col-md-4"><span class="disagrees">Disagrees</span> <span class="disagrees-percent">25</span>%</div>
+                        <div class="col-md-4"><span class="indifferent">Indifferent</span> <span class="indifferent-percent">50</span>%</div>
+                    </div>
+                </div>
             </nav>
         </div>
 
@@ -81,7 +141,7 @@
 
         <div class="container">
             <footer class="navbar navbar-fixed-bottom">
-                <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <span class="spaghetti">Arm Spaghetti</span> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
+                <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <a class="text-muted" href="mailto:support@youdeliberate.org" title="Email us for support."><i class="fa fa-envelope-o"></i></a> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
             </footer>
         </div>
 
@@ -93,12 +153,11 @@
         <script src="{{ asset('js/dictionary.js') }}"></script>
         <script>
             var currentLanguage = '',
-                narrativeSource = '/api/narrative',
                 konamiMode      = false,
                 stanceGravityCenters  = {
-                    'yay': { x: (width / 4), y: (height / 2) },
-                    'meh': { x: (width / 2), y: (height / 2) },
-                    'nay': { x: (3 * (width / 4)), y: (height / 2) }
+                    'For': { x: (width / 4), y: (height / 2) },
+                    'Indifferent': { x: (width / 2), y: (height / 2) },
+                    'Against': { x: (2.83 * (width / 4)), y: (height / 2) }
                 };
 
             /**
@@ -122,6 +181,11 @@
 
                 // Set Spaghetti
                 $('.spaghetti').html(dictionary[langCode].spaghetti);
+
+                // Agree/Disagree/Indifferent
+                $('span.agrees').html(dictionary[langCode].agrees);
+                $('span.disagrees').html(dictionary[langCode].disagrees);
+                $('span.indifferent').html(dictionary[langCode].indifferent);
             }
 
             /**
@@ -130,10 +194,16 @@
              * @param langCode string
              */
             function setLanguageFilter(langCode) {
+		var lang = null;
+
+		if (langCode == "en") lang = "English";
+
+		if (langCode == "fr") lang = "French";
+
                 rectangles.transition()
-                          .duration(750)
+                          .duration(500)
                           .style('opacity', function(node) {
-                              return (langCode === null || langCode === node.lang) ? 1 : 0.2;
+                              return (lang === null || lang === node.lang) ? 1 : 0.2;
                           });
             }
 

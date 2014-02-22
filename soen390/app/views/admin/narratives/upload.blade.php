@@ -1,0 +1,126 @@
+@extends('admin.master')
+
+@section('view_title')
+Upload Narrative(s)
+@stop
+
+@section('styles')
+<style>
+    .n-upload-form {
+        margin-top: 20px;
+    }
+</style>
+@stop
+
+@section('content')
+<div id="uploadProgressModal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="text-center"><i class="fa fa-spin fa-spinner fa-fw fa-3x"></i></p>
+                <p class="text-center"><span class="lead">{{ trans('admin.narratives.upload.uploading.pleaseWait') }}</span><br><small class="text-muted">{{ trans('admin.narratives.upload.uploading.mayTakeAWhile') }}</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="uploadCompletedModal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-reply"></i> {{ trans('admin.narratives.upload.close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        {{ Form::open(array('action' => 'ApiNarrativeController@store', 'class' => 'form-horizontal n-upload-form', 'files' => true)) }}
+            <div class="form-group">
+                {{ Form::label('archive', 'Archive File', array('class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
+                    {{ Form::file('archive', array('class' => 'form-control', 'accept' => 'application/zip', 'required' => 'required')) }}
+                    <span class="help-block"><small>{{ Lang::get('admin.narratives.upload.help.archive', array('limit' => ini_get('post_max_size'))) }}</small></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ Form::label('category', 'Default Category', array('class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
+                    {{ Form::select('category', $categoryArray, null, array('class' => 'form-control', 'required' => 'required')) }}
+                    <span class="help-block"><small>{{ trans('admin.narratives.upload.help.category') }}</small></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ Form::label('publish', 'Publish on Upload?', array('class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
+                    <div class="checkbox">
+                        {{ Form::checkbox('publish', 'publish') }}
+                    </div>
+                    <span class="help-block"><small>{{ trans('admin.narratives.upload.help.publish') }}</small></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-upload"></i> {{ trans('admin.narratives.upload.submit') }}</button>
+                </div>
+            </div>
+        {{ Form::close() }}
+    </div>
+</div>
+@stop
+
+@section('scripts')
+<script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
+<script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+
+        $(".n-upload-form").submit(function(e) {
+            e.preventDefault();
+            var form = $(".n-upload-form");
+
+            $("#uploadProgressModal").modal({
+                backdrop: "static",
+                keyboard: false
+            });
+
+            var formData = new FormData(form[0]);
+
+            $.ajax({
+                type: "POST",
+                url: "/api/narrative",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false
+            }).done(function(data, status, xhr) {
+                $("#uploadCompletedModal .modal-body").html(
+                    "<p class=\"text-center text-success\"><i class=\"fa fa-thumbs-o-up fa-fw fa-3x\"></i></p>" +
+                    "<p class=\"text-center\"><span class=\"lead\">{{ trans('admin.narratives.upload.uploaded.success') }}</span><br><small>{{ trans('admin.narratives.upload.uploaded.successQueued') }}</small></p>"
+                );
+
+                ($(".n-upload-form")[0]).reset();
+
+                $("#uploadProgressModal").modal("hide");
+                $("#uploadCompletedModal").modal("show");
+            }).fail(function(xhr, status, error) {
+                $("#uploadCompletedModal .modal-body").html(
+                    "<p class=\"text-center text-danger\"><i class=\"fa fa-thumbs-o-down fa-fw fa-3x\"></i></p>" +
+                    "<p class=\"text-center\"><span class=\"lead\">{{ trans('admin.narratives.upload.uploaded.failed') }}</span><br><small>{{ trans('admin.narratives.upload.uploaded.failedSorry') }}</small></p>" +
+                    "<pre>" + xhr.statusCode() + "<br>" + xhr.status + "<br>" + xhr.responseText + "</pre>"
+                );
+
+                $("#uploadProgressModal").modal("hide");
+                $("#uploadCompletedModal").modal("show");
+            });
+        });
+
+    });
+</script>
+@stop

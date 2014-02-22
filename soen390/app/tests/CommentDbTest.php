@@ -1,6 +1,6 @@
 <?php
 
-class CommentControllerTest extends TestCase
+class CommentDbTest extends TestCase
 {
     
     /**
@@ -43,14 +43,14 @@ class CommentControllerTest extends TestCase
         $commentCreated->NarrativeID = 1;
         $commentCreated->CommentParentID = NULL;
         $commentCreated->Name = "Test";
-        //agrees will be check for default value
+        $commentCreated->Agrees = 0;
         $commentCreated->Indifferents = 1;
         $commentCreated->Disagrees = 1;
         $commentCreated->Comment = "Test";
 
         $commentCreated->save();
 
-        $insertedId = $commentCreated->id;
+        $insertedId = $commentCreated->CommentId;
 
         $commentFetched = Comment::find($insertedId);
 
@@ -65,27 +65,31 @@ class CommentControllerTest extends TestCase
         testCommentCreationComment($insertedId);//Make this comment the parent of the next test case
 
         $commentFetched->delete();
+
+        $commentFetched = Comment::find($insertedId);
+
+        $this->assertNull($commentFetched);
     }
     /**
      * Ensure comment get created (for a Comment).
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testCommentCreationComment(int $id)
+    private function testCommentCreationComment($id)
     {
         $commentCreated = new Comment;
 
         $commentCreated->NarrativeID = 1;
         $commentCreated->CommentParentID = $id;
         $commentCreated->Name = "Test";
-        //agrees will be check for default value
+        $commentCreated->Agrees = 0;
         $commentCreated->Indifferents = 1;
         $commentCreated->Disagrees = 1;
         $commentCreated->Comment = "Test";
 
         $commentCreated->save();
 
-        $insertedId = $commentCreated->id;
+        $insertedId = $commentCreated->CommentId;
 
         $commentFetched = Comment::find($insertedId);
 
@@ -98,6 +102,10 @@ class CommentControllerTest extends TestCase
         $this->assertEquals("Test", $commentFetched->Comment);
 
         $commentFetched->delete();
+
+        $commentFetched = Comment::find($insertedId);
+
+        $this->assertNull($commentFetched);
 
     }
 

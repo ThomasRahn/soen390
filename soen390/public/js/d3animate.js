@@ -1,6 +1,6 @@
 var data            = null,
     width           = $(window).width(),
-    height          = $(window).height() - 250,
+    height          = $(window).height() - 225,
     visualization   = null,
     layoutGravity   = -0.01,
     damper          = 0.1,
@@ -17,10 +17,10 @@ var center = {
 
 function initializeCards() {
     d3.json("/api/narrative", function(error, json) {
-        if (error)
+        if (error || json['success'] == false)
             return console.log("JSON Error Occurred: " + error);
 
-        data = json;
+        data = json['return'];
 
         createNodes();
         createVisualization();
@@ -42,11 +42,68 @@ function createNodes() {
             nays:      narrative.nays,
             mehs:      narrative.mehs,
             createdAt: narrative.createdAt,
-            imageLink: narrative.imageLink,
+            imageLink: narrative.images[0],
             x:         Math.random() * width,
             y:         Math.random() * height,
         });
     });
+}
+
+function cardMouseOver(eventNode) {
+    rectangles
+        .attr('width', function(node) {
+            if (node === eventNode)
+                return $(this).attr('width') * 2;
+            else
+                return $(this).attr('width');
+        })
+        .attr('height', function(node) {
+            if (node === eventNode)
+                return $(this).attr('height') * 2;
+            else
+                return $(this).attr('height');
+        });
+
+    var yays = parseInt(eventNode.yays),
+        nays = parseInt(eventNode.nays),
+        mehs = parseInt(eventNode.mehs);
+
+    var totalVotes       = yays + nays + mehs,
+        agreesRatio      = (yays / totalVotes) * 100,
+        disagreesRatio   = (nays / totalVotes) * 100,
+        indifferentRatio = (mehs / totalVotes) * 100;
+
+    if (totalVotes == 0)
+        agreesRatio = 0, disagreesRatio = 0, indifferentRatio = 0;
+
+    $(".ratio-bar.agrees").css("width", agreesRatio + "%");
+    $(".ratio-bar.disagrees").css("width", disagreesRatio + "%");
+
+    $("span.agrees-percent").html(agreesRatio.toPrecision(3));
+    $("span.disagrees-percent").html(disagreesRatio.toPrecision(3));
+    $("span.indifferent-percent").html(indifferentRatio.toPrecision(3));
+
+    $(".meta-container").css("display", "block");
+    $(".meta-container").css("opacity", 1);
+}
+
+function cardMouseOut(eventNode) {
+    rectangles
+        .attr('width', function(node) {
+            if (node === eventNode)
+                return $(this).attr('width') / 2;
+            else
+                return $(this).attr('width');
+        })
+        .attr('height', function(node) {
+            if (node === eventNode)
+                return $(this).attr('height') / 2;
+            else
+                return $(this).attr('height');
+        });
+
+    $(".meta-container").css("opacity", 0);
+    $(".meta-container").css("display", "block");
 }
 
 function createVisualization() {
@@ -61,10 +118,13 @@ function createVisualization() {
 
     rectangles.enter()
              .append('image')
+             .attr('class', 'card')
              .attr('data-narrative-id', function(node) {return node.id})
              .attr('width', stdThumbW)
              .attr('height', stdThumbH)
              .attr('xlink:href', function(node) {return node.imageLink})
+             .on('mouseover', cardMouseOver)
+             .on('mouseout', cardMouseOut)
              .on('click', function(node) {
                 var popupWidth = screen.width * 0.75, 
                     popupHeight = screen.height * 0.75,

@@ -1,6 +1,6 @@
 <?php
 
-class ContentControllerTest extends TestCase
+class ContentDbTest extends TestCase
 {
     
     /**
@@ -41,53 +41,61 @@ class ContentControllerTest extends TestCase
         $contentCreated = new Content;
 
         $contentCreated->NarrativeID = 1;
-        $contentCreated->CategoryID = NULL;
+        $contentCreated->TopicID = NULL;
         $contentCreated->CommentID = NULL;
         $contentCreated->AudioPath = "Test";
         $contentCreated->PicturePath = "Test";
 
         $contentCreated->save();
 
-        $insertedId = $contentCreated->id;
+        $insertedId = $contentCreated->ContentID;
 
         $contentFetched = Content::find($insertedId);
 
         $this->assertEquals(1, $contentFetched->NarrativeID);
-        $this->assertEquals(NULL, $contentFetched->CategoryID);
+        $this->assertEquals(NULL, $contentFetched->TopicID);
         $this->assertEquals(NULL, $contentFetched->CommentID);
         $this->assertEquals("Test", $contentFetched->AudioPath);
         $this->assertEquals("Test", $contentFetched->PicturePath);
 
         $contentFetched->delete();
+
+        $contentFetched = Content::find($insertedId);
+
+        $this->assertNull($contentFetched);
     }
     /**
      * Ensure content get created (for a Comment).
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testContentCreationComment(int $id)
+    public function testContentCreationComment()
     {
         $contentCreated = new Content;
 
         $contentCreated->NarrativeID = NULL;
-        $contentCreated->CategoryID = 1;
+        $contentCreated->TopicID = 1;
         $contentCreated->CommentID = NULL;
         $contentCreated->AudioPath = "Test";
         $contentCreated->PicturePath = NULL;
 
         $contentCreated->save();
 
-        $insertedId = $contentCreated->id;
+        $insertedId = $contentCreated->ContentID;
 
         $contentFetched = Content::find($insertedId);
 
         $this->assertEquals(NULL, $contentFetched->NarrativeID);
-        $this->assertEquals(1, $contentFetched->CategoryID);
+        $this->assertEquals(1, $contentFetched->TopicID);
         $this->assertEquals(NULL, $contentFetched->CommentID);
         $this->assertEquals("Test", $contentFetched->AudioPath);
         $this->assertEquals(NULL, $contentFetched->PicturePath);
 
         $contentFetched->delete();
+
+        $contentFetched = Content::find($insertedId);
+
+        $this->assertNull($contentFetched);
 
     }
     /**
@@ -95,29 +103,33 @@ class ContentControllerTest extends TestCase
      *
      * @covers ApiNarrativeControllerTest::index
      */
-    public function testContentCreationTopic(int $id)
+    public function testContentCreationTopic()
     {
         $contentCreated = new Content;
 
         $contentCreated->NarrativeID = NULL;
-        $contentCreated->CategoryID = NULL;
+        $contentCreated->TopicID = NULL;
         $contentCreated->CommentID = 1;
         $contentCreated->AudioPath = NULL;
         $contentCreated->PicturePath = "Test";
 
         $contentCreated->save();
 
-        $insertedId = $contentCreated->id;
+        $insertedId = $contentCreated->ContentID;
 
         $contentFetched = Content::find($insertedId);
 
         $this->assertEquals(NULL, $contentFetched->NarrativeID);
-        $this->assertEquals(NULL, $contentFetched->CategoryID);
+        $this->assertEquals(NULL, $contentFetched->TopicID);
         $this->assertEquals(1, $contentFetched->CommentID);
         $this->assertEquals(NULL, $contentFetched->AudioPath);
         $this->assertEquals("Test", $contentFetched->PicturePath);
 
         $contentFetched->delete();
+
+        $contentFetched = Content::find($insertedId);
+
+        $this->assertNull($contentFetched);
 
     }
 
