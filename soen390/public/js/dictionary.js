@@ -18,7 +18,7 @@ var dictionary = {
                         "spaghetti": "Spaghetti de bras",
                         "momSpaghetti": "Spaghetti de maman",
                         "agrees": "Approuver",
-                        "disagrees": "Pas concorder",
+                        "disagrees": "Contre",
                         "indifferent": "Neutre"
                     }
                 }
