@@ -220,7 +220,7 @@ class Narrative extends Eloquent
      * @param  boolean $publish
      * @return Narrative
      */
-    private static function createFromXML($xmlFilePath, $category, $publish)
+    private static function createFromXML($xmlFilePath, $category, $publish = false)
     {
         // Let's parse the XML file and create a Narrative instance.
 
