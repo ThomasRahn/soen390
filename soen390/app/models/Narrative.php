@@ -232,7 +232,7 @@ class Narrative extends Eloquent
 
         // If we don't have the appropriate language, throw an exception.
         if (! $language)
-            throw new RuntimeException('Narrative references unknown language: "' . $path . '"');
+            throw new RuntimeException('Narrative references unknown language: "' . $xmlFilePath . '"');
 
         // Create the narrative instance with the data.
         $narrative = Narrative::create(array(
