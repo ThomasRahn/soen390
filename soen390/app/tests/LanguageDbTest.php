@@ -6,7 +6,6 @@ class LanguageDbTest extends TestCase
     /**
      * Test the API's index and ensures that response is valid JSON.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {
@@ -21,7 +20,6 @@ class LanguageDbTest extends TestCase
     /**
      * Ensure Languages get fetched.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testTopicRetrieval()
     {
@@ -33,7 +31,6 @@ class LanguageDbTest extends TestCase
     /**
      * Ensure Languages gets created.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testLanguageCreation()
     {

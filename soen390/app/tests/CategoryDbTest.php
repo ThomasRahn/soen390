@@ -5,8 +5,6 @@ class CategoryDbTest extends TestCase
     
     /**
      * Test the API's index and ensures that response is valid JSON.
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {
@@ -20,8 +18,6 @@ class CategoryDbTest extends TestCase
     }
     /**
      * Ensure Categories get fetched.
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testTopicRetrieval()
     {
@@ -32,8 +28,6 @@ class CategoryDbTest extends TestCase
     }
     /**
      * Ensure Category gets created.
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testCategoryCreation()
     {

@@ -15,6 +15,12 @@
             <directory>./app/tests/</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./app/models/</directory>
+            <directory suffic=".php">./app/controllers/</directory>
+        </whitelist>
+    </filter>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>

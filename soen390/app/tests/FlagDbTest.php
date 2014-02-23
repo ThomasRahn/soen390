@@ -6,7 +6,6 @@ class FlagDbTest extends TestCase
     /**
      * Test the API's index and ensures that response is valid JSON.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {
@@ -21,7 +20,6 @@ class FlagDbTest extends TestCase
     /**
      * Ensure flags get fetched.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testFlagRetrieval()
     {
@@ -33,7 +31,6 @@ class FlagDbTest extends TestCase
      /**
      * Ensure flags get created (for a Narrative).
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testFlagCreationNarrative()
     {
@@ -65,7 +62,6 @@ class FlagDbTest extends TestCase
     /**
      * Ensure flags get created (for a Comment).
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testFlagCreationComment()
     {

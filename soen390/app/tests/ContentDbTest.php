@@ -5,8 +5,6 @@ class ContentDbTest extends TestCase
     
     /**
      * Test the API's index and ensures that response is valid JSON.
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {
@@ -20,8 +18,6 @@ class ContentDbTest extends TestCase
     }
     /**
      * Ensure content get fetched.
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testContentRetrieval()
     {
@@ -33,8 +29,6 @@ class ContentDbTest extends TestCase
 
      /**
      * Ensure content get created (for a Narrative).
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testContentCreationNarrative()
     {
@@ -66,8 +60,6 @@ class ContentDbTest extends TestCase
     }
     /**
      * Ensure content get created (for a Comment).
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testContentCreationComment()
     {
@@ -100,8 +92,6 @@ class ContentDbTest extends TestCase
     }
     /**
      * Ensure content get created (for a Topic).
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testContentCreationTopic()
     {

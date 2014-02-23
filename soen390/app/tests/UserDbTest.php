@@ -6,7 +6,6 @@ class UserDbTest extends TestCase
     /**
      * Test the API's index and ensures that response is valid JSON.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {
@@ -21,7 +20,6 @@ class UserDbTest extends TestCase
     /**
      * Ensure users get fetched.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testUserRetrieval()
     {
@@ -33,7 +31,6 @@ class UserDbTest extends TestCase
     /**
      * Ensure User gets created.
      *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testUserCreation()
     {
@@ -67,7 +64,6 @@ class UserDbTest extends TestCase
     /**
      * Ensure User gets created. With nulls
      *
-     * @covers ApiNarrativeControllerTest::index
      */
      public function testUserCreationTestNulls()
     {
