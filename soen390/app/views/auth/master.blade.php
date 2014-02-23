@@ -32,12 +32,12 @@
             }
             .auth-container {
                 position: absolute;
+                width: 386px;
+                min-height: 316px;
                 top: 48%;
                 left: 50%;
-                -webkit-transform: translateX(-50%) translateY(-50%);
-                -moz-transform: translateX(-50%) translateY(-50%);
-                -ie-transform: translateX(-50%) translateY(-50%);
-                transform: translateX(-50%) translateY(-50%);
+                margin-top: -158px;
+                margin-left: -193px;
             }
             .auth-container header {
                 padding: 0 20px 5px 20px;

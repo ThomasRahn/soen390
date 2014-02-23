@@ -12,6 +12,9 @@ Narratives
     .table-spinner td {
         text-align: center;
     }
+    .table tr {
+        -webkit-transition: background-color 0.2s linear;
+    }
 </style>
 @stop
 
@@ -63,6 +66,16 @@ Narratives
         updateNarrative(narrativeID, { published : toggledStatus}, narrativeRow);
     }
 
+    function handleCategoryChange(e, obj) {
+        var select = $(obj),
+            row    = select.parent().parent();
+	console.log(obj);
+
+        console.log("Change category for " + row.data("narrative-id") + " to " + select.val());
+
+        updateNarrative(row.data("narrative-id"), { category: select.val() }, row);
+    }
+
     function updateNarrative(narrativeID, jsonData, narrativeRow) {
         $.ajax({
             type: "PUT",
@@ -70,6 +83,9 @@ Narratives
             data: jsonData,
             success: function(data) {
                 var narrative = data.return;
+
+                // Highlight table row
+                narrativeRow.css("background-color", "#dff0d8");
 
                 // Update category value
                 narrativeRow.children(".category").data("category", narrative.stance);
@@ -88,11 +104,21 @@ Narratives
 
                 editingRow = null;
 
+                setTimeout(function() {
+                    narrativeRow.css("background-color", "");
+                }, 200);
+
                 console.log(narrative);
             },
             error: function(data) {
+                narrativeRow.css("background-color", "#f2dede");
+
                 alert("{{ trans('admin.narratives.update.error') }}");
                 console.log(data);
+
+                setTimeout(function() {
+                    narrativeRow.css("background-color", "");
+                }, 1250);
             },
             dataType: "json"
         });
@@ -168,20 +194,16 @@ Narratives
                     select += "</select>";
 
                     column.html(select);
+
+                    $(".category-edit-select").focus();
                 });
              }
 
         });
 
         // Handle change event on category selection.
-        $(document).on("change", ".narrative-table td.category select", function(e) {
-            var select = $(this),
-                row    = select.parent().parent();
-
-            console.log(row.data("narrative-id"));
-
-            updateNarrative(row.data("narrative-id"), { category: select.val() }, row);
-        });
+        $(document).on("change", ".narrative-table td.category select", function(e) { handleCategoryChange(e, this); });
+        $(document).on("blur", ".narrative-table td.category select", function(e) { handleCategoryChange(e, this); });
 
     });
 </script>
