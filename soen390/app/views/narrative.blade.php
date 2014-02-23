@@ -45,7 +45,7 @@ function printObject(o) {
 	var playlist = []; // Empty playlist
 	var options = {
 	        swfPath: "./js", 
-	        supplied: "oga, mp3",
+	        supplied: "mp3, oga",
 		play: function(element){
 			var current  = myPlaylist.current;	
 			var temp = myPlaylist.playlist;
