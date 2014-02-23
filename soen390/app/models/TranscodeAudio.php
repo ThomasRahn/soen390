@@ -13,6 +13,9 @@ class TranscodeAudio
 		// Determine the filename
 		$fileName = $pathinfo['filename'];
 
+		// Determine the original format
+		$sourceExtension = $pathinfo['extension'];
+
 		// Determine the source directory path
 		$sourceDirPath = $pathinfo['dirname'];
 
@@ -23,8 +26,11 @@ class TranscodeAudio
 		);
 
 		// Determine the duration of the source audio.
+
 		$durationString = Sonus::getMediaInfo($sourceFilePath)['format']['duration'];
+
 		sscanf($durationString, "%d:%d:%d.%s", $dHours, $dMinutes, $dSeconds, $dMicroseconds);
+
 		$dSeconds += ($dHours * 3600) + ($dMinutes * 60);
 		$parsedDuration = $dSeconds . '.' . $dMicroseconds;
 
@@ -40,11 +46,22 @@ class TranscodeAudio
 				. DIRECTORY_SEPARATOR 
 				. $baseName;
 
-			// Begin transcoding
-			Sonus::convert()
-				->input($sourceFilePath)
-				->output($outputPath)
-				->go('-acodec ' . $codec . ' -ab 64k -ar 44100');
+			// If the source file is already in the desired $codec,
+			// then we'll just move it and skip transcoding to $codec.
+
+			if (strtolower($sourceExtension) == $extension) {
+
+				File::move($sourceFilePath, $outputPath);
+
+			} else {
+
+				// Begin transcoding
+				Sonus::convert()
+					->input($sourceFilePath)
+					->output($outputPath)
+					->go('-acodec ' . $codec . ' -ab 64k -ar 44100');
+
+			}
 
 			// Once completed, create the Content object for the output.
 			Media::create(array(
