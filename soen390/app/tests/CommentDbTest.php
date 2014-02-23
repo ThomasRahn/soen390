@@ -5,8 +5,6 @@ class CommentDbTest extends TestCase
     
     /**
      * Test the API's index and ensures that response is valid JSON.
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {
@@ -20,8 +18,6 @@ class CommentDbTest extends TestCase
     }
     /**
      * Ensure comment get fetched.
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testCommentRetrieval()
     {
@@ -33,8 +29,6 @@ class CommentDbTest extends TestCase
 
      /**
      * Ensure comment get created (for a Narrative).
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
     public function testCommentCreationNarrative()
     {
@@ -72,10 +66,8 @@ class CommentDbTest extends TestCase
     }
     /**
      * Ensure comment get created (for a Comment).
-     *
-     * @covers ApiNarrativeControllerTest::index
      */
-    private function testCommentCreationComment($id)
+    public function testCommentCreationComment($id)
     {
         $commentCreated = new Comment;
 
