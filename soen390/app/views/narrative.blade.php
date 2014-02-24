@@ -24,6 +24,9 @@
         padding-top: 50px;
         background: rgba(255,255,255,0.3);
     }
+    .pagination-center{
+	text-align:center;
+    }
 </style>
 
 <script type="text/javascript">
@@ -222,15 +225,9 @@ function expressOpinion(stance){
     });
 }
 </script>
-<img class="audio_poster" height="500px" width="500px" src=""/>
-   <!-- Playlist -->
-        <div id="jp-container" class="container pull-right" style="right:0px; width:200px;">
-            <section class="jp-playlist">
-                <ul class="nav nav-pills nav-stacked">
-                    <li></li>
-                </ul>
-            </section>
-        </div>
+<div class="row-fluid">
+	<div class="span12 pagination-center"><img class="audio_poster" height="500px" width="500px" src=""/></div>
+</div>
         <!-- Player -->
         <div id="jquery_jplayer" class="jp-jplayer"></div>
 
