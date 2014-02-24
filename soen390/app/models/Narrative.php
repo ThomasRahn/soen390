@@ -19,11 +19,6 @@ class Narrative extends Eloquent
         return $this->belongsTo('Language', 'LanguageID', 'LanguageID');
     }
 
-    public function content()
-    {
-        return $this->hasMany('Content', 'NarrativeID', 'NarrativeID');
-    }
-
     public function media()
     {
         return $this->hasMany('Media', 'narrative_id', 'NarrativeID');
