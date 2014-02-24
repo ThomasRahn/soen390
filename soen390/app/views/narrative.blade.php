@@ -224,13 +224,6 @@ function expressOpinion(stance){
 </script>
 <img class="audio_poster" height="500px" width="500px" src=""/>
    <!-- Playlist -->
-        <div id="jp-container" class="container pull-right" style="right:0px; width:200px;">
-            <section class="jp-playlist">
-                <ul class="nav nav-pills nav-stacked">
-                    <li></li>
-                </ul>
-            </section>
-        </div>
         <!-- Player -->
         <div id="jquery_jplayer" class="jp-jplayer"></div>
 
