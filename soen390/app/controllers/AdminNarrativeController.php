@@ -10,7 +10,7 @@ class AdminNarrativeController extends BaseController {
     public function getUpload()
     {
         $categories = Category::all();
-        $categoryArray = [];
+        $categoryArray = array();
 
         foreach($categories as $c)
             $categoryArray[$c->CategoryID] = $c->Description;
