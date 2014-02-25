@@ -32,31 +32,19 @@ class CommentDbTest extends TestCase
      */
     public function testCommentCreationNarrative()
     {
-        $commentCreated = new Comment;
+        $commentCreated = Comment::create(array('NarrativeID'=>1,'Name'=>'test','Agrees'=>0,'Indifferents'=>1,'Disagrees'=>1,'DateCreated'=>date('Y-m-d H:i:s'), 'Comment'=>'TEST'));
 
-        $commentCreated->NarrativeID = 1;
-        $commentCreated->CommentParentID = NULL;
-        $commentCreated->Name = "Test";
-        $commentCreated->Agrees = 0;
-        $commentCreated->Indifferents = 1;
-        $commentCreated->Disagrees = 1;
-        $commentCreated->Comment = "Test";
-
-        $commentCreated->save();
-
-        $insertedId = $commentCreated->CommentId;
+        $insertedId = $commentCreated->CommentID;
 
         $commentFetched = Comment::find($insertedId);
 
         $this->assertEquals(1, $commentFetched->NarrativeID);
         $this->assertEquals(NULL, $commentFetched->CommentParentID);
-        $this->assertEquals("Test", $commentFetched->Name);
+        $this->assertEquals("test", $commentFetched->Name);
         $this->assertEquals(0, $commentFetched->Agrees);
         $this->assertEquals(1, $commentFetched->Indifferents);
         $this->assertEquals(1, $commentFetched->Disagrees);
-        $this->assertEquals("Test", $commentFetched->Comment);
-
-        testCommentCreationComment($insertedId);//Make this comment the parent of the next test case
+        $this->assertEquals("TEST", $commentFetched->Comment);
 
         $commentFetched->delete();
 
@@ -64,41 +52,4 @@ class CommentDbTest extends TestCase
 
         $this->assertNull($commentFetched);
     }
-    /**
-     * Ensure comment get created (for a Comment).
-     */
-    public function testCommentCreationComment($id)
-    {
-        $commentCreated = new Comment;
-
-        $commentCreated->NarrativeID = 1;
-        $commentCreated->CommentParentID = $id;
-        $commentCreated->Name = "Test";
-        $commentCreated->Agrees = 0;
-        $commentCreated->Indifferents = 1;
-        $commentCreated->Disagrees = 1;
-        $commentCreated->Comment = "Test";
-
-        $commentCreated->save();
-
-        $insertedId = $commentCreated->CommentId;
-
-        $commentFetched = Comment::find($insertedId);
-
-        $this->assertEquals(1, $commentFetched->NarrativeID);
-        $this->assertEquals($id, $commentFetched->CommentParentID);
-        $this->assertEquals("Test", $commentFetched->Name);
-        $this->assertEquals(0, $commentFetched->Agrees);
-        $this->assertEquals(1, $commentFetched->Indifferents);
-        $this->assertEquals(1, $commentFetched->Disagrees);
-        $this->assertEquals("Test", $commentFetched->Comment);
-
-        $commentFetched->delete();
-
-        $commentFetched = Comment::find($insertedId);
-
-        $this->assertNull($commentFetched);
-
-    }
-
 }

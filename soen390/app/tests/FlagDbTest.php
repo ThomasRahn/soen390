@@ -38,7 +38,6 @@ class FlagDbTest extends TestCase
 
         $flagCreated->NarrativeID = 1;
         $flagCreated->CommentID = NULL;
-        $flagCreated->Flags = 1;
         $flagCreated->Comment = "Test";
 
         $flagCreated->save();
@@ -49,7 +48,6 @@ class FlagDbTest extends TestCase
 
         $this->assertEquals(1, $flagFetched->NarrativeID);
         $this->assertEquals(NULL, $flagFetched->CommentID);
-        $this->assertEquals(1, $flagFetched->Flags);
         $this->assertEquals("Test", $flagFetched->Comment);
 
         $flagFetched->delete();
@@ -69,7 +67,6 @@ class FlagDbTest extends TestCase
 
         $flagCreated->NarrativeID = NULL;
         $flagCreated->CommentID = 1;
-        $flagCreated->Flags = 1;
         $flagCreated->Comment = "Test";
 
         $flagCreated->save();
@@ -80,7 +77,6 @@ class FlagDbTest extends TestCase
 
         $this->assertEquals(NULL, $flagFetched->NarrativeID);
         $this->assertEquals(1, $flagFetched->CommentID);
-        $this->assertEquals(1, $flagFetched->Flags);
         $this->assertEquals("Test", $flagFetched->Comment);
 
         $flagFetched->delete();

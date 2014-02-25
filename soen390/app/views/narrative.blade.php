@@ -91,7 +91,7 @@ function printObject(o) {
         ended: function(event){
             var progress_bar = parseInt($(".personal_prog_bar").css("width"));
             var total = parseInt($(".temp_progress").css("width"));
-            if( total > (progress_bar * 0.95)){
+            if( total > (progress_bar * 0.98)){
                 myPlaylist.play(0);
                 myPlaylist.pause();
 
@@ -203,6 +203,7 @@ function reportNarrative(){
         }
 
     });
+    $(".report").hide();
     $("#report-narrative").modal("hide");
    
 }

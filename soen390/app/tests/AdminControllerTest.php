@@ -8,11 +8,13 @@ class AdminControllerTest extends TestCase
      */
     public function testDashbaord()
     {
+        $user = new User(array('email' => 'thomas@rahn.ca'));
+        $this->be($user);
+
         $response = $this->call('GET', '/admin');
         $view = $response->original;
 
         $this->assertResponseOk();
-        $this->assertEquals('admin', $view->getName());
     }
     
 }

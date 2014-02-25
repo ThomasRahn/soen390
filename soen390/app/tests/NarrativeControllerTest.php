@@ -8,28 +8,11 @@ class NarrativeControllerTest extends TestCase
      */
     public function testIndexView()
     {
-        $response = $this->call('GET', '/admin/manage');
-        $view = $response->original;
+        $user = new User(array('email' => 'thomas@rahn.ca'));
+        $this->be($user);
+        $response = $this->call('GET', 'admin/narrative');
 
         $this->assertResponseOk();
-        $this->assertEquals('admin/manage', $view->getName());
-    }
-    public function testGetAllNarratives(){
-	$response = $this->call('GET', '/admin/manage');
-	$this->assertViewHas('narratives');
-	
-
-	$narratives = $response->original->getData()['narratives'];
-	$this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $narratives);
-	
     }
 
-    public function testNarrativeShow(){
-	$response = $this->call('GET', '/narrative/1');
-        $this->assertViewHas('narrative');
-
-
-        $narrative = $response->original->getData()['narrative'];
-        $this->assertInstanceOf('Narrative', $narrative);
-    }  
 }
