@@ -6,7 +6,7 @@ class ApiNarrativeControllerTest extends TestCase
     /**
      * Test the API's index and ensures that response is valid JSON.
      *
-     * @covers \ApiNarrativeControllerTest::index
+     * @covers ApiNarrativeControllerTest::index
      */
     public function testIndex()
     {

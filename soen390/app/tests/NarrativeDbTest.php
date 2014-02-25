@@ -36,7 +36,7 @@ class NarrativeDbTest extends TestCase
     {
         $narrativeCreated = new Narrative;
 
-        $date = date_create_from_format('j-M-Y', '1-Jan-2000');
+        $date = date('Y-m-d H:i:s');
 
         $narrativeCreated->TopicID = 1;
         $narrativeCreated->CategoryID = 1;
@@ -46,6 +46,7 @@ class NarrativeDbTest extends TestCase
         $narrativeCreated->Agrees = 1;
         $narrativeCreated->Disagrees = 1;
         $narrativeCreated->Indifferents = 1;
+        $narrativeCreated->Published = true;
 
         $narrativeCreated->save();
 
@@ -61,7 +62,7 @@ class NarrativeDbTest extends TestCase
         $this->assertEquals(1, $narrativeFetched->Disagrees);
         $this->assertEquals(1, $narrativeFetched->Indifferents);
         $this->assertEquals(0, $narrativeFetched->Views);//Test for default value
-
+        $this->assertEquals(1,$narrativeFetched->Published);
         $narrativeFetched->delete();
 
         $narrativeFetched = Narrative::find($insertedId);
