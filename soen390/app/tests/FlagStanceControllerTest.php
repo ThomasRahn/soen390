@@ -4,9 +4,9 @@ class FlagStanceControllerTest extends TestCase
 {
 
     /**
-     * Test that the root route will return the cards listing view.
+     * Test that will test sending in a report for invalid narrative.
      *
-     * @covers FlagStanceConrtoller::flagReport
+     * @covers FlagStanceController::flagReport
      */
     public function testReportWithNullNarrative()
     {
@@ -18,9 +18,9 @@ class FlagStanceControllerTest extends TestCase
     }	
 
     /**
-     * Test that the root route will return the cards listing view.
+     * Test that will test sending in a report for a VALID narrative
      *
-     * @covers FlagStanceConrtoller::flagReport
+     * @covers FlagStanceController::flagReport
      */
     public function testReport()
     {
@@ -46,9 +46,9 @@ class FlagStanceControllerTest extends TestCase
     }	
 
     /**
-     * Test that the root route will return the cards listing view.
+     * Test that will agree with a narrative 
      *
-     * @covers FlagStanceConrtoller::setStance
+     * @covers FlagStanceController::setStance
      */
     public function testAgreeVote()
     {
@@ -74,9 +74,9 @@ class FlagStanceControllerTest extends TestCase
     	$this->assertEquals($narrative->Agrees, 2);
     }
     /**
-     * Test that the root route will return the cards listing view.
+     * Test that will disagree with narrative
      *
-     * @covers FlagStanceConrtoller::setStance
+     * @covers FlagStanceController::setStance
     */
     public function testDisAgreeVote()
     {
@@ -103,9 +103,9 @@ class FlagStanceControllerTest extends TestCase
     }	
 	
 	/**
-     * Test that the root route will return the cards listing view.
+     * Test that will disagree with narrative and decrement agree because of toggle effect.
      *
-     * @covers FlagStanceConrtoller::setStance
+     * @covers FlagStanceController::setStance
      */
     public function testDisAgreeVoteInToggle()
     {
