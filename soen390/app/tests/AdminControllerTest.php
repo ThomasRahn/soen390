@@ -5,6 +5,8 @@ class AdminControllerTest extends TestCase
 
     /**
      * Test that the root route will return the cards listing view.
+     *
+     * @covers AdminNarrativeController::getIndex
      */
     public function testDashbaord()
     {

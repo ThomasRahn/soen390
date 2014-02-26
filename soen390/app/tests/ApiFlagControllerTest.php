@@ -5,6 +5,8 @@ class ApiFlagControllerTest extends TestCase
     
     /**
      * Test the API's index and ensures that response is valid JSON.
+     *
+     * @covers ApiFlagController::index
      */
     public function testIndex()
     {
