@@ -36,7 +36,7 @@ Route::get('/content/{id}', 'ContentController@getContent');
 
 // Routes for player.
 Route::resource('/narrative', 'NarrativeController@show');
-Route::resource('/flag','FlagStanceController@getIndex');
+Route::resource('/flag','FlagStanceController@flagReport');
 Route::resource('/stance','FlagStanceController@setStance');
 
 // Routes for administrative view.
