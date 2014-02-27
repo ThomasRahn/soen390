@@ -132,4 +132,33 @@ class FlagStanceControllerTest extends TestCase
     	$this->assertEquals($narrative->Agrees, 0);
     }	
     
+    /**
+     * Test that will disagree with narrative and decrement agree because of toggle effect.
+     *
+     * @covers FlagStanceController::setStance
+     */
+    public function testAgreeVoteInToggle()
+    {
+        $narrativeCreated = new Narrative;
+
+        $date = date('Y-m-d H:i:s');
+
+        $narrativeCreated->TopicID = 1;
+        $narrativeCreated->CategoryID = 1;
+        $narrativeCreated->LanguageID = 1;
+        $narrativeCreated->DateCreated = $date;
+        $narrativeCreated->Name = "Test";
+        $narrativeCreated->Agrees = 1;
+        $narrativeCreated->Disagrees = 1;
+        $narrativeCreated->Indifferents = 1;
+        $narrativeCreated->Published = true;
+
+        $narrativeCreated->save();
+
+        $response = $this->call('POST', 'stance', array('NarrativeID'=>1, 'stance'=>1,'_token'=>csrf_token(),'old'=>true)); 
+
+        $narrative = Narrative::find(1);
+        $this->assertEquals($narrative->Agrees, 2);
+        $this->assertEquals($narrative->Disagrees, 0);
+    }   
 }
