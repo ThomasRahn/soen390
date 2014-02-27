@@ -32,7 +32,7 @@ class FlagTest extends TestCase
      * Ensure flags get created (for a Narrative).
      * @covers Flag::save
      * @covers Flag::create
-     * @covers Flage::delete
+     * @covers Flag::delete
      */
     public function testFlagCreationNarrative()
     {
