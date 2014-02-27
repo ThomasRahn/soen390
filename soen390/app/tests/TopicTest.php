@@ -30,6 +30,9 @@ class TopicTest extends TestCase
     }
     /**
      * Ensure Topic gets created.
+     * @covers Topic::create
+     * @covers Topic::save
+     * @covers Topic::delete
      *
      */
     public function testCategoryCreation()

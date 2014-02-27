@@ -5,7 +5,7 @@ class NarrativeTest extends TestCase
     
     /**
      * Test the API's index and ensures that response is valid JSON.
-     *
+     * @covers ApiNarrativeController::index
      */
     public function testIndex()
     {
@@ -30,7 +30,8 @@ class NarrativeTest extends TestCase
     }
     /**
      * Ensure narratives get created.
-     *
+     *  @covers Narrative::create
+     *  @covers Narrative::save
      */
     public function testNarrativeCreation()
     {

@@ -28,6 +28,9 @@ class CategoryTest extends TestCase
     }
     /**
      * Ensure Category gets created.
+     * @covers Category::save
+     * @covers Category::create
+     * @covers Category::delete
      */
     public function testCategoryCreation()
     {

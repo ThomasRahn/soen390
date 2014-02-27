@@ -28,7 +28,11 @@ class CommentTest extends TestCase
     }
 
      /**
-     * Ensure comment get created (for a Narrative).
+     * Ensure comment get created (for a Narrative). 
+     *
+     * @covers Comment::save
+     * @covers Comment::create
+     * @covers Comment::delete
      */
     public function testCommentCreationNarrative()
     {
