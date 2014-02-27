@@ -53,5 +53,38 @@ class LanguageTest extends TestCase
         $this->assertNull($languageFetched);
 
     }
+      /**
+     * Ensure Category gets created.
+     * @covers Category::narratives
+     */
+    public function testLanguageNarrativesRelation()
+    {
+        $languageCreated = new Language;
+        $languageCreated->LanguageID = 1;
+        $languageCreated->Description = "Test";
 
+        $languageCreated->save();
+
+        $narrativeCreated = new Narrative;
+
+        $date = date('Y-m-d H:i:s');
+
+        $narrativeCreated->TopicID = 1;
+        $narrativeCreated->CategoryID = 1;
+        $narrativeCreated->LanguageID = 1;
+        $narrativeCreated->DateCreated = $date;
+        $narrativeCreated->Name = "Test";
+        $narrativeCreated->Agrees = 1;
+        $narrativeCreated->Disagrees = 1;
+        $narrativeCreated->Indifferents = 1;
+        $narrativeCreated->Published = true;
+
+        $narrativeCreated->save();
+
+        $narratives = Language::find(1)->narrative();
+        $this->assertTrue($narratives->count() > 0);
+
+        
+
+    }
 }

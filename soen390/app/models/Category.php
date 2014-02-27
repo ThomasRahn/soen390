@@ -7,4 +7,8 @@ class Category extends Eloquent{
 	public $timestamps = false;
 	
 
+
+	public function narrative(){
+		return $this->hasMany('Narrative', 'CategoryID', 'CategoryID');
+	}
 }
