@@ -54,8 +54,7 @@ class LanguageTest extends TestCase
 
     }
       /**
-     * Ensure Category gets created.
-     * @covers Category::narrative
+     * @covers Language::narrative
      */
     public function testLanguageNarrativesRelation()
     {
