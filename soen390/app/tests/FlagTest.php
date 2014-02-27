@@ -88,5 +88,38 @@ class FlagTest extends TestCase
         $this->assertNull($flagFetched);
 
     }
+     /**
+     * Testing relationship from flag to narrative
+     * @covers Flag::Narrative
+     */
+    public function testFlagNarrativeRelationship()
+    {
+         $narrativeCreated = new Narrative;
 
+        $date = date('Y-m-d H:i:s');
+
+        $narrativeCreated->TopicID = 1;
+        $narrativeCreated->CategoryID = 1;
+        $narrativeCreated->LanguageID = 1;
+        $narrativeCreated->DateCreated = $date;
+        $narrativeCreated->Name = "Test";
+        $narrativeCreated->Agrees = 1;
+        $narrativeCreated->Disagrees = 1;
+        $narrativeCreated->Indifferents = 1;
+        $narrativeCreated->Published = true;
+
+        $narrativeCreated->save();
+
+        $flagCreated = new Flag;
+
+        $flagCreated->NarrativeID = 1;
+        $flagCreated->CommentID = NULL;
+        $flagCreated->Comment = "Test";
+
+        $flagCreated->save();
+
+        $narrative = Flag::find(1)->narrative();
+        $this->assertNotNull($narrative);
+
+    }
 }
