@@ -55,7 +55,7 @@ class CategoryTest extends TestCase
     }
    /**
      * Ensure Category gets created.
-     * @covers Category::narratives
+     * @covers Category::narrative
      */
     public function testCategoryNarrativesRelation()
     {
