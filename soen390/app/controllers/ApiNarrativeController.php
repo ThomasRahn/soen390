@@ -2,6 +2,9 @@
 
 class ApiNarrativeController extends \BaseController {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function __construct()
 	{
 		// Ensure that user is authenticated for all write/update routes.

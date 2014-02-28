@@ -1,10 +1,12 @@
 <?php
 
+/**
+ * @codeCoverageIgnore
+ */
 class Topic extends Eloquent{
 
-	protected $table = "Topic";
-	public $timestamps = false;
+	protected $table      = "Topic";
 	protected $primaryKey = 'TopicID';
+    public    $timestamps = false;
 	
-
 }
