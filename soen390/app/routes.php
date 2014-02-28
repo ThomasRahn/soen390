@@ -54,7 +54,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
         Route::get('/', array('uses' => 'AdminNarrativeController@getIndex'));
 	
         // Narrative flags
-        Route::get('flag', array('uses'=>'AdminFlagController@getIndex'));
+        Route::get('flag/{id}', array('uses'=>'AdminFlagController@getIndex'));
 
         //Remove Narrative flag
         Route::delete('flag/{id}', array('uses'=>'AdminFlagController@destroy'));

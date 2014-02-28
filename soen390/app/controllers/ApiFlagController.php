@@ -19,7 +19,9 @@ class ApiFlagController extends \BaseController {
 	 */
 	public function index()
 	{
-		$flags = Flag::all();
+		$NarrativeID = Input::get('NarrativeID');
+		$flags = Flag::where('NarrativeID',$NarrativeID)->get();
+
 		$formattedFlags = array();
 		foreach ($flags as $flag) {
 			$formattedFlags[] = array(
@@ -29,7 +31,6 @@ class ApiFlagController extends \BaseController {
 					'comment' =>$flag->Comment,
 				);
 		}
-
 		return Response::json($formattedFlags);
 	}
 	

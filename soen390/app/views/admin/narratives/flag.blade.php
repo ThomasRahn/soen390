@@ -42,9 +42,8 @@ Flagged Narrative(s)
 
 <script>
     $(document).ready(function () {
-       
         var narratives = $.getJSON(
-            "{{ action('ApiFlagController@index') }}",
+            "{{ action('ApiFlagController@index', array('NarrativeID' => $NarrativeID )) }}",
             function (data) {
                 var rows = [];
 
@@ -75,7 +74,7 @@ Flagged Narrative(s)
             });
        
     });
-    function play_narrative(id){//65
+    function play_narrative(id){//
         var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
             left = (screen.width / 2) - (popupWidth / 2),

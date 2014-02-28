@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @codeCoverageIgnore
- */
 class Flag extends Eloquent{
 
     protected $table      = 'Flag';

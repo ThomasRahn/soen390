@@ -90,7 +90,7 @@ class FlagTest extends TestCase
     }
      /**
      * Testing relationship from flag to narrative
-     * @covers Flag::Narrative
+     * @covers Flag::narrative
      */
     public function testFlagNarrativeRelationship()
     {
