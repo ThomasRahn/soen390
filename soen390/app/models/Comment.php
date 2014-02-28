@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @codeCoverageIgnore
+ */
+class Comment extends Eloquent
+{
 
 class Comment extends Eloquent{
 

@@ -1,8 +1,10 @@
 <?php 
 
-class Language extends Eloquent{
-
-	protected $table = "Language";
+/**
+ * @codeCoverageIgnore
+ */
+class Language extends Eloquent
+{
 
 	protected $primaryKey = 'LanguageID';
 
