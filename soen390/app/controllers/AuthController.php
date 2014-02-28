@@ -41,7 +41,7 @@ class AuthController extends BaseController {
 		}
 
 		return $this->alertAction(
-				true,
+				$success === false,
 				($success === false ? Lang::get('auth.login.invalid') : Lang::get('auth.login.fail')),
 				Redirect::route('login')->withInput()
 			);

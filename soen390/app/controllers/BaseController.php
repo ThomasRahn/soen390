@@ -2,6 +2,9 @@
 
 class BaseController extends Controller {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function __construct()
 	{
 		$this->beforeFilter('csrf', array('on' => 'post'));
@@ -11,6 +14,7 @@ class BaseController extends Controller {
 	 * Setup the layout used by the controller.
 	 *
 	 * @return void
+	 * @codeCoverageIgnore
 	 */
 	protected function setupLayout()
 	{

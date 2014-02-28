@@ -2,6 +2,9 @@
 
 class ApiFlagController extends \BaseController {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function __construct()
 	{
 		$this->beforeFilter('auth', array(
