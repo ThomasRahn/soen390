@@ -243,4 +243,30 @@ class AuthControllerTest extends TestCase
 
 		$this->assertHasOldInput();
 	}
+
+	/**
+	 * Test to ensure that in the event that the user password value requires
+	 * a rehash, it succeeds.
+	 *
+	 * @covers AuthController::postLogin
+	 */
+	public function testPostLoginNeedRehash()
+	{
+		$hasher = Mockery::mock('Illuminate\Hashing\BcryptHasher');
+
+		$hasher->shouldReceive('needsRehash')->once()->andReturn(true);
+
+		$loginResponse = $this->call(
+			'POST',
+			'auth/login',
+			array(
+				'email' => 'thomas@rahn.ca',
+				'password' => 'Thomas1',
+				'_token' => csrf_token(),
+				)
+			);
+
+		$this->assertTrue(Auth::check());
+	}
+
 }
