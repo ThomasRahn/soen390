@@ -244,7 +244,7 @@ class ApiNarrativeController extends \BaseController {
 				'duration' => $a->audio_duration,
 			);
 		}
-
+		$flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
 		// Put this narrative into the array.
 		$narrative = array(
 			'id' => $n->NarrativeID,
@@ -259,9 +259,11 @@ class ApiNarrativeController extends \BaseController {
 			'published' => $n->Published,
 			'images' => $imagesArray,
 			'audio' => $audioArray,
+			'flags' => $flagCount,
 		);
 
 		return $narrative;
 	}
 
 }
+

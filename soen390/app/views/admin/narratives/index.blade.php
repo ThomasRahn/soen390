@@ -35,6 +35,7 @@ Narratives
             <th>{{ trans('admin.narratives.table.category') }}</th>
             <th>{{ trans('admin.narratives.table.createdAt') }}</th>
             <th>{{ trans('admin.narratives.table.published') }}</th>
+            <th>{{ trans('admin.narratives.table.flags') }}</th>
             <th>{{ trans('admin.narratives.table.manage') }}</th>
         </tr>
     </thead>
@@ -141,6 +142,7 @@ Narratives
                         + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
                         + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa fa-eye" + (narrative.published == false ? "-slash" : "") + " fa-fw\"></i></td>"
+                        + "<td>" + narrative.flags +"</td>"
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
                         + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-pencil fa-fw\"></i></button>"

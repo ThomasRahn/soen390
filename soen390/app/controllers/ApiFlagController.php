@@ -33,6 +33,14 @@ class ApiFlagController extends \BaseController {
 		return Response::json($formattedFlags);
 	}
 	
+	/*
+	*  Returns the number of flags per narrative
+	*
+	*
+	*/
+	public function getCount($NarrativeID){
+		
+	}
 	/**
 	 * Display the specified resource.
 	 *
