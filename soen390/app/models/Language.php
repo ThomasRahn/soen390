@@ -6,14 +6,14 @@
 class Language extends Eloquent
 {
 
-	protected $table      = 'Language';
-	protected $primaryKey = 'LanguageID';
-	public    $timestamps = false;
+    protected $table      = 'Language';
+    protected $primaryKey = 'LanguageID';
+    public    $timestamps = false;
     public    $guarded    = array('LanguageID');
 
-	public function narrative()
+    public function narrative()
     {
-		return $this->hasMany('Narrative', 'LanguageID', 'LanguageID');
-	}
+        return $this->hasMany('Narrative', 'LanguageID', 'LanguageID');
+    }
 
 }
