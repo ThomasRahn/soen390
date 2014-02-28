@@ -2,9 +2,10 @@
 
 class AdminFlagController extends BaseController {
 
-    public function getIndex()
+    public function getIndex($id)
     {
-        return View::make('admin.narratives.flag');
+
+        return View::make('admin.narratives.flag')->with('NarrativeID',$id);
     }
 
     /**

@@ -124,7 +124,22 @@ Narratives
             dataType: "json"
         });
     }
+    function playNarrative(id){//
+        var popupWidth = screen.width * 0.75, 
+            popupHeight = screen.height * 0.75,
+            left = (screen.width / 2) - (popupWidth / 2),
+            top = (screen.height / 2) - (popupHeight / 2);
 
+        window.open('/narrative/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
+    }
+    function openFlagWindow(id){//
+      var popupWidth = screen.width * 0.75, 
+            popupHeight = screen.height * 0.75,
+            left = (screen.width / 2) - (popupWidth / 2),
+            top = (screen.height / 2) - (popupHeight / 2);
+
+        window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
+    }
     $(document).ready(function () {
 
         // Fetch the narratives from the API and display them.
@@ -142,12 +157,12 @@ Narratives
                         + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
                         + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa fa-eye" + (narrative.published == false ? "-slash" : "") + " fa-fw\"></i></td>"
-                        + "<td>" + narrative.flags +"</td>"
+                        + "<td> <a href=\"#\" onclick=\"openFlagWindow(" + narrative.id+")\">" + narrative.flags +"</a></td>"
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
                         + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-pencil fa-fw\"></i></button>"
                         + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
-                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-play fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"playNarrative("+ narrative.id+")\"><i class=\"fa fa-play fa-fw\"></i></button>"
                         + "</td>"
                         + "</tr>");
                 });
