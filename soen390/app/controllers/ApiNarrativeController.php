@@ -29,9 +29,10 @@ class ApiNarrativeController extends \BaseController {
 		// Create an array to hold all the narratives. This array will be converted into a JSON object.
 		$narrativesArray = array();
 
-		foreach ($narratives as $n)
+		foreach ($narratives as $n){
 			$narrativesArray[] = $this->narrativeToArray($n);
-
+		}
+		
 		return Response::json(array(
 			'success' => true,
 			'return' => $narrativesArray,
@@ -60,7 +61,6 @@ class ApiNarrativeController extends \BaseController {
 		// Increment the view count.
 		$narrative->Views = $narrative->Views + 1;
 		$narrative->save();
-
 		return Response::json(array(
 			'success' => true,
 			'return' => $this->narrativeToArray($narrative),
@@ -241,7 +241,7 @@ class ApiNarrativeController extends \BaseController {
 				'duration' => $a->audio_duration,
 			);
 		}
-
+		$flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
 		// Put this narrative into the array.
 		$narrative = array(
 			'id' => $n->NarrativeID,
@@ -256,6 +256,7 @@ class ApiNarrativeController extends \BaseController {
 			'published' => $n->Published,
 			'images' => $imagesArray,
 			'audio' => $audioArray,
+			'flags'=> $flagCount,
 		);
 
 		return $narrative;
