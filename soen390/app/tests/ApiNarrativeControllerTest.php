@@ -2,6 +2,14 @@
 
 class ApiNarrativeControllerTest extends TestCase
 {
+
+    /**
+     * Clean up after the test run.
+     */
+    public function tearDown()
+    {
+        Mockery::close();
+    }
     
     /**
      * Test the API's index and ensures that response is valid JSON.
