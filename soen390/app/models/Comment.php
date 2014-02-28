@@ -6,15 +6,14 @@
 class Comment extends Eloquent
 {
 
-class Comment extends Eloquent{
-
-	protected $table = "Comment";
+	protected $table      = 'Comment';
 	protected $primaryKey = 'CommentID';
 	protected $softDelete = true;
-	public $timestamps = false;
-	public static $unguarded = true;
+	public    $timestamps = false;
+	public    $guarded    = array('CommentID');
 
-	public function narrative(){
+	public function narrative()
+    {
 		return $this->belongsTo("Narrative", "NarrativeID","NarrativeID");
 	}
 //	public function comment(){
