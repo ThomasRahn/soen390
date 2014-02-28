@@ -11,7 +11,7 @@ class AdminFlagControllerTest extends TestCase
     {
         $user = new User(array('email' => 'thomas@rahn.ca'));
         $this->be($user);
-        $response = $this->call('GET', 'admin/narrative/flag');
+        $response = $this->call('GET', 'admin/narrative/flag/1');
 
         $this->assertResponseOk();
     }
