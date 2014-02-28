@@ -3,10 +3,11 @@
 /**
  * @codeCoverageIgnore
  */
-class Topic extends Eloquent{
+class Topic extends Eloquent
+{
 
-	protected $table      = "Topic";
-	protected $primaryKey = 'TopicID';
+    protected $table      = 'Topic';
+    protected $primaryKey = 'TopicID';
     public    $timestamps = false;
-	
+
 }

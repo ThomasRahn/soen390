@@ -6,7 +6,7 @@ class Narrative extends Eloquent
     protected $table      = 'Narrative';
     protected $primaryKey = 'NarrativeID';
     protected $softDelete = true;
-    protected $guarded    = array('id');
+    protected $guarded    = array('NarrativeID');
     public    $timestamps = false;
 
     public function category()
