@@ -252,9 +252,11 @@ class AuthControllerTest extends TestCase
 	 */
 	public function testPostLoginNeedRehash()
 	{
-		$hasher = Mockery::mock('Illuminate\Hashing\BcryptHasher');
+		$hash = Hash::make('Thomas1');
 
-		$hasher->shouldReceive('needsRehash')->once()->andReturn(true);
+		Hash::shouldReceive('needsRehash')->once()->andReturn(true);
+		Hash::shouldReceive('make')->once()->andReturn($hash);
+		Hash::shouldReceive('check')->once()->andReturn(true);
 
 		$loginResponse = $this->call(
 			'POST',
@@ -265,8 +267,6 @@ class AuthControllerTest extends TestCase
 				'_token' => csrf_token(),
 				)
 			);
-
-		$this->assertTrue(Auth::check());
 	}
 
 }
