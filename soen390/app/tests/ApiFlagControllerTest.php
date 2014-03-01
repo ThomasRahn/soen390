@@ -8,15 +8,12 @@ class ApiFlagControllerTest extends TestCase
      *
      * @covers ApiFlagController::index
      */
-    public function testIndex()
+    public function testIndexForJsonResponse()
     {
-        $response = $this->call('GET', 'api/flags');
+        $response = $this->action('GET', 'ApiFlagController@index');
 
         $this->assertResponseOk();
-
-        json_decode($response->getContent());
-
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
+        $this->assertJson($response->getContent());
     }
 
      /**
@@ -26,37 +23,45 @@ class ApiFlagControllerTest extends TestCase
      */
     public function testIndexWithFlags()
     {
-        $flagCreated = new Flag;
+        // Seed necessary values.
+        $this->seed('TopicTableSeeder');
+        $this->seed('CategoryTableSeeder');
+        $this->seed('LanguageTableSeeder');
 
-        $flagCreated->NarrativeID = 1;
-        $flagCreated->CommentID = NULL;
-        $flagCreated->Comment = "Test";
+        // Create a narrative and flag instance.
 
-        $flagCreated->save();
+        $narrative = Narrative::create(array(
+                'TopicID'      => 1,
+                'CategoryID'   => 1,
+                'LanguageID'   => 1,
+                'DateCreated'  => new DateTime,
+                'Name'         => 'Test',
+                'Agrees'       => 1,
+                'Disagrees'    => 1,
+                'Indifferents' => 1,
+                'Published'    => true,
+            ));
 
-        $narrativeCreated = new Narrative;
+        $flag = Flag::create(array(
+                'NarrativeID' => Narrative::first()->NarrativeID,
+                'CommentID'   => null,
+                'Comment'     => 'testIndexWithFlags',
+            ));
 
-        $date = date('Y-m-d H:i:s');
+        $response = $this->action('GET', 'ApiFlagController@index', array('NarrativeID' => $narrative->NarrativeID));
 
-        $narrativeCreated->TopicID = 1;
-        $narrativeCreated->CategoryID = 1;
-        $narrativeCreated->LanguageID = 1;
-        $narrativeCreated->DateCreated = $date;
-        $narrativeCreated->Name = "Test";
-        $narrativeCreated->Agrees = 1;
-        $narrativeCreated->Disagrees = 1;
-        $narrativeCreated->Indifferents = 1;
-        $narrativeCreated->Published = true;
+        $this->assertJson($response->getContent());
 
-        $narrativeCreated->save();
+        $jsonResponse = json_decode($response->getContent());
 
-        $response = $this->call('GET', 'api/flags');
+        $this->assertEquals(1, count($jsonResponse));
 
-        $this->assertResponseOk();
+        $responseFlag = $jsonResponse[0];
 
-        json_decode($response->getContent());
-
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
+        $this->assertEquals($flag->FlagID, $responseFlag->id);
+        $this->assertEquals($narrative->Name, $responseFlag->name);
+        $this->assertEquals($flag->NarrativeID, $responseFlag->narrativeID);
+        $this->assertEquals($flag->Comment, $responseFlag->comment);
     }
 
 }
