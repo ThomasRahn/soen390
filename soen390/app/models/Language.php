@@ -1,8 +1,5 @@
 <?php 
 
-/**
- * @codeCoverageIgnore
- */
 class Language extends Eloquent
 {
 
