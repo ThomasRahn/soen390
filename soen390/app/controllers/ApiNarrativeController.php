@@ -104,7 +104,7 @@ class ApiNarrativeController extends \BaseController {
 		try {
 			Narrative::addArchive($hashedName, $destinationPath, Input::get('category'), (Input::get('publish') == 'publish'));
 		} catch (Exception $e) {
-			$errorArray = array($->getMessage());
+			$errorArray = array($e->getMessage());
 
 			if (Config::get('app.debug') === true)
 				$errorArray[] = $e->getTrace();
