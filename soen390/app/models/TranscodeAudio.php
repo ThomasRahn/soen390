@@ -7,6 +7,8 @@ class TranscodeAudio
 {
     public function fire($job, $data)
     {
+    	$transcodeEnabled = Config::get('media.transcode');
+
         // Retrieve the given details
         $sourceFilePath = $data['sourceFilePath'];
         $narrativeID = $data['narrativeID'];
@@ -23,10 +25,7 @@ class TranscodeAudio
         $sourceDirPath = $pathinfo['dirname'];
 
         // Specify the desired output formats (extension => codec)
-        $outputFormats = array(
-            'ogg' => 'libvorbis',
-            'mp3' => 'libmp3lame',
-        );
+        $outputFormats = Config::get('media.transcode_formats');
 
         // Determine the duration of the source audio.
 
