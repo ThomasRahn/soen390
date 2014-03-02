@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Alan Ly <me@alanly.ca>
+ */
 class ApiNarrativeController extends \BaseController {
 
 	/**
@@ -223,8 +226,22 @@ class ApiNarrativeController extends \BaseController {
 		$audioArray = array();
 
 		foreach ($audio as $a) {
-			$a_mpeg = $n->media()->audio()->where('filename', $a->filename)->where('audio_codec', 'mp3')->first();
-			$a_ogg  = $n->media()->audio()->where('filename', $a->filename)->where('audio_codec', 'ogg')->first();
+			
+			// Retrieve the audio and get their media address.
+
+			$a_mpeg = $n->media()->audio()
+				->where('filename', $a->filename)
+				->where('audio_codec', 'mp3')
+				->first();
+
+			$a_ogg  = $n->media()->audio()
+				->where('filename', $a->filename)
+				->where('audio_codec', 'ogg')
+				->first();
+
+			$mpeg_link = (! $a_mpeg) ? '' : action('ContentController@getContent', array('id' => $a_mpeg->id));
+
+			$ogg_link = (! $a_ogg) ? '' : action('ContentController@getContent', array('id' => $a_ogg->id));
 
 			// Determine an appropriate poster for this track.
 			$tracknumber = intval($a->filename);
@@ -243,8 +260,8 @@ class ApiNarrativeController extends \BaseController {
 
 			$audioArray[] = array(
 				'title' => $a->id,
-				'mp3' => action('ContentController@getContent', array('id' => $a_mpeg->id)),
-				'oga' => action('ContentController@getContent', array('id' => $a_ogg->id)),
+				'mp3' => $mpeg_link,
+				'oga' => $ogg_link,
 				'poster' => $posterPath,
 				'duration' => $a->audio_duration,
 			);
