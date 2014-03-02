@@ -87,4 +87,26 @@ class TranscodeAudio
         }
 
     }
+
+    /**
+     * Create a Media instance based upon the given parameter fields for this audio.
+     *
+     * @param  integer  $narrativeID
+     * @param  string   $fileName
+     * @param  string   $baseName
+     * @param  string   $extension
+     * @param  string   $parsedDuration
+     * @return Media
+     */
+    protected function createMediaInstance($narrativeID, $fileName, $baseName, $extension, $parsedDuration)
+    {
+    	return Media::create(array(
+                'narrative_id' => $narrativeID,
+                'type' => 'audio',
+                'filename' => $fileName,
+                'basename' => $baseName,
+                'audio_codec' => $extension,
+                'audio_duration' => $parsedDuration,
+            ));
+    }
 }
