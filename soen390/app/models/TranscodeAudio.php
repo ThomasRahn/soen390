@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Alan Ly <me@alanly.ca>
+ */
 class TranscodeAudio
 {
     public function fire($job, $data)
