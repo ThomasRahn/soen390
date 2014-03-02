@@ -1,18 +1,9 @@
 <?php
 
-/**
- * Handles the queued request to transcode a specific audio file.
- *
- * @author Alan Ly <me@alanly.ca>
- */
 class TranscodeAudio
 {
-
     public function fire($job, $data)
     {
-    	// Retrieve whether or not files should be transcoded.
-    	$toTranscode = Config::get('media.transcode');
-
         // Retrieve the given details
         $sourceFilePath = $data['sourceFilePath'];
         $narrativeID = $data['narrativeID'];
@@ -29,7 +20,10 @@ class TranscodeAudio
         $sourceDirPath = $pathinfo['dirname'];
 
         // Specify the desired output formats (extension => codec)
-        $outputFormats = Config::get('transcode_formats');
+        $outputFormats = array(
+            'ogg' => 'libvorbis',
+            'mp3' => 'libmp3lame',
+        );
 
         // Determine the duration of the source audio.
 
@@ -55,7 +49,7 @@ class TranscodeAudio
             // If the source file is already in the desired $codec,
             // then we'll just move it and skip transcoding to $codec.
 
-            if (strtolower($sourceExtension) == $extension || $toTranscode === false) {
+            if (strtolower($sourceExtension) == $extension) {
 
                 File::move($sourceFilePath, $outputPath);
 
@@ -70,7 +64,14 @@ class TranscodeAudio
             }
 
             // Once completed, create the Content object for the output.
-            $this->createMediaInstance($narrativeID, $fileName, $baseName, $extension, $parsedDuration);
+            Media::create(array(
+                'narrative_id' => $narrativeID,
+                'type' => 'audio',
+                'filename' => $fileName,
+                'basename' => $baseName,
+                'audio_codec' => $extension,
+                'audio_duration' => $parsedDuration,
+            ));
         }
 
         // If application is not in debug mode, let's clean up.
@@ -84,29 +85,4 @@ class TranscodeAudio
         }
 
     }
-
-    /**
-     * Create and store a new Media instance based on the given parameters for
-     * this audio.
-     *
-     * @param  integer  $narrativeID
-     * @param  string   $filename
-     * @param  string   $basename
-     * @param  string   $extension
-     * @param  string   $duration
-     * @return Media
-     */
-    protected function createMediaInstance($narrativeID, $filename, $basename, $extension, $duration)
-    {
-        return Media::create(array(
-                'narrative_id' => $narrativeID,
-                'type' => 'audio',
-                'filename' => $filename,
-                'basename' => $basename,
-                'audio_codec' => $extension,
-                'audio_duration' => $duration,
-            ));
-    }
-
 }
-
