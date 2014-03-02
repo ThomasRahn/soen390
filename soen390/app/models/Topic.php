@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @codeCoverageIgnore
- */
 class Topic extends Eloquent
 {
 

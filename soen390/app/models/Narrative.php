@@ -9,19 +9,36 @@ class Narrative extends Eloquent
     protected $guarded    = array('NarrativeID');
     public    $timestamps = false;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function category()
     {
         return $this->belongsTo('Category', 'CategoryID', 'CategoryID');
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function language()
     {
         return $this->belongsTo('Language', 'LanguageID', 'LanguageID');
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function media()
     {
         return $this->hasMany('Media', 'narrative_id', 'NarrativeID');
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function flags()
+    {
+        return $this->hasMany('Flag', 'NarrativeID', 'NarrativeID');
     }
 
     /**
@@ -51,6 +68,10 @@ class Narrative extends Eloquent
      */
     public static function addArchive($name, $path, $category, $publish)
     {
+        // Check to see if the archive file actually exists first.
+        if (File::exists($path) === false)
+            return;
+
         // Extract the specified archive and retrieve the output path.
         $outputPath = self::extractArchive($name, $path);
 

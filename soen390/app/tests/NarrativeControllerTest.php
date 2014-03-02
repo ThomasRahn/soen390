@@ -4,15 +4,27 @@ class NarrativeControllerTest extends TestCase
 {
 
     /**
-     * Test that the root route will return the cards listing view.
+     * Attempt to display an non-existant narrative. This should result in a
+     * NotFoundHttpException.
+     *
+     * @covers            NarrativeController::show
+     * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function testIndexView()
+    public function testShowWithInvalidNarrative()
     {
-        $user = new User(array('email' => 'thomas@rahn.ca'));
-        $this->be($user);
-        $response = $this->call('GET', 'admin/narrative');
+        $response = $this->action('GET', 'NarrativeController@show', array('id' => 10));
 
-        $this->assertResponseOk();
+        $this->assertResponseStatus(404);
+    }
+
+    /**
+     * Display an existing narrative.
+     *
+     * @covers NarrativeController::show
+     */
+    public function testShowWithValidNarrative()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
 }
