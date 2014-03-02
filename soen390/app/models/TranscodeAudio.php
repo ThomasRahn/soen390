@@ -36,45 +36,56 @@ class TranscodeAudio
         $dSeconds += ($dHours * 3600) + ($dMinutes * 60);
         $parsedDuration = $dSeconds . '.' . $dMicroseconds;
 
-        // Create a version of the source file for each format specified.
-        foreach ($outputFormats as $extension => $codec) {
-            // Determine the output basename
-            $baseName = $fileName . '.' . $extension;
+        if (! $transcodeEnabled) {
 
-            // Determine the full output path
-            $outputPath = Config::get('media.paths.processed')
-                . DIRECTORY_SEPARATOR 
-                . $narrativeID 
-                . DIRECTORY_SEPARATOR 
-                . $baseName;
+        	$baseName = $pathinfo['basename'];
 
-            // If the source file is already in the desired $codec,
-            // then we'll just move it and skip transcoding to $codec.
+        	$outputPath = Config::get('media.paths.processed')
+	                . DIRECTORY_SEPARATOR 
+	                . $narrativeID 
+	                . DIRECTORY_SEPARATOR 
+	                . $baseName;
 
-            if (strtolower($sourceExtension) == $extension) {
+	        File::move($sourceFilePath, $outputPath);
 
-                File::move($sourceFilePath, $outputPath);
+	        $this->createMediaInstance($narrativeID, $fileName, $baseName, $sourceExtension, $parsedDuration);
 
-            } else {
+        } else {
 
-                // Begin transcoding
-                Sonus::convert()
-                    ->input($sourceFilePath)
-                    ->output($outputPath)
-                    ->go('-acodec ' . $codec . ' -ab 64k -ar 44100');
+	        // Create a version of the source file for each format specified.
+	        foreach ($outputFormats as $extension => $codec) {
+	            // Determine the output basename
+	            $baseName = $fileName . '.' . $extension;
 
-            }
+	            // Determine the full output path
+	            $outputPath = Config::get('media.paths.processed')
+	                . DIRECTORY_SEPARATOR 
+	                . $narrativeID 
+	                . DIRECTORY_SEPARATOR 
+	                . $baseName;
 
-            // Once completed, create the Content object for the output.
-            Media::create(array(
-                'narrative_id' => $narrativeID,
-                'type' => 'audio',
-                'filename' => $fileName,
-                'basename' => $baseName,
-                'audio_codec' => $extension,
-                'audio_duration' => $parsedDuration,
-            ));
-        }
+	            // If the source file is already in the desired $codec,
+	            // then we'll just move it and skip transcoding to $codec.
+
+	            if (strtolower($sourceExtension) == $extension) {
+
+	                File::move($sourceFilePath, $outputPath);
+
+	            } else {
+
+	                // Begin transcoding
+	                Sonus::convert()
+	                    ->input($sourceFilePath)
+	                    ->output($outputPath)
+	                    ->go('-acodec ' . $codec . ' -ab 64k -ar 44100');
+
+	            }
+
+	            // Once completed, create the Content object for the output.
+	            $this->createMediaInstance($narrativeID, $fileName, $baseName, $extension, $parsedDuration);
+	        }
+
+	    }
 
         // If application is not in debug mode, let's clean up.
         if (Config::get('app.debug') === false) {
