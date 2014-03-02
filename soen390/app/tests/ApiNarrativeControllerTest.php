@@ -48,6 +48,14 @@ class ApiNarrativeControllerTest extends TestCase
 
         $name = time();
 
+        // We need to mock Sonus
+        $sonus = Mockery::mock('Rafasamp\Sonus\Sonus');
+        $sonus->shouldReceive('getMediaInfo')->andReturn(array(
+                'format' => array(
+                    'duration' => '00:00:10.500000',
+                ),
+            ));
+
         Narrative::addArchive(
                 $name,
                 $narrativeBundle,
