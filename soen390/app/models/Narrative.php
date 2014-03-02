@@ -34,6 +34,14 @@ class Narrative extends Eloquent
     }
 
     /**
+     * @codeCoverageIgnore
+     */
+    public function flags()
+    {
+        return $this->hasMany('Flag', 'NarrativeID', 'NarrativeID');
+    }
+
+    /**
      * Creates all Narratives found in an uploaded archive.
      *
      * A directory containing a Narrative is assumed to be made up of a XML
@@ -63,7 +71,7 @@ class Narrative extends Eloquent
         // Check to see if the archive file actually exists first.
         if (File::exists($path) === false)
             return;
-        
+
         // Extract the specified archive and retrieve the output path.
         $outputPath = self::extractArchive($name, $path);
 
