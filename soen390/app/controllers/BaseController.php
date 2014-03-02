@@ -34,7 +34,7 @@ class BaseController extends Controller {
 	 * @param  $redirector RedirectResponse
 	 * @return Illuminate\Http\RedirectResponse
 	 */
-	protected function alertAction($hasFailed, $message, Illuminate\Http\RedirectResponse $redirector = null)
+	public function alertAction($hasFailed, $message, Illuminate\Http\RedirectResponse $redirector = null)
 	{
 		Session::flash('action.failed', $hasFailed);
 		Session::flash('action.message', $message);

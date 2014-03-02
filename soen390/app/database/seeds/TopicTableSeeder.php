@@ -1,10 +1,17 @@
-<?php 
-class TopicTableSeeder extends Seeder{
+<?php
 
-        public function run(){
+class TopicTableSeeder extends Seeder
+{
 
-                DB::table('Topic')->delete();
-		Topic::create(array("TopicID"=>1, "DateCreated"=>new DateTime,"Name"=>"Pipes and stuff","Description"=>"Key stone pipeline stuff"));
-        }
+    public function run()
+    {
+        DB::table('Topic')->delete();
+
+		Topic::create(array(
+                "DateCreated" => new DateTime,
+                "Name"        => "Pipes and stuff",
+                "Description" => "Key stone pipeline stuff",
+            ));
+    }
+
 }
-

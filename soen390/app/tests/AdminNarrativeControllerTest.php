@@ -4,6 +4,48 @@ class AdminNarrativeControllerTest extends TestCase
 {
 
     /**
+     * Check for proper view and response code.
+     *
+     * @covers AdminNarrativeController::getIndex
+     */
+    public function testGetIndex()
+    {
+        // Set the user
+        $user = new User(array('email' => 'user@domain.local'));
+        $this->be($user);
+
+        $response = $this->action('GET', 'AdminNarrativeController@getIndex');
+        $view = $response->original;
+
+        $this->assertResponseOk();
+        $this->assertEquals('admin.narratives.index', $view->getName());
+    }
+    
+    /**
+     * Check for proper view and response code along with the correct number
+     * of categories.
+     *
+     * @covers AdminNarrativeController::getUpload
+     */
+    public function testGetUpload()
+    {
+        // Set the user
+        $user = new User(array('email' => 'user@domain.local'));
+        $this->be($user);
+
+        $this->seed('CategoryTableSeeder');
+        $categories = Category::all()->count();
+
+        $response = $this->action('GET', 'AdminNarrativeController@getUpload');
+        $view = $response->original;
+
+        $this->assertResponseOk();
+        $this->assertEquals('admin.narratives.upload', $view->getName());
+        $this->assertViewHas('categoryArray');
+        $this->assertEquals($categories, count($view['categoryArray']));
+    }
+
+    /**
     * Test that will test the narrative desotry method
     *
     * @covers AdminNarrativeController::destroy
