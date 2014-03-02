@@ -35,7 +35,7 @@ Route::group(array('prefix' => 'api'), function() {
 Route::get('/content/{id}', 'ContentController@getContent');
 
 // Routes for player.
-Route::get('/narrative', 'NarrativeController@show');
+Route::get('/narrative/{id}', 'NarrativeController@show');
 Route::post('/flag','FlagStanceController@flagReport');
 Route::post('/stance','FlagStanceController@setStance');
 
