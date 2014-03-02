@@ -32,7 +32,7 @@ class ApiNarrativeControllerTest extends TestCase
     /**
      * Adds a single narrative to the database.
      */
-    protected function addNarrativeToDatabase($published = true)
+    protected function addNarrativeToDatabase($published = true, $transcode = false)
     {
         // This should refer to the narrative bundle for unit testing.
         $narrativeBundle = Config::get('media.paths.uploads')
@@ -48,10 +48,12 @@ class ApiNarrativeControllerTest extends TestCase
 
         $name = time();
 
-        // Mock the audio transcoding so that we don't spend any time
-        // waiting for things to transcode.
-        Queue::shouldReceive('connected')->with('iron')->andReturn(false);
-        Queue::shouldReceive('push')->times(8)->andReturn(true);
+        if (! $transcode) {
+            // Mock the audio transcoding so that we don't spend any time
+            // waiting for things to transcode.
+            Queue::shouldReceive('connected')->with('iron')->andReturn(false);
+            Queue::shouldReceive('push')->times(8)->andReturn(true);
+        }
 
         Narrative::addArchive(
                 $name,
