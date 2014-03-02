@@ -2,168 +2,171 @@
 
 class NarrativeTest extends TestCase
 {
-    
+
     /**
-     * Test the API's index and ensures that response is valid JSON.
-     * @covers ApiNarrativeController::index
+     * Clean up the `processed` directory.
      */
-    public function testIndex()
+    public function tearDown()
     {
-        $response = $this->call('GET', 'api/narrative');
+        // Delete each processed narrative directory.
+        foreach (Narrative::all() as $n) {
+            $path = Config::get('media.paths.processed')
+                    . DIRECTORY_SEPARATOR
+                    . $n->NarrativeID;
 
-        $this->assertResponseOk();
-
-        json_decode($response->getContent());
-
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
+            File::deleteDirectory($path);
+        }
     }
+
     /**
-     * Ensure narratives get fetched.
+     * Test to ensure that the archive is extracted properly.
      *
+     * @covers Narrative::addArchive
+     * @covers Narrative::extractArchive
+     * @covers Narrative::processMedia
+     * @covers Narrative::processAudioMedia
      */
-    public function testNarrativeRetrieval()
+    public function testExtractArchive()
     {
-        /*$narratives = Narrative::all();
+        // This should refer to the narrative bundle for unit testing.
+        $narrativeBundle = Config::get('media.paths.uploads')
+            . DIRECTORY_SEPARATOR
+            . 'unit_testing_narrative_bundle.zip';
 
-        $this->assertNotEmpty($narratives);*/
+        $this->assertTrue(File::exists($narrativeBundle), 'The narrative bundle for unit testing is missing.');
 
+        // Seed the required tables first.
+        $this->seed('CategoryTableSeeder');
+        $this->seed('TopicTableSeeder');
+        $this->seed('LanguageTableSeeder');
+
+        $name = time();
+
+        // Mock the audio transcoding so that we don't spend any time
+        // waiting for things to transcode.
+        Queue::shouldReceive('push')->times(8)->andReturn(true);
+
+        Narrative::addArchive(
+                $name,
+                $narrativeBundle,
+                Category::first()->CategoryID,
+                true
+            );
+
+        $extractedPath = Config::get('media.paths.extracted') 
+                . DIRECTORY_SEPARATOR
+                . $name;
+
+        $this->assertFileExists($extractedPath);
+
+        $directories = File::directories($extractedPath);
+
+        $this->assertCount(1, $directories);
+
+        File::deleteDirectory($extractedPath);
     }
+
     /**
-     * Ensure narratives get created.
-     *  @covers Narrative::create
-     *  @covers Narrative::save
+     * Test to ensure that extracted narratives are processed and found.
+     *
+     * @covers Narrative::addArchive
+     * @covers Narrative::extractArchive
+     * @covers Narrative::findNarratives
+     * @covers Narrative::processNarrative
+     * @covers Narrative::createFromXML
+     * @covers Narrative::processMedia
+     * @covers Narrative::processAudioMedia
      */
-    public function testNarrativeCreation()
+    public function testProcessNarratives()
     {
-        $narrativeCreated = new Narrative;
+        // This should refer to the narrative bundle for unit testing.
+        $narrativeBundle = Config::get('media.paths.uploads')
+            . DIRECTORY_SEPARATOR
+            . 'unit_testing_narrative_bundle.zip';
 
-        $date = date('Y-m-d H:i:s');
+        $this->assertTrue(File::exists($narrativeBundle), 'The narrative bundle for unit testing is missing.');
 
-        $narrativeCreated->TopicID = 1;
-        $narrativeCreated->CategoryID = 1;
-        $narrativeCreated->LanguageID = 1;
-        $narrativeCreated->DateCreated = $date;
-        $narrativeCreated->Name = "Test";
-        $narrativeCreated->Agrees = 1;
-        $narrativeCreated->Disagrees = 1;
-        $narrativeCreated->Indifferents = 1;
-        $narrativeCreated->Published = true;
+        // Seed the required tables first.
+        $this->seed('CategoryTableSeeder');
+        $this->seed('TopicTableSeeder');
+        $this->seed('LanguageTableSeeder');
 
-        $narrativeCreated->save();
+        $name = time();
 
-        $insertedId = $narrativeCreated->NarrativeID;
+        // Mock the audio transcoding so that we don't spend any time
+        // waiting for things to transcode.
+        Queue::shouldReceive('push')->times(8)->andReturn(true);
 
-        $narrativeFetched = Narrative::find($insertedId);
+        Narrative::addArchive(
+                $name,
+                $narrativeBundle,
+                Category::first()->CategoryID,
+                true
+            );
 
-        $this->assertEquals(1, $narrativeFetched->TopicID);
-        $this->assertEquals(1, $narrativeFetched->CategoryID);
-        $this->assertEquals(1, $narrativeFetched->LanguageID);
-        $this->assertEquals("Test", $narrativeFetched->Name);
-        $this->assertEquals(1, $narrativeFetched->Agrees);
-        $this->assertEquals(1, $narrativeFetched->Disagrees);
-        $this->assertEquals(1, $narrativeFetched->Indifferents);
-        $this->assertEquals(0, $narrativeFetched->Views);//Test for default value
-        $this->assertEquals(1,$narrativeFetched->Published);
-        $narrativeFetched->delete();
+        $extractedPath = Config::get('media.paths.extracted') 
+                . DIRECTORY_SEPARATOR
+                . $name;
 
-        $narrativeFetched = Narrative::find($insertedId);
+        $this->assertCount(1, Narrative::all());
 
-        $this->assertNull($narrativeFetched);
-
+        File::deleteDirectory($extractedPath);
     }
-    /*
-    *   Testing the relationship between narative and category
-    *
-    *  @covers Narrative::category
-    */
-    public function testNarrativeCategory(){
-         $narrativeCreated = new Narrative;
 
-        $date = date('Y-m-d H:i:s');
+    /**
+     * Checks to ensure that the images are process properly.
+     *
+     * @covers Narrative::addArchive
+     * @covers Narrative::extractArchive
+     * @covers Narrative::findNarratives
+     * @covers Narrative::processNarrative
+     * @covers Narrative::createFromXML
+     * @covers Narrative::processMedia
+     * @covers Narrative::processImageMedia
+     * @covers Narrative::processAudioMedia
+     */
+    public function testProcessImageMedia()
+    {
+        // This should refer to the narrative bundle for unit testing.
+        $narrativeBundle = Config::get('media.paths.uploads')
+            . DIRECTORY_SEPARATOR
+            . 'unit_testing_narrative_bundle.zip';
 
-        $narrativeCreated->TopicID = 1;
-        $narrativeCreated->CategoryID = 1;
-        $narrativeCreated->LanguageID = 1;
-        $narrativeCreated->DateCreated = $date;
-        $narrativeCreated->Name = "Test";
-        $narrativeCreated->Agrees = 1;
-        $narrativeCreated->Disagrees = 1;
-        $narrativeCreated->Indifferents = 1;
-        $narrativeCreated->Published = true;
+        $this->assertTrue(File::exists($narrativeBundle), 'The narrative bundle for unit testing is missing.');
 
-        $narrativeCreated->save();
+        // Seed the required tables first.
+        $this->seed('CategoryTableSeeder');
+        $this->seed('TopicTableSeeder');
+        $this->seed('LanguageTableSeeder');
 
-        $category = new Category;
-        $category->CategoryID = 1;
-        $category->Description = "hello";
-        $category->save();
+        $name = time();
 
-        $category1 = Narrative::find(1)->category()->first();
-        $this->assertNotNull($category1);
+        // Mock the audio transcoding so that we don't spend any time
+        // waiting for things to transcode.
+        Queue::shouldReceive('push')->times(8)->andReturn(true);
 
+        Narrative::addArchive(
+                $name,
+                $narrativeBundle,
+                Category::first()->CategoryID,
+                true
+            );
+
+        $extractedPath = Config::get('media.paths.extracted') 
+                . DIRECTORY_SEPARATOR
+                . $name;
+
+        $processedPath = Config::get('media.paths.processed')
+                . DIRECTORY_SEPARATOR
+                . Narrative::first()->NarrativeID;
+
+        $this->assertFileExists($processedPath);
+
+        $files = File::files($processedPath);
+
+        $this->assertCount(5, $files);
+
+        File::deleteDirectory($extractedPath);
     }
-      /*
-    *   Testing the relationship between narative and Language
-    *
-    *  @covers Narrative::language
-    */
-    public function testNarrativeLanguage(){
-         $narrativeCreated = new Narrative;
 
-        $date = date('Y-m-d H:i:s');
-
-        $narrativeCreated->TopicID = 1;
-        $narrativeCreated->CategoryID = 1;
-        $narrativeCreated->LanguageID = 1;
-        $narrativeCreated->DateCreated = $date;
-        $narrativeCreated->Name = "Test";
-        $narrativeCreated->Agrees = 1;
-        $narrativeCreated->Disagrees = 1;
-        $narrativeCreated->Indifferents = 1;
-        $narrativeCreated->Published = true;
-
-        $narrativeCreated->save();
-
-        $language = new Language;
-        $language->LanguageID = 1;
-        $language->Description = "hello";
-        $language->save();
-
-        $langauge1 = Narrative::find(1)->language()->first();
-        $this->assertNotNull($langauge1);
-
-    }
-  /*
-    *   Testing the relationship between narative and Media Item
-    *
-    *  @covers Narrative::media
-    */
-    public function testNarrativeMedia(){
-         $narrativeCreated = new Narrative;
-
-        $date = date('Y-m-d H:i:s');
-
-        $narrativeCreated->TopicID = 1;
-        $narrativeCreated->CategoryID = 1;
-        $narrativeCreated->LanguageID = 1;
-        $narrativeCreated->DateCreated = $date;
-        $narrativeCreated->Name = "Test";
-        $narrativeCreated->Agrees = 1;
-        $narrativeCreated->Disagrees = 1;
-        $narrativeCreated->Indifferents = 1;
-        $narrativeCreated->Published = true;
-
-        $narrativeCreated->save();
-
-        $media = new Media;
-        $media->id = 1;
-        $media->filename = "hello";
-        $media->basename = "hello";
-        $media->type = "hello";
-        $media->save();
-
-        $media1 = Narrative::find(1)->media();
-        $this->assertNotNull($media1);
-
-    }
 }
