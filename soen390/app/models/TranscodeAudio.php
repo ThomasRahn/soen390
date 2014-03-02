@@ -29,7 +29,8 @@ class TranscodeAudio
 
         // Determine the duration of the source audio.
 
-        $durationString = Sonus::getMediaInfo($sourceFilePath)['format']['duration'];
+        $durationString = Sonus::getMediaInfo($sourceFilePath);
+        $durationString = $durationString['format']['duration'];
 
         sscanf($durationString, "%d:%d:%d.%s", $dHours, $dMinutes, $dSeconds, $dMicroseconds);
 
