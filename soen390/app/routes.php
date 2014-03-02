@@ -35,9 +35,9 @@ Route::group(array('prefix' => 'api'), function() {
 Route::get('/content/{id}', 'ContentController@getContent');
 
 // Routes for player.
-Route::resource('/narrative', 'NarrativeController@show');
-Route::resource('/flag','FlagStanceController@flagReport');
-Route::resource('/stance','FlagStanceController@setStance');
+Route::get('/narrative', 'NarrativeController@show');
+Route::post('/flag','FlagStanceController@flagReport');
+Route::post('/stance','FlagStanceController@setStance');
 
 // Routes for administrative view.
 Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
@@ -51,19 +51,19 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
     Route::group(array('prefix' => 'narrative'), function() {
 
         // Narrative Listing
-        Route::get('/', array('uses' => 'AdminNarrativeController@getIndex'));
-	
-        // Narrative flags
-        Route::get('flag/{id}', array('uses'=>'AdminFlagController@getIndex'));
-
-        //Remove Narrative flag
-        Route::delete('flag/{id}', array('uses'=>'AdminFlagController@destroy'));
+        Route::get('/', 'AdminNarrativeController@getIndex');
 
         // Narrative Upload
-        Route::get('upload', array('uses' => 'AdminNarrativeController@getUpload'));
+        Route::get('upload', 'AdminNarrativeController@getUpload');
+	
+        // Narrative flags
+        Route::get('flag/{id}', 'AdminFlagController@getIndex');
+
+        //Remove Narrative flag
+        Route::delete('flag/{id}', 'AdminFlagController@destroy');
 
         //Remove Narrative
-        Route::delete('narrative/{id}', array('uses'=>'AdminNarrativeController@destroy'));
+        Route::delete('narrative/{id}', 'AdminNarrativeController@destroy');
 
     });
 
