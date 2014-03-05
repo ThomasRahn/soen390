@@ -41,12 +41,12 @@ Narratives
     </thead>
     <tfoot>
         <tr>
-            <th colspan="8"><small><span class="row-count">0</span> {{ trans('admin.narratives.table.inTotal') }}</small></th>
+            <th colspan="9"><small><span class="row-count">0</span> {{ trans('admin.narratives.table.inTotal') }}</small></th>
         </tr>
     </tfoot>
     <tbody class="table-spinner">
         <tr class="active">
-            <td colspan="8"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
+            <td colspan="9"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
         </tr>
     </tbody>
 </table>
