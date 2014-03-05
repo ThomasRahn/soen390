@@ -6,6 +6,6 @@
 
 @section('content')
 <div class="alert alert-info">
-    <p>{{ trans('auth.maintenance.message') }}</p>
+    {{ trans('auth.maintenance.message') }}
 </div>
 @stop
