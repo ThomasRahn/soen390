@@ -65,8 +65,13 @@ return array(
             'saveSettings'  => 'Save Settings',
             'resetSettings' => 'Undo Changes',
 
+            'save' => array(
+                    'success' => '<p>Settings have been updated successfully.</p>',
+                    'failed'  => '<p>Unable to save settings due to an internal error.</p>',
+                ),
+
             'maintenance' => array(
-                    'description' => 'Enabling maintenance mode will close the client-side interface, displaying a maintenance page to users. This allows you to make major changes to the system without potentially affecting users.',
+                    'description' => 'Enabling maintenance mode will close the client-side interface, displaying a maintenance page to users. This allows you to make major changes to the system without potentially affecting users or to temporarily take the site down.',
                     'legend'      => 'Maintenance Mode',
                     'label'       => 'Enable mode?',
                     'help'        => 'The administrative interface will always be available.',
