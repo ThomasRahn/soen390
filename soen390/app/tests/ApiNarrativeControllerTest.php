@@ -32,7 +32,7 @@ class ApiNarrativeControllerTest extends TestCase
     /**
      * Adds a single narrative to the database.
      */
-    protected function addNarrativeToDatabase($published = true, $transcode = false)
+    protected function addNarrativeToDatabase($published = true)
     {
         // This should refer to the narrative bundle for unit testing.
         $narrativeBundle = Config::get('media.paths.uploads')
@@ -48,12 +48,13 @@ class ApiNarrativeControllerTest extends TestCase
 
         $name = time();
 
-        if (! $transcode) {
-            // Mock the audio transcoding so that we don't spend any time
-            // waiting for things to transcode.
-            Queue::shouldReceive('connected')->with('iron')->andReturn(false);
-            Queue::shouldReceive('push')->times(8)->andReturn(true);
-        }
+        // We need to mock Sonus
+        $sonus = Mockery::mock('Rafasamp\Sonus\Sonus');
+        $sonus->shouldReceive('getMediaInfo')->andReturn(array(
+                'format' => array(
+                    'duration' => '00:00:10.500000',
+                ),
+            ));
 
         Narrative::addArchive(
                 $name,
@@ -162,6 +163,8 @@ class ApiNarrativeControllerTest extends TestCase
      *
      * @covers ApiNarrativeController::show
      * @covers ApiNarrativeController::narrativeToArray
+     * @covers TranscodeAudio::fire
+     * @covers TranscodeAudio::createMediaInstance
      */
     public function testShowWithValidNarrative()
     {
@@ -189,6 +192,9 @@ class ApiNarrativeControllerTest extends TestCase
         $this->assertEquals($narrative->Indifferents,                     $resJson->mehs);
         $this->assertEquals($narrative->DateCreated,                      $resJson->createdAt);
         $this->assertEquals($narrative->Published,                        $resJson->published);
+
+        $this->assertCount(5, $resJson->images);
+        $this->assertCount(8, $resJson->audio);
     }
 
     /**
