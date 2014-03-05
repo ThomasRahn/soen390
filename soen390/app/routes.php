@@ -12,10 +12,10 @@
 */
 
 // Route for main front-end view.
-Route::get('/', function()
+Route::get('/', array('before' => 'maintenance', function()
 {
 	return View::make('cards/listing');
-});
+}));
 
 // Routes for JSON API.
 Route::group(array('prefix' => 'api'), function() {
