@@ -61,4 +61,16 @@ return array(
                 ),
         ),
 
+    'configuration' => array(
+            'saveSettings'  => 'Save Settings',
+            'resetSettings' => 'Undo Changes',
+
+            'maintenance' => array(
+                    'description' => 'Enabling maintenance mode will close the client-side interface, displaying a maintenance page to users. This allows you to make major changes to the system without potentially affecting users.',
+                    'legend'      => 'Maintenance Mode',
+                    'label'       => 'Enable mode?',
+                    'help'        => 'The administrative interface will always be available.',
+                ),
+        ),
+
 );

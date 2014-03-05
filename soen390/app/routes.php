@@ -67,6 +67,9 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
 
     });
 
+    // Routing for Configuration
+    Route::controller('configuration', 'AdminConfigController');
+
 });
 
 // Routes for authentication views.
