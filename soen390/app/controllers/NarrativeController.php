@@ -1,10 +1,15 @@
 <?php
 
+/**
+ * @author  Thomas Rahn <thomas@rahn.ca>
+ * @package Controller
+ */
 class NarrativeController extends \BaseController {
 
     /**
      * Display the specified resource.
      *
+     * @author Thomas Rahn <thomas@rahn.ca>, Alan Ly <me@alanly.ca>
      * @param  int  $id
      * @return Response
      */

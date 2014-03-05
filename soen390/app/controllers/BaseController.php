@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package Controller
+ */
 class BaseController extends Controller {
 
 	/**
@@ -29,6 +32,7 @@ class BaseController extends Controller {
 	 * Data is available from the Session object in `action.failed` and `action.message` keys.
 	 * An optional `Illuminate\Http\RedirectResponse` can be provided if a single line alert-redirect action is preferred.
 	 *
+	 * @author Alan Ly <me@alanly.ca>
 	 * @param  $hasFailed  boolean
 	 * @param  $message    string
 	 * @param  $redirector RedirectResponse

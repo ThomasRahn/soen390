@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @author Alan Ly <me@alanly.ca>
+ * @author  Alan Ly <me@alanly.ca>
+ * @package Controller
  */
 class ApiNarrativeController extends \BaseController {
 

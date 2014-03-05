@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author  Alan Ly <me@alanly.ca>
+ * @package Controller
+ */
 class AuthController extends BaseController {
 
 	public function getLogin()

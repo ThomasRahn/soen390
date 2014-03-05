@@ -1,10 +1,12 @@
 <?php
 
+/**
+ * @package Controller
+ */
 class AdminFlagController extends BaseController {
 
     public function getIndex($id)
     {
-
         return View::make('admin.narratives.flag')->with('NarrativeID',$id);
     }
 
@@ -18,4 +20,5 @@ class AdminFlagController extends BaseController {
 		$flag = Flag::find($id);
 		$flag->first()->delete();
 	}
+    
 }

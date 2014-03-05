@@ -2,6 +2,7 @@
 
 /**
  * @author Alan Ly <me@alanly.ca>
+ * @package Queue
  */
 class TranscodeAudio
 {

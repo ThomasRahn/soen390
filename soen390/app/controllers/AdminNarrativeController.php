@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Alan Ly <me@alanly.ca>
+ * @package Controller
+ */
 class AdminNarrativeController extends BaseController {
 
     public function getIndex()
@@ -18,10 +22,11 @@ class AdminNarrativeController extends BaseController {
         return View::make('admin.narratives.upload')->with('categoryArray', $categoryArray);
     }
     /**
-    *   remove a particular narrative
-    *
-    *   @para int $id (Narrative id)
-    */
+     * remove a particular narrative
+     *
+     * @author Thomas Rahn <thomas@rahn.ca>
+     * @param int $id (Narrative id)
+     */
     public function destroy($id)
     {
         $narrative = Narrative::find($id);
