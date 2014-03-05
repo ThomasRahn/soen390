@@ -21,7 +21,11 @@ class Configuration extends \Eloquent
     {
         $config = parent::find($key);
 
-        return (! $config) ? $default : $config->value;
+        if (! $config) {
+            return $default;
+        } else {
+            return $config->value;
+        }
     }
 
     /**
