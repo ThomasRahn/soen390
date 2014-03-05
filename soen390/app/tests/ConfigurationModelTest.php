@@ -32,7 +32,7 @@ class ConfigurationModelTest extends TestCase
 
         $setResult = Configuration::set($key, $value);
 
-        $this->assertTrue($setResult);
+        $this->assertInstanceOf('Configuration', $setResult);
         $this->assertNotNull(Configuration::find($key));
         $this->assertEquals($value, Configuration::find($key)->value);
     }
