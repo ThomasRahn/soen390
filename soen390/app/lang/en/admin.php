@@ -23,12 +23,13 @@ return array(
                     'uploadedOn' => 'Uploaded On',
                     'published' => 'Published?',
                     'manage' => 'Manage',
-		    'comment'=> 'Comment',
+		            'comment'=> 'Comment',
                     'empty' => 'You need to upload some narratives first!',
                     'loading' => 'Loading narratives...',
                     'inTotal' => 'narrative(s) in total.',
-		    'totalFlags' => 'flag(s) in total.',
-		    'narrativeName'=>'Narrative Name'
+		            'totalFlags' => 'flag(s) in total.',
+		            'narrativeName'=> 'Narrative Name',
+                    'flags' => 'Flags',
                 ),
 
             'tips' => array(
