@@ -32,12 +32,12 @@ Route::group(array('prefix' => 'api'), function() {
 });
 
 // Route for content handler
-Route::get('/content/{id}', 'ContentController@getContent');
+Route::get('/content/{id}', array('before' => 'maintenance', 'uses' => 'ContentController@getContent'));
 
 // Routes for player.
-Route::get('/narrative/{id}', 'NarrativeController@show');
-Route::post('/flag','FlagStanceController@flagReport');
-Route::post('/stance','FlagStanceController@setStance');
+Route::get('/narrative/{id}', array('before' => 'maintenance', 'uses' => 'NarrativeController@show'));
+Route::post('/flag', array('before' => 'maintenance', 'uses' => 'FlagStanceController@flagReport'));
+Route::post('/stance', array('before' => 'maintenance', 'uses' => 'FlagStanceController@setStance'));
 
 // Routes for administrative view.
 Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
