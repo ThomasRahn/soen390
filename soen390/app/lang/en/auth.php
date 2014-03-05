@@ -29,4 +29,11 @@ return array(
 
         ),
 
+    'maintenance' => array(
+
+            'title'   => 'Site Maintenance',
+            'message' => '<p class="text-center">The site is currently undergoing maintenance operations and is temporarily unavailable.</p><p class="text-center">Please check back later.</p>',
+
+        ),
+
 );
