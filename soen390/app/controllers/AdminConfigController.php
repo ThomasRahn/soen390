@@ -27,7 +27,13 @@ class AdminConfigController extends \BaseController
         ));
 
         if ($validator->fails()) {
-            return Redirect::back(400)->withErrors($validator)->withInput();
+            return $this->alertAction(
+                true,
+                trans('admin.configuration.validator.fails'),
+                Redirect::action('AdminConfigController@getIndex')
+                    ->withErrors($validator)
+                    ->withInput()
+            );
         }
 
         $hasFailed = false;
@@ -39,7 +45,7 @@ class AdminConfigController extends \BaseController
         return $this->alertAction(
             $hasFailed,
             ($hasFailed ? trans('admin.configuration.save.failed') : trans('admin.configuration.save.success')),
-            Redirect::back()
+            Redirect::action('AdminConfigController@getIndex')
         );
     }
 
