@@ -74,7 +74,7 @@ return array(
             'maintenance' => array(
                     'description' => 'Enabling maintenance mode will close the client-side interface, displaying a maintenance page to users. This allows you to make major changes to the system without potentially affecting users or to temporarily take the site down.',
                     'legend'      => 'Maintenance Mode',
-                    'label'       => 'Enable mode?',
+                    'label'       => 'Enable maintenance mode?',
                     'help'        => 'The administrative interface will always be available.',
                 ),
         ),

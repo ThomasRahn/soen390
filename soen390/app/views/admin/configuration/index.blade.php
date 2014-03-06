@@ -32,9 +32,9 @@ Configuration
                 </div>
 
                 <div class="form-group{{ $errors->has('maintenance') ? ' has-error' : '' }}">
-                    {{ Form::label('maintenance', trans('admin.configuration.maintenance.label'), array('class' => 'col-sm-3 control-label')) }}
+                    {{ Form::label('maintenance', trans('admin.configuration.maintenance.label'), array('class' => 'col-sm-4 control-label')) }}
 
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                         <div class="checkbox">
                             {{ Form::checkbox('maintenance', 'true', (Configuration::get('maintenance', 'false') == 'true')) }}
                         </div>
