@@ -12,7 +12,6 @@ class UserTableSeeder extends Seeder
                 'Password'    => Hash::make('Thomas1'),
                 'Name'        => 'Thomas Rahn',
                 'LanguageID'  => 1,
-                'PrivilegeID' => 1,
             ));
     }
 
