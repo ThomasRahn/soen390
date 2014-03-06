@@ -109,6 +109,7 @@
                     <div class="btn-group btn-group-sm lang-btn-group">
                         <button type="button" class="btn btn-default" data-lang="en"><img src="img/gb.png"></button>
                         <button type="button" class="btn btn-default" data-lang="fr"><img src="img/fr.png"></button>
+                        <button type="button" class="btn btn-default"><span class="language">Language</span></button>
                     </div>
 
                     <button type="button" class="btn btn-sm btn-default stance-btn"><i class="fa fa-thumbs-up"></i> <span class="stance">Stance</span> <i class="fa fa-thumbs-down"></i></button>
@@ -188,6 +189,9 @@
                 $('span.agrees').html(dictionary[langCode].agrees);
                 $('span.disagrees').html(dictionary[langCode].disagrees);
                 $('span.indifferent').html(dictionary[langCode].indifferent);
+
+                // Language
+                $('span.language').html(dictionary[langCode].language);
             }
 
             /**
