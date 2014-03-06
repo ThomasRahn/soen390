@@ -8,7 +8,7 @@ class AdminConfigController extends \BaseController
 {
 
     /**
-     * @return  View
+     * @return  Response
      */
     public function getIndex()
     {
