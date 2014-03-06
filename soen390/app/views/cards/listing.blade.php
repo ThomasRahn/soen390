@@ -107,9 +107,8 @@
             <nav id="filter-nav" class="row">
                 <div class="col-sm-6">
                     <div class="btn-group btn-group-sm lang-btn-group">
-                        <button type="button" class="btn btn-default" data-lang="en"><img src="img/gb.png"></button>
-                        <button type="button" class="btn btn-default" data-lang="fr"><img src="img/fr.png"></button>
-                        <button type="button" class="btn btn-default"><span class="language">Language</span></button>
+                        <button type="button" class="btn btn-default" data-lang="en"><img src="img/gb.png"> EN</button>
+                        <button type="button" class="btn btn-default" data-lang="fr"><img src="img/fr.png"> FR</button>
                     </div>
 
                     <button type="button" class="btn btn-sm btn-default stance-btn"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
