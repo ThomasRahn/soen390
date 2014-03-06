@@ -4,12 +4,12 @@ return array(
 
     'sidebar' => array(
             'uploadNarratives' => 'Upload Narrative(s)',
-            'dashboard' => 'Dashboard',
-            'narratives' => 'Narratives',
-            'categories' => 'Categories',
+            'dashboard' => 'Google Analytics',
+            'narratives' => 'Manage Narratives',
+            'categories' => 'Manage Categories',
             'flagReports' => 'Flag Reports',
-            'configuration' => 'Configuration',
-            'openMainSite' => 'Open Main Site',
+            'configuration' => 'Site Configuration',
+            'openMainSite' => 'View User Site',
             'signOut' => 'Sign Out',
         ),
 

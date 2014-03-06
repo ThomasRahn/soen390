@@ -95,11 +95,11 @@ Narratives
                 // Update publication status
                 if (narrative.published == false) {
                     narrativeRow.addClass("warning");
-                    narrativeRow.children(".published").html("<i class=\"fa fa-eye-slash fa-fw\"></i>");
+                    narrativeRow.children(".published").html("<i class=\"fa fa-square-o fa-fw\"></i>");
                     narrativeRow.children(".published").data("published", false);
                 } else {
                     narrativeRow.removeClass("warning");
-                    narrativeRow.children(".published").html("<i class=\"fa fa-eye fa-fw\"></i>");
+                    narrativeRow.children(".published").html("<i class=\"fa fa-check-square-o fa-fw\"></i>");
                     narrativeRow.children(".published").data("published", true);
                 }
 
@@ -156,12 +156,10 @@ Narratives
                         + "<td class=\"comments\">" + 0 + "</td>"
                         + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
-                        + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa fa-eye" + (narrative.published == false ? "-slash" : "") + " fa-fw\"></i></td>"
+                        + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa " + (narrative.published == false ? "fa-square-o" : "fa-check-square-o") + " fa-fw\"></i></td>"
                         + "<td> <a href=\"#\" onclick=\"openFlagWindow(" + narrative.id+")\">" + narrative.flags +"</a></td>"
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
-                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-pencil fa-fw\"></i></button>"
-                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
                         + "<button type=\"button\" class=\"btn btn-default\" onclick=\"playNarrative("+ narrative.id+")\"><i class=\"fa fa-play fa-fw\"></i></button>"
                         + "</td>"
                         + "</tr>");
