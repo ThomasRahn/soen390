@@ -93,6 +93,12 @@ return array(
                     'changePasswordTip' => '<p class="lead">Changing Passwords</p><p>The password fields only need to be filled-out <strong>if</strong> you want to change your password. If you do not wish to change your password, you can simply leave them blank.</p>',
                 ),
 
+            'postIndex' => array(
+                    'validationFails' => '<p>There is a mistake in your form. Please correct it and try again.</p>',
+                    'internalError'   => '<p>Unable to save your changes due to an internal error.</p>',
+                    'success'         => '<p>Your profile has been updated successfully.</p>',
+                ),
+
         ),
 
 );
