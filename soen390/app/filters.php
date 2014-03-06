@@ -89,3 +89,21 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+/*
+|---------------------------------------------------------------------------
+| Maintenance Mode Filter
+|---------------------------------------------------------------------------
+|
+| The Maintenance Mode filter is responsible for determining whehter or not
+| maintenance mode is enabled. If this mode is enabled, then the user will
+| be redirected to the maintenance page.
+|
+*/
+Route::filter('maintenance', function()
+{
+	if (Configuration::get('maintenance') == 'true')
+	{
+		return Response::view('maintenance', array(), 503);
+	}
+});

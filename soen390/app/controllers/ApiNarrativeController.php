@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @author Alan Ly <me@alanly.ca>
+ * @author  Alan Ly <me@alanly.ca>
+ * @package Controller
  */
 class ApiNarrativeController extends \BaseController {
 
@@ -158,47 +159,28 @@ class ApiNarrativeController extends \BaseController {
 				'error' => $validator->errors()->toArray(),
 			), 400);
 
-		if (Input::has('category'))
-			$narrative->CategoryID = Input::get('category');
+		$narrative->CategoryID   = Input::get('category',     $narrative->CategoryID);
+		$narrative->TopicID      = Input::get('topic',        $narrative->TopicID);
+		$narrative->LanguageID   = Input::get('language',     $narrative->LanguageID);
+		$narrative->Name         = Input::get('name',         $narrative->Name);
+		$narrative->Views        = Input::get('views',        $narrative->Views);
+		$narrative->Agrees       = Input::get('agrees',       $narrative->Agrees);
+		$narrative->Disagrees    = Input::get('disagrees',    $narrative->Disagrees);
+		$narrative->Indifferents = Input::get('indifferents', $narrative->Indifferents);
 
-		if (Input::has('topic'))
-			$narrative->TopicID = Input::get('topic');
+		if (Input::has('published'))
+			$narrative->Published = Input::get('published') === 1 || Input::get('published') === 'true';
 
-		if (Input::has('language'))
-			$narrative->LanguageID = Input::get('language');
-
-		if (Input::has('name'))
-			$narrative->Name = Input::get('name');
-
-		if (Input::has('views'))
-			$narrative->Views = Input::get('views');
-
-		if (Input::has('agrees'))
-			$narrative->Agrees = Input::get('agrees');
-
-		if (Input::has('disagrees'))
-			$narrative->Disagrees = Input::get('disagrees');
-
-		if (Input::has('indifferents'))
-			$narrative->Indifferents = Input::get('indifferents');
-
-		if (Input::has('published')) {
-			if (Input::get('published') === 0 || Input::get('published') === "false")
-				$narrative->Published = false;
-			else
-				$narrative->Published = true;
-		}
-
-		if ($narrative->save() === true)
+		if ($narrative->save() === false)
 			return Response::json(array(
-				'success' => true,
-				'return'  => $this->narrativeToArray($narrative),
-			));
+				'success' => false,
+				'error'   => 'Unable to save changes to narrative.',
+			), 500);
 
 		return Response::json(array(
-			'success' => false,
-			'error'   => 'Unable to save changes to narrative.',
-		), 500);
+			'success' => true,
+			'return'  => $this->narrativeToArray($narrative),
+		));
 	}
 
 	/**

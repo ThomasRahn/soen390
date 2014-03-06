@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package Model
+ */
 class Category extends Eloquent
 {
 

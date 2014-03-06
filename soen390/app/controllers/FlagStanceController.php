@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author  Thomas Rahn <thomas@rahn.ca>
+ * @package Controller
+ */
 class FlagStanceController extends BaseController {
 
 	public function flagReport()

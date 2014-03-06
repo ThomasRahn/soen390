@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author  Thomas Rahn <thomas@rahn.ca>
+ * @package Controller
+ */
 class ApiFlagController extends \BaseController {
 
     /**
