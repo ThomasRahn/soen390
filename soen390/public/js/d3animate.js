@@ -79,9 +79,11 @@ function cardMouseOver(eventNode) {
     $(".ratio-bar.agrees").css("width", agreesRatio + "%");
     $(".ratio-bar.disagrees").css("width", disagreesRatio + "%");
 
-    $("span.agrees-percent").html(agreesRatio.toPrecision(3));
-    $("span.disagrees-percent").html(disagreesRatio.toPrecision(3));
-    $("span.indifferent-percent").html(indifferentRatio.toPrecision(3));
+    //$("span.agrees-percent").html(agreesRatio.toPrecision(3));
+    $("span.agrees-percent").html(yays);
+    $("span.disagrees-percent").html(nays);
+    //$("span.disagrees-percent").html(disagreesRatio.toPrecision(3));
+    //$("span.indifferent-percent").html(indifferentRatio.toPrecision(3));
 
     $(".meta-container").css("display", "block");
     $(".meta-container").css("opacity", 1);

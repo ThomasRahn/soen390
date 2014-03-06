@@ -301,13 +301,12 @@ function expressOpinion(id, element){
                 <h4 class="modal-title">Report Narrative</h4>
               </div>
               <div class="modal-body">
-                <p>I am reporting this narrative because ...</p>
                 <form class="reported-Narrative">
             
                 </form>
                 <form id='reported-narrative'>
                     {{ Form::token()}}
-                    {{ Form::textarea('report-comment')}}
+                    {{ Form::textarea('report-comment','I am reporting this narrative because ')}}
                     <input type="hidden" name="NarrativeID" value="{{ $narrative->NarrativeID}}"/>
                 </form>
               </div>
