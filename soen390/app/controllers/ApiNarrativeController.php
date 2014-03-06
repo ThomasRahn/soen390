@@ -183,23 +183,22 @@ class ApiNarrativeController extends \BaseController {
 		if (Input::has('indifferents'))
 			$narrative->Indifferents = Input::get('indifferents');
 
-		if (Input::has('published')) {
+		if (Input::has('published'))
 			if (Input::get('published') === 0 || Input::get('published') === "false")
 				$narrative->Published = false;
 			else
 				$narrative->Published = true;
-		}
 
-		if ($narrative->save() === true)
+		if ($narrative->save() === false)
 			return Response::json(array(
-				'success' => true,
-				'return'  => $this->narrativeToArray($narrative),
-			));
+				'success' => false,
+				'error'   => 'Unable to save changes to narrative.',
+			), 500);
 
 		return Response::json(array(
-			'success' => false,
-			'error'   => 'Unable to save changes to narrative.',
-		), 500);
+			'success' => true,
+			'return'  => $this->narrativeToArray($narrative),
+		));
 	}
 
 	/**
