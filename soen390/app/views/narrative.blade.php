@@ -38,6 +38,8 @@ function printObject(o) {
   alert(out);
 }
  $(document).ready(function(){
+    $('div').tooltip();
+
 	var cssSelector = {
 	        jPlayer: '#jquery_jplayer',
             cssSelectorAncestor: '#jp-container'
