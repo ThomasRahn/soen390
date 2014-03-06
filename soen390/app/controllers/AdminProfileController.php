@@ -45,8 +45,8 @@ class AdminProfileController extends \BaseController
                 );
         }
 
-        $user->Email = Input::get('Email');
-        $user->Name = Input::get('Name');
+        $user->Email      = Input::get('Email');
+        $user->Name       = Input::get('Name');
         $user->LanguageID = Input::get('LanguageID');
 
         if (Input::has('Password')) {
