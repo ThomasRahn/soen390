@@ -6,7 +6,7 @@ class ApiCommentControllerTest extends TestCase
     /**
      * Test the API's index and ensures that response is valid JSON.
      *
-     * @covers ApiFlagController::index
+     * @covers ApiCommentController::index
      */
     public function testIndexForJsonResponse()
     {
@@ -19,7 +19,7 @@ class ApiCommentControllerTest extends TestCase
      /**
      * Test the API's index and ensures that response is valid JSON and has flags.
      *
-     * @covers ApiFlagController::index
+     * @covers ApiCommentController::index
      */
     public function testIndexWithComments()
     {
