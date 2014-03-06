@@ -112,9 +112,9 @@
                         <button type="button" class="btn btn-default"><span class="language">Language</span></button>
                     </div>
 
-                    <button type="button" class="btn btn-sm btn-default stance-btn"><i class="fa fa-thumbs-up"></i> <span class="stance">Stance</span> <i class="fa fa-thumbs-down"></i></button>
+                    <button type="button" class="btn btn-sm btn-default stance-btn"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
 
-                    <button type="button" class="btn btn-sm btn-default popularity-btn"><i class="fa fa-signal"></i> <span class="popularity">Popularity</span></button>
+                    <button type="button" class="btn btn-sm btn-default popularity-btn"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
                 </div>
               
             </nav>
@@ -122,9 +122,9 @@
 
         <section id="cards-container">
 		<div id="stance-heading">
-			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-smile-o"></i></span>
-			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-meh-o"></i></span>
-			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-frown-o"></i></span>
+			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-up"></i></span>
+			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-ellipsis-h"></i></span>
+			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-down"></i></span>
 		</div>
         </section>
 
