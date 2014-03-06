@@ -40,7 +40,7 @@ class AdminProfileController extends \BaseController
         if ($validator->fails()) {
             return $this->alertAction(
                     true,
-                    'There is a mistake in your form. Please correct it and try again.',
+                    trans('admin.profile.postIndex.validationFails'),
                     Redirect::action('AdminProfileController@getIndex')->withErrors($validator)->withInput()
                 );
         }
@@ -58,13 +58,13 @@ class AdminProfileController extends \BaseController
         if (! $success)
             return $this->alertAction(
                     true,
-                    'An internal error occured while trying to save the changes to your profile.',
+                    trans('admin.profile.postIndex.internalError'),
                     Redirect::action('AdminProfileController@getIndex')->withInput()
                 );
 
         return $this->alertAction(
                 false,
-                'Your profile has been updated.',
+                trans('admin.profile.postIndex.success'),
                 Redirect::action('AdminProfileController@getIndex')
             );
 
