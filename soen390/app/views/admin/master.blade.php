@@ -133,6 +133,7 @@
                         <li{{ Request::is('admin/configuration*') ? ' class="active"' : '' }}><a href="{{ action('AdminConfigController@getIndex') }}"><i class="fa fa-cogs fa-fw"></i> {{ trans('admin.sidebar.configuration') }}</a></li>
                     </ul>
                     <ul class="nav nav-sidebar">
+                        <li{{ Request::is('admin/profile*') ? ' class="active"' : '' }}><a href="{{ action('AdminProfileController@getIndex') }}"><i class="fa fa-user fa-fw"></i> {{ trans('admin.sidebar.profile') }}</a></li>
                         <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> {{ trans('admin.sidebar.signOut') }}</a></li>
                         <li><a href="{{ url('/') }}" target="_blank"><i class="fa fa-eye fa-fw"></i> {{ trans('admin.sidebar.openMainSite') }}</a></li>
                     </ul>

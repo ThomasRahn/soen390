@@ -11,6 +11,7 @@ return array(
             'configuration' => 'Site Configuration',
             'openMainSite' => 'View User Site',
             'signOut' => 'Sign Out',
+            'profile' => 'Profile',
         ),
 
     'narratives' => array(
@@ -77,6 +78,21 @@ return array(
                     'label'       => 'Enable maintenance mode?',
                     'help'        => 'The administrative interface will always be available.',
                 ),
+        ),
+
+    'profile' => array(
+
+            'form' => array(
+                    'name' => 'Name',
+                    'email' => 'Email Address',
+                    'language' => 'Language',
+                    'newPassword' => 'New Password',
+                    'confirmPassword' => 'Confirm Password',
+                    'saveChanges' => 'Save Changes',
+                    'undoChanges' => 'Undo Changes',
+                    'changePasswordTip' => '<p class="lead">Changing Passwords</p><p>The password fields only need to be filled-out <strong>if</strong> you want to change your password. If you do not wish to change your password, you can simply leave them blank.</p>',
+                ),
+
         ),
 
 );
