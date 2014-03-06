@@ -35,7 +35,7 @@ return array(
 
             'tips' => array(
                     'tip' => 'Tip!',
-                    'updateNarrative' => 'You can toggle the publication status of each narrative by clicking on the <i class="fa fa-eye"></i>-icon. The Category can be changed by clicking on the current label.',
+                    'updateNarrative' => 'You can toggle the publication status of each narrative by clicking on the <i class="fa fa-check-square-o"></i> and <i class="fa fa-square-o"></i>-icon. The Category can be changed by clicking on the current label.',
                 ),
 
             'update' => array(
