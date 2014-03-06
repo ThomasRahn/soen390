@@ -39,8 +39,10 @@ class AdminConfigController extends \BaseController
         $hasFailed = false;
 
         // Set Maintenance Mode
-        $maintenance = Input::get('maintenance', 'false');
-        $hasFailed = $hasFailed || (! Configuration::set('maintenance', $maintenance));
+        if (Input::has('maintenance')) {
+            $maintenance = Input::get('maintenance', 'false');
+            $hasFailed = $hasFailed || (! Configuration::set('maintenance', $maintenance));
+        }
 
         return $this->alertAction(
             $hasFailed,
