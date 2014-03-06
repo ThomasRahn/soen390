@@ -107,13 +107,13 @@
             <nav id="filter-nav" class="row">
                 <div class="col-sm-6">
                     <div class="btn-group btn-group-sm lang-btn-group">
-                        <button type="button" class="btn btn-default" data-lang="en"><img src="img/gb.png"> EN</button>
-                        <button type="button" class="btn btn-default" data-lang="fr"><img src="img/fr.png"> FR</button>
+                        <button type="button" class="btn btn-default" data-lang="en" data-toggle="tooltip" data-placement="bottom" title="Highlight English Narratives"><img src="img/gb.png"> EN</button>
+                        <button type="button" class="btn btn-default" data-lang="fr" data-toggle="tooltip" data-placement="bottom" title="Highlight French Narratives"><img src="img/fr.png"> FR</button>
                     </div>
 
-                    <button type="button" class="btn btn-sm btn-default stance-btn"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
+                    <button type="button" class="btn btn-sm btn-default stance-btn" data-toggle="tooltip" data-placement="bottom" title="Separate Narratives by Opinion"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
 
-                    <button type="button" class="btn btn-sm btn-default popularity-btn"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
+                    <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
                 </div>
               
             </nav>
@@ -149,6 +149,7 @@
 
         <!-- Guavascripts -->
         <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
+        <script src="//cdn.jsdelivr.net/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script src="//cdn.jsdelivr.net/d3js/3.3.9/d3.min.js"></script>
         <script src="//cdn.jsdelivr.net/konami.js/1.4.2/konami.min.js"></script>
         <script src="{{ asset('js/d3animate.js') }}"></script>
@@ -273,6 +274,8 @@
             }
 
             $(document).ready(function() {
+                $('button').tooltip();
+
                 // Set default language to load.
                 setTranslation('en');
 
