@@ -29,6 +29,8 @@ Route::group(array('prefix' => 'api'), function() {
     // Category API
     Route::resource('category', 'ApiCategoryController');
 
+    // Comment API
+    Route::resource('comments', 'ApiCommentController');
 });
 
 // Route for content handler
