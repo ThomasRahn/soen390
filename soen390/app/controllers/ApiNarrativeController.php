@@ -159,35 +159,17 @@ class ApiNarrativeController extends \BaseController {
 				'error' => $validator->errors()->toArray(),
 			), 400);
 
-		if (Input::has('category'))
-			$narrative->CategoryID = Input::get('category');
-
-		if (Input::has('topic'))
-			$narrative->TopicID = Input::get('topic');
-
-		if (Input::has('language'))
-			$narrative->LanguageID = Input::get('language');
-
-		if (Input::has('name'))
-			$narrative->Name = Input::get('name');
-
-		if (Input::has('views'))
-			$narrative->Views = Input::get('views');
-
-		if (Input::has('agrees'))
-			$narrative->Agrees = Input::get('agrees');
-
-		if (Input::has('disagrees'))
-			$narrative->Disagrees = Input::get('disagrees');
-
-		if (Input::has('indifferents'))
-			$narrative->Indifferents = Input::get('indifferents');
+		$narrative->CategoryID   = Input::get('category',     $narrative->CategoryID);
+		$narrative->TopicID      = Input::get('topic',        $narrative->TopicID);
+		$narrative->LanguageID   = Input::get('language',     $narrative->LanguageID);
+		$narrative->Name         = Input::get('name',         $narrative->Name);
+		$narrative->Views        = Input::get('views',        $narrative->Views);
+		$narrative->Agrees       = Input::get('agrees',       $narrative->Agrees);
+		$narrative->Disagrees    = Input::get('disagrees',    $narrative->Disagrees);
+		$narrative->Indifferents = Input::get('indifferents', $narrative->Indifferents);
 
 		if (Input::has('published'))
-			if (Input::get('published') === 0 || Input::get('published') === "false")
-				$narrative->Published = false;
-			else
-				$narrative->Published = true;
+			$narrative->Published = Input::get('published') === 1 || Input::get('published') === 'true';
 
 		if ($narrative->save() === false)
 			return Response::json(array(

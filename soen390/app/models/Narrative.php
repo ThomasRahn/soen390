@@ -352,11 +352,8 @@ class Narrative extends Eloquent
 
         // Attempt to move the image to the determined path. If an error
         // occurs, then log the error and return.
-        if (! File::move($path, $imageDestination)) {
-            Log::error('Unable to move image from "' . $path . '" to "' . $imageDestination . '"');
-
-            return null;
-        }
+        if (! File::move($path, $imageDestination))
+            return Log::error('Unable to move image from "' . $path . '" to "' . $imageDestination . '"');
 
         // Create the media instance for this image.
         return Media::create(array(
