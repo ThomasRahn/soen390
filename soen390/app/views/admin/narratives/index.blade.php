@@ -160,8 +160,6 @@ Narratives
                         + "<td> <a href=\"#\" onclick=\"openFlagWindow(" + narrative.id+")\">" + narrative.flags +"</a></td>"
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
-                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-pencil fa-fw\"></i></button>"
-                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
                         + "<button type=\"button\" class=\"btn btn-default\" onclick=\"playNarrative("+ narrative.id+")\"><i class=\"fa fa-play fa-fw\"></i></button>"
                         + "</td>"
                         + "</tr>");
