@@ -115,19 +115,7 @@
 
                     <button type="button" class="btn btn-sm btn-default popularity-btn"><i class="fa fa-signal"></i> <span class="popularity">Popularity</span></button>
                 </div>
-                <div class="col-sm-6 meta-container">
-                    <div class="row-fluid">
-                        <div class="ratio-bar-container">
-                            <div class="ratio-bar agrees"></div>
-                            <div class="ratio-bar disagrees"></div>
-                        </div>
-                    </div>
-                    <div class="row-fluid narrative-ratios">
-                        <div class="col-md-4"><span class="agrees">Agrees</span> <span class="agrees-percent">25</span>%</div>
-                        <div class="col-md-4"><span class="disagrees">Disagrees</span> <span class="disagrees-percent">25</span>%</div>
-                        <div class="col-md-4"><span class="indifferent">Indifferent</span> <span class="indifferent-percent">50</span>%</div>
-                    </div>
-                </div>
+              
             </nav>
         </div>
 
@@ -138,7 +126,21 @@
 			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-frown-o"></i></span>
 		</div>
         </section>
-
+        <div class="row">
+             <div class="col-sm-5 meta-container" style="margin:0 auto; float:none;">
+                <div class="row-fluid">
+                    <div class="ratio-bar-container">
+                        <div class="ratio-bar agrees"></div>
+                        <div class="ratio-bar disagrees"></div>
+                    </div>
+                </div>
+                <div class="row-fluid narrative-ratios">
+                    <div class="col-md-6"><span class="agrees">Agrees</span> <span class="agrees-percent">25</span></div>
+                    <div class="col-md-6"><span class="disagrees">Disagrees</span> <span class="disagrees-percent">25</span></div>
+                    <!--<div class="col-md-4"><span class="indifferent">Indifferent</span> <span class="indifferent-percent">50</span>%</div>-->
+                </div>
+            </div>
+        </div>
         <div class="container">
             <footer class="navbar navbar-fixed-bottom">
                 <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <a class="text-muted" href="mailto:support@youdeliberate.org" title="Email us for support."><i class="fa fa-envelope-o"></i></a> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
@@ -339,6 +341,17 @@
                 });
 
             });
+        </script>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-48518812-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
         </script>
     </body>
 </html>

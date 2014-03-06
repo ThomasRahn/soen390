@@ -1,13 +1,14 @@
-<?php 
-class LanguageTableSeeder extends Seeder{
+<?php
 
-        public function run(){
+class LanguageTableSeeder extends Seeder
+{
 
-                DB::table('Language')->delete();
+    public function run()
+    {
+        DB::table('Language')->delete();
 
-		Language::create(array("Description" => "English"));
-		Language::create(array("Description" => "French"));
+        Language::create(array("Description" => "English"));
+        Language::create(array("Description" => "French"));
+    }
 
-        }
 }
-

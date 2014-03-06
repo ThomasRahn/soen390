@@ -1,93 +1,26 @@
 <?php
 
+/**
+ * @author  Thomas Rahn <thomas@rahn.ca>
+ * @package Controller
+ */
 class NarrativeController extends \BaseController {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		$narratives = Narrative::all();
-		return View::make("admin/manage")
-			->with('narratives',$narratives);
-	}
+    /**
+     * Display the specified resource.
+     *
+     * @author Thomas Rahn <thomas@rahn.ca>, Alan Ly <me@alanly.ca>
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        $narrative = Narrative::find($id);
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
+        if (! $narrative) App::abort(404, 'The specified narrative could not be found.');
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		$narrative = Narrative::where('NarrativeID',$id)->first();
-		return View::make("narrative")
-			->with("narrative",$narrative);
-	
-	}
-	/**
-		Get JSON response for a particular narrative
-
-	*/
-	public function getNarrativeAjax($id)
-	{
-		$narrative = Narrative::where('NarrativeID',$id)->first();
-
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+        return View::make("narrative")
+            ->with("narrative",$narrative);
+    }
 
 }

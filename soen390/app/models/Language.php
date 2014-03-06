@@ -1,10 +1,19 @@
 <?php 
 
-class Language extends Eloquent{
+/**
+ * @package Model
+ */
+class Language extends Eloquent
+{
 
-	protected $table = "Language";
+    protected $table      = 'Language';
+    protected $primaryKey = 'LanguageID';
+    public    $timestamps = false;
+    public    $guarded    = array('LanguageID');
 
-	protected $primaryKey = 'LanguageID';
+    public function narrative()
+    {
+        return $this->hasMany('Narrative', 'LanguageID', 'LanguageID');
+    }
 
-	public $timestamps = false;
 }

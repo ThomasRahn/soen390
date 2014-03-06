@@ -38,7 +38,8 @@
             .admin-int-text,
             .sidebar,
             button,
-            label {
+            label,
+            input[type=submit] {
                 font-family: "Roboto Condensed", "Helvetica Neue", Helvetica, "Arial Narrow", "Arial", sans-serif;
                 letter-spacing: 0.3px;
                 text-transform: uppercase;
@@ -127,14 +128,13 @@
                     </ul>
                     <ul class="nav nav-sidebar">
                         <li{{ Request::is('admin') ? ' class="active"' : '' }}><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> {{ trans('admin.sidebar.dashboard') }}</a></li>
-                        <li{{ (Request::is('admin/narrative') && ! Request::is('admin/narrative/upload')) ? ' class="active"' : '' }}><a href="{{ action('AdminNarrativeController@getIndex') }}"><i class="fa fa-bullhorn fa-fw"></i> {{ trans('admin.sidebar.narratives') }}</a></li>
                         <li{{ Request::is('admin/category*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-folder-open-o fa-fw"></i> {{ trans('admin.sidebar.categories') }}</a></li>
-                        <li{{ Request::is('admin/narrative/flag*') ? ' class="active"' : '' }}><a href="{{ action('AdminFlagController@getIndex')}}"><i class="fa fa-flag-o fa-fw"></i> {{ trans('admin.sidebar.flagReports') }}</a></li>
-                        <li{{ Request::is('admin/configuration*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-cogs fa-fw"></i> {{ trans('admin.sidebar.configuration') }}</a></li>
+                        <li{{ (Request::is('admin/narrative') && ! Request::is('admin/narrative/upload')) ? ' class="active"' : '' }}><a href="{{ action('AdminNarrativeController@getIndex') }}"><i class="fa fa-bullhorn fa-fw"></i> {{ trans('admin.sidebar.narratives') }}</a></li>
+                        <li{{ Request::is('admin/configuration*') ? ' class="active"' : '' }}><a href="{{ action('AdminConfigController@getIndex') }}"><i class="fa fa-cogs fa-fw"></i> {{ trans('admin.sidebar.configuration') }}</a></li>
                     </ul>
                     <ul class="nav nav-sidebar">
-                        <li><a href="{{ url('/') }}" target="_blank"><i class="fa fa-eye fa-fw"></i> {{ trans('admin.sidebar.openMainSite') }}</a></li>
                         <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> {{ trans('admin.sidebar.signOut') }}</a></li>
+                        <li><a href="{{ url('/') }}" target="_blank"><i class="fa fa-eye fa-fw"></i> {{ trans('admin.sidebar.openMainSite') }}</a></li>
                     </ul>
                 </nav>
 
@@ -147,5 +147,16 @@
         </div>
 
         @yield('scripts')
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-48518812-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
     </body>
 </html>

@@ -1,36 +1,14 @@
 <?php
 
-class UserDbTest extends TestCase
+class UserTest extends TestCase
 {
-    
-    /**
-     * Test the API's index and ensures that response is valid JSON.
-     *
-     */
-    public function testIndex()
-    {
-        /*$response = $this->call('GET', 'api/topic');
 
-        $this->assertResponseOk();
-
-        json_decode($response->getContent());
-
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
-    }
-    /**
-     * Ensure users get fetched.
-     *
-     */
-    public function testUserRetrieval()
-    {
-        /*$narratives = Narrative::all();
-
-        $this->assertNotEmpty($narratives);*/
-
-    }
     /**
      * Ensure User gets created.
      *
+     * @covers User::save
+     * @covers User::find
+     * @covers User::delete
      */
     public function testUserCreation()
     {
@@ -61,11 +39,15 @@ class UserDbTest extends TestCase
         $this->assertNull($userFetched);
 
     }
+
     /**
      * Ensure User gets created. With nulls
      *
+     * @covers User::save
+     * @covers User::find
+     * @covers User::delete
      */
-     public function testUserCreationTestNulls()
+    public function testUserCreationTestNulls()
     {
         $userCreated = new User;
 
@@ -93,6 +75,5 @@ class UserDbTest extends TestCase
 
         $this->assertNull($userFetched);
     }
-
 
 }

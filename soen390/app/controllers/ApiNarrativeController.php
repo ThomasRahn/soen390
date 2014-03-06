@@ -1,7 +1,14 @@
 <?php
 
+/**
+ * @author  Alan Ly <me@alanly.ca>
+ * @package Controller
+ */
 class ApiNarrativeController extends \BaseController {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function __construct()
 	{
 		// Ensure that user is authenticated for all write/update routes.
@@ -101,9 +108,14 @@ class ApiNarrativeController extends \BaseController {
 		try {
 			Narrative::addArchive($hashedName, $destinationPath, Input::get('category'), (Input::get('publish') == 'publish'));
 		} catch (Exception $e) {
+			$errorArray = array($e->getMessage());
+
+			if (Config::get('app.debug') === true)
+				$errorArray[] = $e->getTrace();
+
 			return Response::json(array(
 				'success' => false,
-				'error' => $e->getMessage()
+				'error' => $errorArray,
 			), 500);
 		}
 
@@ -147,47 +159,28 @@ class ApiNarrativeController extends \BaseController {
 				'error' => $validator->errors()->toArray(),
 			), 400);
 
-		if (Input::has('category'))
-			$narrative->CategoryID = Input::get('category');
+		$narrative->CategoryID   = Input::get('category',     $narrative->CategoryID);
+		$narrative->TopicID      = Input::get('topic',        $narrative->TopicID);
+		$narrative->LanguageID   = Input::get('language',     $narrative->LanguageID);
+		$narrative->Name         = Input::get('name',         $narrative->Name);
+		$narrative->Views        = Input::get('views',        $narrative->Views);
+		$narrative->Agrees       = Input::get('agrees',       $narrative->Agrees);
+		$narrative->Disagrees    = Input::get('disagrees',    $narrative->Disagrees);
+		$narrative->Indifferents = Input::get('indifferents', $narrative->Indifferents);
 
-		if (Input::has('topic'))
-			$narrative->TopicID = Input::get('topic');
+		if (Input::has('published'))
+			$narrative->Published = Input::get('published') === 1 || Input::get('published') === 'true';
 
-		if (Input::has('language'))
-			$narrative->LanguageID = Input::get('language');
-
-		if (Input::has('name'))
-			$narrative->Name = Input::get('name');
-
-		if (Input::has('views'))
-			$narrative->Views = Input::get('views');
-
-		if (Input::has('agrees'))
-			$narrative->Agrees = Input::get('agrees');
-
-		if (Input::has('disagrees'))
-			$narrative->Disagrees = Input::get('disagrees');
-
-		if (Input::has('indifferents'))
-			$narrative->Indifferents = Input::get('indifferents');
-
-		if (Input::has('published')) {
-			if (Input::get('published') === 0 || Input::get('published') === "false")
-				$narrative->Published = false;
-			else
-				$narrative->Published = true;
-		}
-
-		if ($narrative->save() === true)
+		if ($narrative->save() === false)
 			return Response::json(array(
-				'success' => true,
-				'return'  => $this->narrativeToArray($narrative),
-			));
+				'success' => false,
+				'error'   => 'Unable to save changes to narrative.',
+			), 500);
 
 		return Response::json(array(
-			'success' => false,
-			'error'   => 'Unable to save changes to narrative.',
-		), 500);
+			'success' => true,
+			'return'  => $this->narrativeToArray($narrative),
+		));
 	}
 
 	/**
@@ -215,8 +208,22 @@ class ApiNarrativeController extends \BaseController {
 		$audioArray = array();
 
 		foreach ($audio as $a) {
-			$a_mpeg = $n->media()->audio()->where('filename', $a->filename)->where('audio_codec', 'mp3')->first();
-			$a_ogg  = $n->media()->audio()->where('filename', $a->filename)->where('audio_codec', 'ogg')->first();
+			
+			// Retrieve the audio and get their media address.
+
+			$a_mpeg = $n->media()->audio()
+				->where('filename', $a->filename)
+				->where('audio_codec', 'mp3')
+				->first();
+
+			$a_ogg  = $n->media()->audio()
+				->where('filename', $a->filename)
+				->where('audio_codec', 'ogg')
+				->first();
+
+			$mpeg_link = (! $a_mpeg) ? '' : action('ContentController@getContent', array('id' => $a_mpeg->id));
+
+			$ogg_link = (! $a_ogg) ? '' : action('ContentController@getContent', array('id' => $a_ogg->id));
 
 			// Determine an appropriate poster for this track.
 			$tracknumber = intval($a->filename);
@@ -235,13 +242,13 @@ class ApiNarrativeController extends \BaseController {
 
 			$audioArray[] = array(
 				'title' => $a->id,
-				'mp3' => action('ContentController@getContent', array('id' => $a_mpeg->id)),
-				'oga' => action('ContentController@getContent', array('id' => $a_ogg->id)),
+				'mp3' => $mpeg_link,
+				'oga' => $ogg_link,
 				'poster' => $posterPath,
 				'duration' => $a->audio_duration,
 			);
 		}
-
+		$flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
 		// Put this narrative into the array.
 		$narrative = array(
 			'id' => $n->NarrativeID,
@@ -256,9 +263,11 @@ class ApiNarrativeController extends \BaseController {
 			'published' => $n->Published,
 			'images' => $imagesArray,
 			'audio' => $audioArray,
+			'flags' => $flagCount,
 		);
 
 		return $narrative;
 	}
 
 }
+

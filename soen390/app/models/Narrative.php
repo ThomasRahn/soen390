@@ -1,32 +1,48 @@
 <?php 
 
+/**
+ * @author Alan Ly <me@alanly.ca>
+ * @package Model
+ */
 class Narrative extends Eloquent
 {
 
     protected $table      = 'Narrative';
     protected $primaryKey = 'NarrativeID';
     protected $softDelete = true;
-    protected $guarded    = array('id');
+    protected $guarded    = array('NarrativeID');
     public    $timestamps = false;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function category()
     {
         return $this->belongsTo('Category', 'CategoryID', 'CategoryID');
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function language()
     {
         return $this->belongsTo('Language', 'LanguageID', 'LanguageID');
     }
 
-    public function content()
-    {
-        return $this->hasMany('Content', 'NarrativeID', 'NarrativeID');
-    }
-
+    /**
+     * @codeCoverageIgnore
+     */
     public function media()
     {
         return $this->hasMany('Media', 'narrative_id', 'NarrativeID');
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function flags()
+    {
+        return $this->hasMany('Flag', 'NarrativeID', 'NarrativeID');
     }
 
     /**
@@ -56,6 +72,10 @@ class Narrative extends Eloquent
      */
     public static function addArchive($name, $path, $category, $publish)
     {
+        // Check to see if the archive file actually exists first.
+        if (File::exists($path) === false)
+            return;
+
         // Extract the specified archive and retrieve the output path.
         $outputPath = self::extractArchive($name, $path);
 
@@ -332,11 +352,8 @@ class Narrative extends Eloquent
 
         // Attempt to move the image to the determined path. If an error
         // occurs, then log the error and return.
-        if (! File::move($path, $imageDestination)) {
-            Log::error('Unable to move image from "' . $path . '" to "' . $imageDestination . '"');
-
-            return null;
-        }
+        if (! File::move($path, $imageDestination))
+            return Log::error('Unable to move image from "' . $path . '" to "' . $imageDestination . '"');
 
         // Create the media instance for this image.
         return Media::create(array(

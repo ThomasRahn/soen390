@@ -1,7 +1,13 @@
 <?php
 
+/**
+ * @package Controller
+ */
 class BaseController extends Controller {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function __construct()
 	{
 		$this->beforeFilter('csrf', array('on' => 'post'));
@@ -11,6 +17,7 @@ class BaseController extends Controller {
 	 * Setup the layout used by the controller.
 	 *
 	 * @return void
+	 * @codeCoverageIgnore
 	 */
 	protected function setupLayout()
 	{
@@ -25,12 +32,13 @@ class BaseController extends Controller {
 	 * Data is available from the Session object in `action.failed` and `action.message` keys.
 	 * An optional `Illuminate\Http\RedirectResponse` can be provided if a single line alert-redirect action is preferred.
 	 *
+	 * @author Alan Ly <me@alanly.ca>
 	 * @param  $hasFailed  boolean
 	 * @param  $message    string
 	 * @param  $redirector RedirectResponse
 	 * @return Illuminate\Http\RedirectResponse
 	 */
-	protected function alertAction($hasFailed, $message, Illuminate\Http\RedirectResponse $redirector = null)
+	public function alertAction($hasFailed, $message, Illuminate\Http\RedirectResponse $redirector = null)
 	{
 		Session::flash('action.failed', $hasFailed);
 		Session::flash('action.message', $message);

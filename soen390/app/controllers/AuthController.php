@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author  Alan Ly <me@alanly.ca>
+ * @package Controller
+ */
 class AuthController extends BaseController {
 
 	public function getLogin()
@@ -41,7 +45,7 @@ class AuthController extends BaseController {
 		}
 
 		return $this->alertAction(
-				true,
+				$success === false,
 				($success === false ? Lang::get('auth.login.invalid') : Lang::get('auth.login.fail')),
 				Redirect::route('login')->withInput()
 			);

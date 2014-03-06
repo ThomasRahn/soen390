@@ -66,17 +66,16 @@ function printObject(o) {
             var progress = event.jPlayer.status.currentPercentAbsolute;
 
             var current_time = 0;
-            for(var i = 0; i < myPlaylist.current; i++){
+            for(var i = 0; i < myPlaylist.current; i++){//
                 current_time += durations[i]
             }
-
             current_time += progress * (durations[myPlaylist.current] / 100);
-	       var minutes = Math.floor((parseInt(current_time) / 60));
-                if(minutes < 10)
-                        minutues =  "0"+minutes;
+	        var minutes = Math.floor((parseInt(current_time) / 60));
+            if(minutes < 10)
+                minutues =  "0"+minutes;
             var seconds = current_time.toFixed(0) % 60;
-                if(seconds < 10)
-                        seconds = "0"+seconds;
+            if(seconds < 10)
+                seconds = "0"+seconds;
 
             var current_str = minutes + ":" + seconds;
 
@@ -91,12 +90,21 @@ function printObject(o) {
         ended: function(event){
             var progress_bar = parseInt($(".personal_prog_bar").css("width"));
             var total = parseInt($(".temp_progress").css("width"));
-            if( total > (progress_bar * 0.95)){
+            //if its the last media item
+            if( myPlaylist.playlist[myPlaylist.playlist.length-1].title == event.jPlayer.status.media.title){
                 myPlaylist.play(0);
                 myPlaylist.pause();
-
                 //show upvote, downvote     
-                $(".option-bar").show();
+                $(".option-bar").attr("title","");
+                $(".option-bar").css("cursor","");
+                $("#agree").removeAttr("disabled");
+                $("#agree").attr("title","Agree");
+
+                $("#disagree").removeAttr("disabled");
+                $("#disagree").attr("title","Disagree");
+
+                $("#report").removeAttr("disabled");
+                $("#report").attr("title","Report this narrative");
             }
         },
         pause: function(event) {
@@ -111,14 +119,14 @@ function printObject(o) {
 
 		data = data.return.audio;
 
-	        $.each(data,function(index,value){
-	        	if(index == 1){
-	        		$(".audio_poster").attr("src", value.poster);
-	        	}
-                total_duration += parseFloat(value.duration);
-                durations.push(parseFloat(value.duration));
-	            myPlaylist.add(value); // add each element in data in myPlaylist
-	        });
+        $.each(data,function(index,value){
+        	if(index == 1){
+        		$(".audio_poster").attr("src", value.poster);
+        	}
+            total_duration += parseFloat(value.duration);
+            durations.push(parseFloat(value.duration));
+            myPlaylist.add(value); // add each element in data in myPlaylist
+        });
 	    var minutes = Math.floor((parseInt(total_duration) / 60));
 		if(minutes < 10)
 			minutues =  "0"+minutes; 
@@ -139,7 +147,7 @@ function printObject(o) {
                     percentage = (value / total_duration) * 100;
                     element.css("width", (percentage)+"%");
                    
-                    element.css("border", "solid black 1px");
+                    element.css("border-right", "solid black 2px");
                     element.css("display","block");
                     element.data("jpp-index",index);
                     $(".personal_prog_bar").append(element);
@@ -164,13 +172,13 @@ function printObject(o) {
     });
 
 	$('.progress').click(function(e) {
-        var posX = $(this).position().left;
-	    var relPosX = e.pageX - posX;
-	    var elemWidth = $(this).width();
-	    var seekPercent = (relPosX / elemWidth) * 100;
+        var x = e.pageX - $(e.target).parent().offset().left;
+        var elemWidth = $(this).width();
+        var seekPercent = (x / elemWidth) * 100;
         var total_time = total_duration * (seekPercent/100);
         var remaning_time = 0;
         var done = false;
+
         $.each(durations, function(index,value){
             if(!done){
                 if(total_time >= value){
@@ -182,13 +190,7 @@ function printObject(o) {
                 }
             } 
         });
-
-       
-       // $('.progress-bar').css('-webkit-transition-duration', '0');
-	    //$('.progress-bar').css('transition-duration', '0');
-        //var playlistIndex = $(this).data('jpp-index');
-        //myPlaylist.play(playlistIndex);
-	    $('#jquery_jplayer').jPlayer("playHead", (remaning_time - 10));
+	    $('#jquery_jplayer').jPlayer("playHead", (remaning_time));
 	});
 });
 
@@ -199,28 +201,38 @@ function reportNarrative(){
         type:"POST",
         data:form,
         success:function(data){//
-            alert("Thank you for the report, we will be looking into it shortly.");
+            alert("Narrative Reported.");
         }
-
     });
+    $(".report").attr("disabled","disabled");
     $("#report-narrative").modal("hide");
    
 }
-function expressOpinion(stance){
+var stance = "";
+function expressOpinion(id, element){
     //ajax call with stance to increase agree or disagree or indifferent
+    var old = false
+
+    if(stance != ""){//
+        var old = true;
+        $("#"+stance).removeAttr("disabled");
+    }
+    element.attr("disabled","disabled");
     var token = $("#crsf_token").val();
     var NarrativeID = $("#NarrativeID").val();
+    stance = element.attr("id");
+    
     $.ajax({//
         url:"/stance",
         type:"POST",
         data:{//
             NarrativeID: NarrativeID,
             _token : token,
-            stance: stance
+            stance: id,
+            old : old
         },
         success:function(data){//
-                $(".opinion").hide();
-               alert("Thank you for opinion.");
+               alert("Your opinion has been receieved.");
         }
     });
 }
@@ -258,24 +270,24 @@ function expressOpinion(stance){
                 </div>
                 <div class="nav navbar-text personal_prog_bar progress" style="width:600px;background-color:#5a5a5a;height:30px;">
                     
-                    <div class="temp_progress" style="width:0%;background-color:lime;z-index:0;height:30px;position:absolute;transition-duration: 0.6s;"></div>
+                    <div class="temp_progress" style="width:0%;background-color:grey;z-index:0;height:30px;position:absolute;transition-duration: 0.5s;"></div>
                     <div class="progress_container clone" style="display:none;height:30px;z-index:5;position:relative;"></div>
                 </div>
                 <div class="nav navbar-text">
                     <span id="jp-total"></span>
                 </div>
-                <div class="nav navbar-text option-bar" style="display:none; width:200px;">
+                <div class="nav navbar-text option-bar" style="width:200px;cursor:not-allowed;"  data-toggle="tooltip" title="Disabled until entire narrative has been heard">
                     <div class="opinion pull-left">
                         <form id='narrative-stance'>    
                             <input type="hidden" name="NarrativeID" id="NarrativeID" value="{{ $narrative->NarrativeID}}"/>
                             <input type="hidden" name="_token" id="crsf_token" value="<?php echo csrf_token(); ?>">
-                            <button type="button" class="btn btn-default" onclick="expressOpinion(1);" ><i class="fa fa-hand-o-up fa-fw"></i></button>
-                            <button type="button" class="btn btn-default" onclick="expressOpinion(2);" ><i class="fa fa-hand-o-down fa-fw"></i></button>
-                            <button type="button" class="btn btn-default" onclick="expressOpinion(3);" ><i class="fa fa-hand-o-right fa-fw"></i></button>
+                            <button type="button" id="agree" class="btn btn-default" disabled="disabled" onclick="expressOpinion(1, $(this));" data-toggle="tooltip" data-placement="bottom" title=""><i class="fa fa-thumbs-up fa-fw"></i></button>
+                            <button type="button" id="disagree" class="btn btn-default" disabled="disabled" onclick="expressOpinion(2, $(this));" data-toggle="tooltip" data-placement="bottom" title=""><i class="fa fa-thumbs-down fa-fw"></i></button>
+                            <!--<button type="button" class="btn btn-default" onclick="expressOpinion(3);"><i class="fa fa-hand-o-right fa-fw"></i></button>-->
                         </form>
                     </div>
-                    <div class="report pull-right">
-                        <button type="button" class="btn btn-default" onclick="" data-toggle="modal" data-target="#report-narrative"><i class="fa fa-exclamation fa-fw"></i></button>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-default report" id="report" onclick="" disabled="disabled" data-toggle="modal" data-target="#report-narrative" data-toggle="tooltip" data-placement="bottom" title=""><i class="fa fa-exclamation fa-fw"></i></button>
                     </div>
                 </div>
 
@@ -289,18 +301,17 @@ function expressOpinion(stance){
                 <h4 class="modal-title">Report Narrative</h4>
               </div>
               <div class="modal-body">
-                <p>You are currently reporting this narrative, tell us why</p>
                 <form class="reported-Narrative">
             
                 </form>
                 <form id='reported-narrative'>
                     {{ Form::token()}}
-                    {{ Form::textarea('report-comment')}}
+                    {{ Form::textarea('report-comment','I am reporting this narrative because ')}}
                     <input type="hidden" name="NarrativeID" value="{{ $narrative->NarrativeID}}"/>
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" onclick="reportNarrative()">Report</button>
               </div>
             </div><!-- /.modal-content -->

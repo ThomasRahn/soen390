@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author  Alan Ly <me@alanly.ca>
+ * @package Controller
+ */
 class ApiCategoryController extends BaseController
 {
 

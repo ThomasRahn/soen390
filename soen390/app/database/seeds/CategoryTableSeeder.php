@@ -1,13 +1,14 @@
 <?php 
-class CategoryTableSeeder extends Seeder{
+class CategoryTableSeeder extends Seeder
+{
 
-        public function run(){
+    public function run()
+    {
+        DB::table('Category')->delete();
 
-                DB::table('Category')->delete();
-		Category::create(array("CategoryID"=>"1","Description"=>"For"));
-		Category::create(array("CategoryID"=>"2","Description"=>"Indifferent"));
-		Category::create(array("CategoryID" => "3","Description"=>"Against"));
+        Category::create(array("Description" => "For"));
+        Category::create(array("Description" => "Indifferent"));
+        Category::create(array("Description" => "Against"));
+    }
 
-        }
 }
-

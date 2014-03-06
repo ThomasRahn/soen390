@@ -3,6 +3,9 @@
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
+/**
+ * @package Model
+ */
 class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	/**
@@ -10,9 +13,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var string
 	 */
-	protected $table = 'User';
-	public $timestamps = false;
+	protected $table      = 'User';
 	protected $primaryKey = 'UserID';
+	public    $timestamps = false;
+	public    $guarded    = array('UserID');
+
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -24,6 +29,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * Get the unique identifier for the user.
 	 *
 	 * @return mixed
+	 * @codeCoverageIgnore
 	 */
 	public function getAuthIdentifier()
 	{
@@ -34,6 +40,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * Get the password for the user.
 	 *
 	 * @return string
+	 * @codeCoverageIgnore
 	 */
 	public function getAuthPassword()
 	{
@@ -44,6 +51,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * Get the e-mail address where password reminders are sent.
 	 *
 	 * @return string
+	 * @codeCoverageIgnore
 	 */
 	public function getReminderEmail()
 	{

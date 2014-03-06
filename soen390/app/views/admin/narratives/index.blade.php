@@ -35,17 +35,18 @@ Narratives
             <th>{{ trans('admin.narratives.table.category') }}</th>
             <th>{{ trans('admin.narratives.table.createdAt') }}</th>
             <th>{{ trans('admin.narratives.table.published') }}</th>
+            <th>{{ trans('admin.narratives.table.flags') }}</th>
             <th>{{ trans('admin.narratives.table.manage') }}</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <th colspan="8"><small><span class="row-count">0</span> {{ trans('admin.narratives.table.inTotal') }}</small></th>
+            <th colspan="9"><small><span class="row-count">0</span> {{ trans('admin.narratives.table.inTotal') }}</small></th>
         </tr>
     </tfoot>
     <tbody class="table-spinner">
         <tr class="active">
-            <td colspan="8"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
+            <td colspan="9"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
         </tr>
     </tbody>
 </table>
@@ -94,11 +95,11 @@ Narratives
                 // Update publication status
                 if (narrative.published == false) {
                     narrativeRow.addClass("warning");
-                    narrativeRow.children(".published").html("<i class=\"fa fa-eye-slash fa-fw\"></i>");
+                    narrativeRow.children(".published").html("<i class=\"fa fa-square-o fa-fw\"></i>");
                     narrativeRow.children(".published").data("published", false);
                 } else {
                     narrativeRow.removeClass("warning");
-                    narrativeRow.children(".published").html("<i class=\"fa fa-eye fa-fw\"></i>");
+                    narrativeRow.children(".published").html("<i class=\"fa fa-check-square-o fa-fw\"></i>");
                     narrativeRow.children(".published").data("published", true);
                 }
 
@@ -123,7 +124,22 @@ Narratives
             dataType: "json"
         });
     }
+    function playNarrative(id){//
+        var popupWidth = screen.width * 0.75, 
+            popupHeight = screen.height * 0.75,
+            left = (screen.width / 2) - (popupWidth / 2),
+            top = (screen.height / 2) - (popupHeight / 2);
 
+        window.open('/narrative/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
+    }
+    function openFlagWindow(id){//
+      var popupWidth = screen.width * 0.75, 
+            popupHeight = screen.height * 0.75,
+            left = (screen.width / 2) - (popupWidth / 2),
+            top = (screen.height / 2) - (popupHeight / 2);
+
+        window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
+    }
     $(document).ready(function () {
 
         // Fetch the narratives from the API and display them.
@@ -140,12 +156,11 @@ Narratives
                         + "<td class=\"comments\">" + 0 + "</td>"
                         + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
-                        + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa fa-eye" + (narrative.published == false ? "-slash" : "") + " fa-fw\"></i></td>"
+                        + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa " + (narrative.published == false ? "fa-square-o" : "fa-check-square-o") + " fa-fw\"></i></td>"
+                        + "<td> <a href=\"#\" onclick=\"openFlagWindow(" + narrative.id+")\">" + narrative.flags +"</a></td>"
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
-                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-pencil fa-fw\"></i></button>"
-                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
-                        + "<button type=\"button\" class=\"btn btn-default\"><i class=\"fa fa-play fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"playNarrative("+ narrative.id+")\"><i class=\"fa fa-play fa-fw\"></i></button>"
                         + "</td>"
                         + "</tr>");
                 });

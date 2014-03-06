@@ -1,6 +1,6 @@
 <?php
 
-class FlagDbTest extends TestCase
+class FlagTest extends TestCase
 {
     
     /**
@@ -30,7 +30,9 @@ class FlagDbTest extends TestCase
     }
      /**
      * Ensure flags get created (for a Narrative).
-     *
+     * @covers Flag::save
+     * @covers Flag::create
+     * @covers Flag::delete
      */
     public function testFlagCreationNarrative()
     {
@@ -38,7 +40,6 @@ class FlagDbTest extends TestCase
 
         $flagCreated->NarrativeID = 1;
         $flagCreated->CommentID = NULL;
-        $flagCreated->Flags = 1;
         $flagCreated->Comment = "Test";
 
         $flagCreated->save();
@@ -49,7 +50,6 @@ class FlagDbTest extends TestCase
 
         $this->assertEquals(1, $flagFetched->NarrativeID);
         $this->assertEquals(NULL, $flagFetched->CommentID);
-        $this->assertEquals(1, $flagFetched->Flags);
         $this->assertEquals("Test", $flagFetched->Comment);
 
         $flagFetched->delete();
@@ -69,7 +69,6 @@ class FlagDbTest extends TestCase
 
         $flagCreated->NarrativeID = NULL;
         $flagCreated->CommentID = 1;
-        $flagCreated->Flags = 1;
         $flagCreated->Comment = "Test";
 
         $flagCreated->save();
@@ -80,7 +79,6 @@ class FlagDbTest extends TestCase
 
         $this->assertEquals(NULL, $flagFetched->NarrativeID);
         $this->assertEquals(1, $flagFetched->CommentID);
-        $this->assertEquals(1, $flagFetched->Flags);
         $this->assertEquals("Test", $flagFetched->Comment);
 
         $flagFetched->delete();
@@ -90,5 +88,38 @@ class FlagDbTest extends TestCase
         $this->assertNull($flagFetched);
 
     }
+     /**
+     * Testing relationship from flag to narrative
+     * @covers Flag::narrative
+     */
+    public function testFlagNarrativeRelationship()
+    {
+         $narrativeCreated = new Narrative;
 
+        $date = date('Y-m-d H:i:s');
+
+        $narrativeCreated->TopicID = 1;
+        $narrativeCreated->CategoryID = 1;
+        $narrativeCreated->LanguageID = 1;
+        $narrativeCreated->DateCreated = $date;
+        $narrativeCreated->Name = "Test";
+        $narrativeCreated->Agrees = 1;
+        $narrativeCreated->Disagrees = 1;
+        $narrativeCreated->Indifferents = 1;
+        $narrativeCreated->Published = true;
+
+        $narrativeCreated->save();
+
+        $flagCreated = new Flag;
+
+        $flagCreated->NarrativeID = 1;
+        $flagCreated->CommentID = NULL;
+        $flagCreated->Comment = "Test";
+
+        $flagCreated->save();
+
+        $narrative = Flag::find(1)->narrative();
+        $this->assertNotNull($narrative);
+
+    }
 }
