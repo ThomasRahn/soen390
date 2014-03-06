@@ -58,4 +58,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->Email;
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
+	public function language()
+	{
+		return $this->belongsTo('Language', 'LanguageID', 'LanguageID');
+	}
+
 }

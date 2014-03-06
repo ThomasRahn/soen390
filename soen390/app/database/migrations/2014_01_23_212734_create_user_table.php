@@ -15,9 +15,9 @@ class CreateUserTable extends Migration {
 		{
 			$table->increments('UserID');
 			$table->integer('LanguageID')->nullable();
-			$table->string('Email', 100);
-			$table->string('Password', 100);
-			$table->string('Name', 50)->nullable();
+			$table->string('Email');
+			$table->string('Password');
+			$table->string('Name')->nullable();
 		});
 	}
 

@@ -107,13 +107,13 @@
             <nav id="filter-nav" class="row">
                 <div class="col-sm-6">
                     <div class="btn-group btn-group-sm lang-btn-group">
-                        <button type="button" class="btn btn-default" data-lang="en"><img src="img/gb.png"></button>
-                        <button type="button" class="btn btn-default" data-lang="fr"><img src="img/fr.png"></button>
+                        <button type="button" class="btn btn-default" data-lang="en" data-toggle="tooltip" data-placement="bottom" title="Highlight English Narratives"><img src="img/gb.png"> EN</button>
+                        <button type="button" class="btn btn-default" data-lang="fr" data-toggle="tooltip" data-placement="bottom" title="Highlight French Narratives"><img src="img/fr.png"> FR</button>
                     </div>
 
-                    <button type="button" class="btn btn-sm btn-default stance-btn"><i class="fa fa-thumbs-up"></i> <span class="stance">Stance</span> <i class="fa fa-thumbs-down"></i></button>
+                    <button type="button" class="btn btn-sm btn-default stance-btn" data-toggle="tooltip" data-placement="bottom" title="Separate Narratives by Opinion"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
 
-                    <button type="button" class="btn btn-sm btn-default popularity-btn"><i class="fa fa-signal"></i> <span class="popularity">Popularity</span></button>
+                    <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
                 </div>
               
             </nav>
@@ -121,27 +121,27 @@
 
         <section id="cards-container">
 		<div id="stance-heading">
-			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-smile-o"></i></span>
-			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-meh-o"></i></span>
-			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-frown-o"></i></span>
+			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-up"></i></span>
+			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-ellipsis-h"></i></span>
+			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-down"></i></span>
 		</div>
         </section>
-        <div class="row">
-             <div class="col-sm-5 meta-container" style="margin:0 auto; float:none;">
-                <div class="row-fluid">
-                    <div class="ratio-bar-container">
-                        <div class="ratio-bar agrees"></div>
-                        <div class="ratio-bar disagrees"></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-5 meta-container" style="margin:0 auto; float:none;">
+                    <div class="row-fluid">
+                        <div class="ratio-bar-container">
+                            <div class="ratio-bar agrees"></div>
+                            <div class="ratio-bar disagrees"></div>
+                        </div>
+                    </div>
+                    <div class="row-fluid narrative-ratios">
+                        <div class="col-md-6"><span class="agrees">Agrees</span> <span class="agrees-percent">25</span></div>
+                        <div class="col-md-6"><span class="disagrees">Disagrees</span> <span class="disagrees-percent">25</span></div>
                     </div>
                 </div>
-                <div class="row-fluid narrative-ratios">
-                    <div class="col-md-6"><span class="agrees">Agrees</span> <span class="agrees-percent">25</span></div>
-                    <div class="col-md-6"><span class="disagrees">Disagrees</span> <span class="disagrees-percent">25</span></div>
-                    <!--<div class="col-md-4"><span class="indifferent">Indifferent</span> <span class="indifferent-percent">50</span>%</div>-->
-                </div>
             </div>
-        </div>
-        <div class="container">
             <footer class="navbar navbar-fixed-bottom">
                 <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <a class="text-muted" href="mailto:support@youdeliberate.org" title="Email us for support."><i class="fa fa-envelope-o"></i></a> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
             </footer>
@@ -149,6 +149,7 @@
 
         <!-- Guavascripts -->
         <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
+        <script src="//cdn.jsdelivr.net/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script src="//cdn.jsdelivr.net/d3js/3.3.9/d3.min.js"></script>
         <script src="//cdn.jsdelivr.net/konami.js/1.4.2/konami.min.js"></script>
         <script src="{{ asset('js/d3animate.js') }}"></script>
@@ -188,6 +189,9 @@
                 $('span.agrees').html(dictionary[langCode].agrees);
                 $('span.disagrees').html(dictionary[langCode].disagrees);
                 $('span.indifferent').html(dictionary[langCode].indifferent);
+
+                // Language
+                $('span.language').html(dictionary[langCode].language);
             }
 
             /**
@@ -270,6 +274,8 @@
             }
 
             $(document).ready(function() {
+                $('button').tooltip();
+
                 // Set default language to load.
                 setTranslation('en');
 

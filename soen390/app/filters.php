@@ -13,7 +13,18 @@
 
 App::before(function($request)
 {
-	//
+
+	if (Auth::check()) {
+		$user = Auth::user();
+		$language = $user->language()->first()->Description;
+
+		if ($language == 'English')
+			App::setLocale('en');
+
+		if ($language == 'French')
+			App::setLocale('fr');
+	}
+
 });
 
 
