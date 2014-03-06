@@ -19,7 +19,6 @@ class CreateCommentTable extends Migration {
 			$table->timestamp('DateCreated');
 			$table->timestamp('deleted_at')->nullable();
 			$table->string('Name', 20);
-			$table->integer('Views')->default(0);
 			$table->integer('Agrees')->default(0);
 			$table->integer('Disagrees')->default(0);
 			$table->integer('Indifferents')->default(0);

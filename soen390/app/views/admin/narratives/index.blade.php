@@ -132,6 +132,17 @@ Narratives
 
         window.open('/narrative/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
+    function remove_narrative(id){//
+        if(confirm("Are you sure you want to remove the entire narrative?")){
+            $.ajax({//
+                type:'DELETE',
+                url:'/admin/narrative/narrative/'+id,
+                success:function(data){//
+                    $('[data-narrative-id = '+id+']').remove();
+                }
+            });
+        }
+    }
     function openFlagWindow(id){//
       var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
@@ -161,6 +172,7 @@ Narratives
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
                         + "<button type=\"button\" class=\"btn btn-default\" onclick=\"playNarrative("+ narrative.id+")\"><i class=\"fa fa-play fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"remove_narrative("+ narrative.id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
                         + "</td>"
                         + "</tr>");
                 });
