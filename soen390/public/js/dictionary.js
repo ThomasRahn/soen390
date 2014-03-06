@@ -8,7 +8,8 @@ var dictionary = {
                         "momSpaghetti": "Mom Spaghetti",
                         "agrees": "Agrees",
                         "disagrees": "Disagrees",
-                        "indifferent": "Indifferent"
+                        "indifferent": "Indifferent",
+                        "language": "Language"
                     },
                     "fr": {
                         "brand": 'Vous <i class="fa fa-comments"></i> D&eacute;lib&eacute;r&eacute;z',
@@ -19,6 +20,7 @@ var dictionary = {
                         "momSpaghetti": "Spaghetti de maman",
                         "agrees": "Approuver",
                         "disagrees": "Contre",
-                        "indifferent": "Neutre"
+                        "indifferent": "Neutre",
+                        "language": "Langue"
                     }
                 }

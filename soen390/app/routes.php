@@ -29,6 +29,8 @@ Route::group(array('prefix' => 'api'), function() {
     // Category API
     Route::resource('category', 'ApiCategoryController');
 
+    // Comment API
+    Route::resource('comments', 'ApiCommentController');
 });
 
 // Route for content handler
@@ -69,6 +71,9 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
 
     // Routing for Configuration
     Route::controller('configuration', 'AdminConfigController');
+
+    // Routing for Profile
+    Route::controller('profile', 'AdminProfileController');
 
 });
 

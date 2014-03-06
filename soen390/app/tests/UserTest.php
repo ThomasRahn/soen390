@@ -14,7 +14,6 @@ class UserTest extends TestCase
     {
         $userCreated = new User;
 
-        $userCreated->PrivilegeID = 1;
         $userCreated->LanguageID = 1;
         $userCreated->Email = "Test@email.com";
         $userCreated->Password = "Test";
@@ -26,7 +25,6 @@ class UserTest extends TestCase
 
         $userFetched = User::find($insertedId);
 
-        $this->assertEquals(1, $userFetched->PrivilegeID);
         $this->assertEquals(1, $userFetched->LanguageID);
         $this->assertEquals("Test@email.com", $userFetched->Email);
         $this->assertEquals("Test", $userFetched->Password);
@@ -51,7 +49,6 @@ class UserTest extends TestCase
     {
         $userCreated = new User;
 
-        $userCreated->PrivilegeID = 1;
         $userCreated->LanguageID = NULL;
         $userCreated->Email = "Test@email.com";
         $userCreated->Password = "Test";
@@ -63,7 +60,6 @@ class UserTest extends TestCase
 
         $userFetched = User::find($insertedId);
 
-        $this->assertEquals(1, $userFetched->PrivilegeID);
         $this->assertEquals(NULL, $userFetched->LanguageID);
         $this->assertEquals("Test@email.com", $userFetched->Email);
         $this->assertEquals("Test", $userFetched->Password);
