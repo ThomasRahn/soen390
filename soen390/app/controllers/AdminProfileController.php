@@ -37,19 +37,21 @@ class AdminProfileController extends \BaseController
                 )
             );
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return $this->alertAction(
                     true,
                     'There is a mistake in your form. Please correct it and try again.',
                     Redirect::action('AdminProfileController@getIndex')->withErrors($validator)->withInput()
                 );
+        }
 
         $user->Email = Input::get('Email');
         $user->Name = Input::get('Name');
         $user->LanguageID = Input::get('LanguageID');
 
-        if (Input::has('Password'))
+        if (Input::has('Password')) {
             $user->Password = Hash::make(Input::get('Password'));
+        }
 
         $success = $user->save();
 
