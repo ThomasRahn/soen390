@@ -20,6 +20,9 @@ Upload Narrative(s)
                 <p class="text-center"><i class="fa fa-spin fa-spinner fa-fw fa-3x"></i></p>
                 <p class="text-center"><span class="lead">{{ trans('admin.narratives.upload.uploading.pleaseWait') }}</span><br><small class="text-muted">{{ trans('admin.narratives.upload.uploading.mayTakeAWhile') }}</small></p>
             </div>
+            <div class="modal-footer">
+                <button type="button" id="cancel-upload-button" class="btn btn-danger"><i class="fa fa-minus-circle fa-fw"></i> Cancel</button>
+            </div>
         </div>
     </div>
 </div>
@@ -79,7 +82,19 @@ Upload Narrative(s)
 <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script>
+    var xhr = null, uploadCancelled = false;
+
     $(document).ready(function() {
+
+        $("#cancel-upload-button").click(function(e){
+            e.preventDefault();
+
+            uploadCancelled = true;
+
+            xhr.abort();
+
+            $("#uploadProgressModal").modal("hide");
+        });
 
         $(".n-upload-form").submit(function(e) {
             e.preventDefault();
@@ -92,7 +107,7 @@ Upload Narrative(s)
 
             var formData = new FormData(form[0]);
 
-            $.ajax({
+            xhr = $.ajax({
                 type: "POST",
                 url: "/api/narrative",
                 data: formData,
@@ -110,6 +125,11 @@ Upload Narrative(s)
                 $("#uploadProgressModal").modal("hide");
                 $("#uploadCompletedModal").modal("show");
             }).fail(function(xhr, status, error) {
+                if (uploadCancelled === true) {
+                    uploadCancelled = false;
+                    return;
+                }
+
                 $("#uploadCompletedModal .modal-body").html(
                     "<p class=\"text-center text-danger\"><i class=\"fa fa-thumbs-o-down fa-fw fa-3x\"></i></p>" +
                     "<p class=\"text-center\"><span class=\"lead\">{{ trans('admin.narratives.upload.uploaded.failed') }}</span><br><small>{{ trans('admin.narratives.upload.uploaded.failedSorry') }}</small></p>" +
