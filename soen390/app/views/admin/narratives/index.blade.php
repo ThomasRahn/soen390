@@ -26,6 +26,8 @@ Narratives
         text-align: center;
     }
     .table tr {
+                transition: background-color 0.2s linear;
+           -moz-transition: background-color 0.2s linear;
         -webkit-transition: background-color 0.2s linear;
     }
     td.category,
@@ -37,8 +39,8 @@ Narratives
 @stop
 
 @section('content')
-<div class="alert alert-info alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" arai-hidden="true">&times;</button>
+<div class="alert alert-info fade in">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <p class="lead">{{ trans('admin.narratives.tips.tip') }}</p>
     <p><small>{{ trans('admin.narratives.tips.updateNarrative') }}</small></p>
 </div>
