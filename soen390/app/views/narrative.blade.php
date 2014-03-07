@@ -266,10 +266,6 @@ function expressOpinion(id, element){
                     </li>
                 </ul>
 
-                <div class="nav navbar-text" style="width:110px;">
-                    <i id="spinner" class="fa fa-spinner fa-spin" style="display:none"></i>
-                    <span class="jp-title">Play something.</span>
-                </div>
                 
                 <div class="nav navbar-text" style="width:20px;">
                     <span id="jp-current"></span>
@@ -293,7 +289,7 @@ function expressOpinion(id, element){
                         </form>
                     </div>
                     <div class="pull-right">
-                        <button type="button" class="btn btn-default report" id="report" onclick="" disabled="disabled" data-toggle="modal" data-target="#report-narrative" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-exclamation fa-fw"></i></button>
+                        <button type="button" class="btn btn-default report" id="report" onclick="" disabled="disabled" style="background-color:red;" data-toggle="modal" data-target="#report-narrative" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-flag fa-fw"></i></button>
                     </div>
                 </div>
 
