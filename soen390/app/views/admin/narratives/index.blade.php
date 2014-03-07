@@ -55,6 +55,7 @@ Narratives
 @section('scripts')
 <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/tablesorter/2.13.3/js/jquery.tablesorter.min.js"></script>
 
 <script>
     var editingRow = null;
@@ -124,7 +125,8 @@ Narratives
             dataType: "json"
         });
     }
-    function playNarrative(id){//
+
+    function playNarrative(id) {
         var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
             left = (screen.width / 2) - (popupWidth / 2),
@@ -132,7 +134,8 @@ Narratives
 
         window.open('/narrative/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
-    function remove_narrative(id){//
+
+    function remove_narrative(id) {
         if(confirm("Are you sure you want to remove the entire narrative?")){
             $.ajax({//
                 type:'DELETE',
@@ -143,7 +146,8 @@ Narratives
             });
         }
     }
-    function openFlagWindow(id){//
+
+    function openFlagWindow(id) {
       var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
             left = (screen.width / 2) - (popupWidth / 2),
@@ -151,6 +155,7 @@ Narratives
 
         window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
+
     $(document).ready(function () {
 
         // Fetch the narratives from the API and display them.
