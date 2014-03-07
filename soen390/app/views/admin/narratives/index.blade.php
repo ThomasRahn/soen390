@@ -8,12 +8,30 @@ Narratives
 <style>
     th {
         font-weight: 400;
+        cursor: pointer;
+    }
+    .tablesorter-header.tablesorter-headerAsc {
+        background-image: url('//cdn.jsdelivr.net/tablesorter/2.13.3/css/images/black-asc.gif');
+        background-position: left center;
+        background-repeat: no-repeat;
+        font-style: italic;
+    }
+    .tablesorter-header.tablesorter-headerDesc {
+        background-image: url('//cdn.jsdelivr.net/tablesorter/2.13.3/css/images/black-desc.gif');
+        background-position: left center;
+        background-repeat: no-repeat;
+        font-style: italic;
     }
     .table-spinner td {
         text-align: center;
     }
     .table tr {
         -webkit-transition: background-color 0.2s linear;
+    }
+    td.category,
+    td.published,
+    td.flags {
+        cursor: pointer;
     }
 </style>
 @stop
@@ -25,7 +43,7 @@ Narratives
     <p><small>{{ trans('admin.narratives.tips.updateNarrative') }}</small></p>
 </div>
 
-<table class="table narrative-table">
+<table class="table narrative-table tablesorter">
     <thead>
         <tr>
             <th>#</th>
@@ -192,6 +210,8 @@ Narratives
                 }).appendTo(".narrative-table");
 
                 $(".row-count").html(data['return'].length);
+
+                $(".narrative-table").tablesorter();
             }
         );
 
