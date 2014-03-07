@@ -39,7 +39,7 @@ Narratives
 @stop
 
 @section('content')
-<div class="alert alert-info fade in">
+<div class="alert alert-info alert-dismissable fade in">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <p class="lead">{{ trans('admin.narratives.tips.tip') }}</p>
     <p><small>{{ trans('admin.narratives.tips.updateNarrative') }}</small></p>
@@ -176,6 +176,15 @@ Narratives
         window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
 
+    $.tablesorter.addParser({
+        id:     'publishedSort',
+        is:     function(s) { return false; },
+        format: function(s, table, cell, cellIndex) {
+                    return $(cell).attr("data-published");
+                },
+        type:   'text'
+    });
+
     $(document).ready(function () {
 
         // Fetch the narratives from the API and display them.
@@ -213,7 +222,11 @@ Narratives
 
                 $(".row-count").html(data['return'].length);
 
-                $(".narrative-table").tablesorter();
+                $(".narrative-table").tablesorter({
+                    headers: {
+                        6: { sorter: "publishedSort" }
+                    }
+                });
             }
         );
 
