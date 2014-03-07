@@ -70,7 +70,7 @@ Upload Narrative(s)
 
             <div class="form-group">
                 <div class="col-sm-9 col-sm-offset-3">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-upload"></i> {{ trans('admin.narratives.upload.submit') }}</button>
+                    <button type="submit" class="btn btn-default">{{ trans('admin.narratives.upload.submit') }}</button>
                 </div>
             </div>
         {{ Form::close() }}
