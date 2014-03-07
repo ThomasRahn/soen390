@@ -35,7 +35,7 @@ return array(
 
             'tips' => array(
                     'tip' => 'Tip!',
-                    'updateNarrative' => 'You can toggle the publication status of each narrative by clicking on the <i class="fa fa-check-square-o"></i> and <i class="fa fa-square-o"></i>-icon. The Category can be changed by clicking on the current label.',
+                    'updateNarrative' => '<ul><li>You can toggle the publication status of each narrative by clicking on the <i class="fa fa-check-square-o"></i> and <i class="fa fa-square-o"></i>-icon.</li><li>The Category can be changed by clicking on the current label.</li><li>Each column can be sorted by clicking on their respective headers.</li>',
                 ),
 
             'update' => array(
@@ -48,7 +48,7 @@ return array(
                             'category' => 'Select the category that will be applied to all narratives found in the archive. This can be changed individually after.',
                             'publish' => 'Would you like the uploaded narratives to be published and made available on the site immediately? You can publish/unpublish each narrative individually later.',
                         ),
-                    'submit' => 'Upload Narrative(s)',
+                    'submit' => 'Upload Archive',
                     'close' => 'Close',
                     'uploading' => array(
                             'pleaseWait' => 'Uploading, please wait...',
