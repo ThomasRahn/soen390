@@ -102,7 +102,7 @@ class ApiNarrativeController extends \BaseController {
 		$file->move(Config::get('media.paths.uploads'), $hashedFullName);
 
 		// Determine the destination of where the archive has been moved to.
-		$destinationPath = Config::get('media.paths.uploads') . '/' . $hashedFullName;
+		$destinationPath = Config::get('media.paths.uploads') . DIRECTORY_SEPARATOR . $hashedFullName;
 
 		// Process the archive
 		try {
