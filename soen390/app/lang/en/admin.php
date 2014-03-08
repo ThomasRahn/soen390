@@ -78,6 +78,12 @@ return array(
                     'label'       => 'Enable maintenance mode?',
                     'help'        => 'The administrative interface will always be available.',
                 ),
+
+            'supportEmail' => array(
+                    'description' => 'This value will determine the recipient address for the support email link on the client site.',
+                    'legend'      => 'Support Email',
+                    'label'       => 'Email Address',
+                ),
         ),
 
     'profile' => array(
