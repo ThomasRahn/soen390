@@ -4,17 +4,22 @@
  * @author  Alan Ly <me@alanly.ca>
  * @package Controller
  */
-class ApiNarrativeController extends \BaseController {
+class ApiNarrativeController extends \BaseController
+{
+
+	protected $narrative;
 
 	/**
 	 * @codeCoverageIgnore
 	 */
-	public function __construct()
+	public function __construct(Narrative $narrative)
 	{
 		// Ensure that user is authenticated for all write/update routes.
 		$this->beforeFilter('auth.api', array(
 			'except' => array('index', 'show'))
 		);
+
+		$this->narrative = $narrative;
 	}
 
 	/**
@@ -106,7 +111,7 @@ class ApiNarrativeController extends \BaseController {
 
 		// Process the archive
 		try {
-			Narrative::addArchive(
+			$this->narrative->addArchive(
 				$hashedName,
 				$destinationPath,
 				Input::get('category'),
@@ -138,7 +143,7 @@ class ApiNarrativeController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$narrative = Narrative::find($id);
+		$narrative = $this->narrative->find($id);
 
 		if ($narrative == null)
 			return Response::json(array(
