@@ -2,30 +2,7 @@
 
 class CategoryTest extends TestCase
 {
-    
-    /**
-     * Test the API's index and ensures that response is valid JSON.
-     */
-    public function testIndex()
-    {
-        /*$response = $this->call('GET', 'api/topic');
 
-        $this->assertResponseOk();
-
-        json_decode($response->getContent());
-
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
-    }
-    /**
-     * Ensure Categories get fetched.
-     */
-    public function testTopicRetrieval()
-    {
-        /*$narratives = Narrative::all();
-
-        $this->assertNotEmpty($narratives);*/
-
-    }
     /**
      * Ensure Category gets created.
      * @covers Category::save
@@ -51,8 +28,8 @@ class CategoryTest extends TestCase
         $categoryFetched = Category::find($insertedId);
 
         $this->assertNull($categoryFetched);
-
     }
+
    /**
      * Ensure Category gets created.
      * @covers Category::narrative
@@ -83,9 +60,6 @@ class CategoryTest extends TestCase
 
         $narratives = Category::find(1)->narrative();
         $this->assertTrue($narratives->count() > 0);
-
-        
-
     }
 
 }
