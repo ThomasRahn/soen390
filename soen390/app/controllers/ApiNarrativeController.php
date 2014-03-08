@@ -104,7 +104,14 @@ class ApiNarrativeController extends \BaseController
 		$hashedName     = hash('sha256', Session::getId() . $originalName . time());
 		$hashedFullName = $hashedName . '.' . $file->getClientOriginalExtension();
 
-		$file->move(Config::get('media.paths.uploads'), $hashedFullName);
+		if (App::environment() === 'testing') {
+			File::copy(
+				$file->getRealPath(),
+				Config::get('media.paths.uploads') . DIRECTORY_SEPARATOR . $hashedFullName
+			);
+		} else {
+			$file->move(Config::get('media.paths.uploads'), $hashedFullName);
+		}
 
 		// Determine the destination of where the archive has been moved to.
 		$destinationPath = Config::get('media.paths.uploads') . DIRECTORY_SEPARATOR . $hashedFullName;
