@@ -3,65 +3,21 @@
 class ApiNarrativeControllerTest extends TestCase
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->mock = Mockery::mock('Eloquent', 'Narrative');
+    }
+
     /**
      * Clean up after the test run.
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         Mockery::close();
-
-        // Delete each processed narrative directory.
-        foreach (Narrative::all() as $n) {
-            $path = Config::get('media.paths.processed')
-                    . DIRECTORY_SEPARATOR
-                    . $n->NarrativeID;
-
-            File::deleteDirectory($path);
-        }
-
-        // Delete each extracted directory.
-
-        $extractedDirectories = File::directories(
-                Config::get('media.paths.extracted')
-            );
-
-        foreach ($extractedDirectories as $path)
-            File::deleteDirectory($path);
-    }
-
-    /**
-     * Adds a single narrative to the database.
-     */
-    protected function addNarrativeToDatabase($published = true)
-    {
-        // This should refer to the narrative bundle for unit testing.
-        $narrativeBundle = Config::get('media.paths.uploads')
-            . DIRECTORY_SEPARATOR
-            . 'unit_testing_narrative_bundle.zip';
-
-        $this->assertTrue(File::exists($narrativeBundle), 'The narrative bundle for unit testing is missing.');
-
-        // Seed the required tables first.
-        $this->seed('CategoryTableSeeder');
-        $this->seed('TopicTableSeeder');
-        $this->seed('LanguageTableSeeder');
-
-        $name = time();
-
-        // We need to mock Sonus
-        $sonus = Mockery::mock('Rafasamp\Sonus\Sonus');
-        $sonus->shouldReceive('getMediaInfo')->andReturn(array(
-                'format' => array(
-                    'duration' => '00:00:10.500000',
-                ),
-            ));
-
-        Narrative::addArchive(
-                $name,
-                $narrativeBundle,
-                Category::first()->CategoryID,
-                $published
-            );
     }
 
     /**
