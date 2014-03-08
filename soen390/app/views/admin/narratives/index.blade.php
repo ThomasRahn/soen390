@@ -8,24 +8,44 @@ Narratives
 <style>
     th {
         font-weight: 400;
+        cursor: pointer;
+    }
+    .tablesorter-header.tablesorter-headerAsc {
+        background-image: url('//cdn.jsdelivr.net/tablesorter/2.13.3/css/images/black-asc.gif');
+        background-position: left center;
+        background-repeat: no-repeat;
+        font-style: italic;
+    }
+    .tablesorter-header.tablesorter-headerDesc {
+        background-image: url('//cdn.jsdelivr.net/tablesorter/2.13.3/css/images/black-desc.gif');
+        background-position: left center;
+        background-repeat: no-repeat;
+        font-style: italic;
     }
     .table-spinner td {
         text-align: center;
     }
     .table tr {
+                transition: background-color 0.2s linear;
+           -moz-transition: background-color 0.2s linear;
         -webkit-transition: background-color 0.2s linear;
+    }
+    td.category,
+    td.published,
+    td.flags {
+        cursor: pointer;
     }
 </style>
 @stop
 
 @section('content')
-<div class="alert alert-info alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" arai-hidden="true">&times;</button>
+<div class="alert alert-info alert-dismissable fade in">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <p class="lead">{{ trans('admin.narratives.tips.tip') }}</p>
     <p><small>{{ trans('admin.narratives.tips.updateNarrative') }}</small></p>
 </div>
 
-<table class="table narrative-table">
+<table class="table narrative-table tablesorter">
     <thead>
         <tr>
             <th>#</th>
@@ -55,6 +75,7 @@ Narratives
 @section('scripts')
 <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/tablesorter/2.13.3/js/jquery.tablesorter.min.js"></script>
 
 <script>
     var editingRow = null;
@@ -124,7 +145,8 @@ Narratives
             dataType: "json"
         });
     }
-    function playNarrative(id){//
+
+    function playNarrative(id) {
         var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
             left = (screen.width / 2) - (popupWidth / 2),
@@ -132,7 +154,8 @@ Narratives
 
         window.open('/narrative/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
-    function remove_narrative(id){//
+
+    function remove_narrative(id) {
         if(confirm("Are you sure you want to remove the entire narrative?")){
             $.ajax({//
                 type:'DELETE',
@@ -143,7 +166,8 @@ Narratives
             });
         }
     }
-    function openFlagWindow(id){//
+
+    function openFlagWindow(id) {
       var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
             left = (screen.width / 2) - (popupWidth / 2),
@@ -151,6 +175,16 @@ Narratives
 
         window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
+
+    $.tablesorter.addParser({
+        id:     'publishedSort',
+        is:     function(s) { return false; },
+        format: function(s, table, cell, cellIndex) {
+                    return $(cell).attr("data-published");
+                },
+        type:   'text'
+    });
+
     $(document).ready(function () {
 
         // Fetch the narratives from the API and display them.
@@ -187,6 +221,12 @@ Narratives
                 }).appendTo(".narrative-table");
 
                 $(".row-count").html(data['return'].length);
+
+                $(".narrative-table").tablesorter({
+                    headers: {
+                        6: { sorter: "publishedSort" }
+                    }
+                });
             }
         );
 
