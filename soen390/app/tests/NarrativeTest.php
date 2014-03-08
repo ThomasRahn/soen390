@@ -31,7 +31,8 @@ class NarrativeTest extends TestCase
         // waiting for things to transcode.
         Queue::shouldReceive('push')->times(8)->andReturn(true);
 
-        (new Narrative)->addArchive(
+        $narrative = new Narrative;
+        $narrative->addArchive(
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,
@@ -82,7 +83,8 @@ class NarrativeTest extends TestCase
         // waiting for things to transcode.
         Queue::shouldReceive('push')->times(8)->andReturn(true);
 
-        (new Narrative)->addArchive(
+        $narrative = new Narrative;
+        $narrative->addArchive(
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,
@@ -130,7 +132,8 @@ class NarrativeTest extends TestCase
         // waiting for things to transcode.
         Queue::shouldReceive('push')->times(8)->andReturn(true);
 
-        (new Narrative)->addArchive(
+        $narrative = new Narrative;
+        $narrative->addArchive(
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,

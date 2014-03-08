@@ -68,7 +68,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         App::instance('Sonus', $sonus);
 
-        (new Narrative)->addArchive(
+        $narrative = new Narrative;
+        $narrative->addArchive(
                 $name,
                 $this->narrativeArchivePath,
                 Category::first()->CategoryID,
