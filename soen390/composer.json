@@ -13,7 +13,8 @@
 		"phploc/phploc": "*",
 		"phpunit/phpunit": "*",
 		"satooshi/php-coveralls": "*",
-		"mockery/mockery": "dev-master@dev"
+		"mockery/mockery": "dev-master@dev",
+		"squizlabs/php_codesniffer": "1.*"
 	},
 	"autoload": {
 		"classmap": [
