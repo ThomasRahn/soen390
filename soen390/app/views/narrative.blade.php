@@ -97,16 +97,20 @@ function printObject(o) {
                 myPlaylist.play(0);
                 myPlaylist.pause();
                 //show upvote, downvote     
-                $(".option-bar").attr("title","");
+
+
+                $(".option-bar").tooltip('hide').attr('data-original-title', "").tooltip('fixTitle');
                 $(".option-bar").css("cursor","");
                 $("#agree").removeAttr("disabled");
-                $("#agree").attr("title","Agree");
+
+
+                $("#agree").tooltip('hide').attr('data-original-title', "Agree").tooltip('fixTitle');
 
                 $("#disagree").removeAttr("disabled");
-                $("#disagree").attr("title","Disagree");
+                $("#disagree").tooltip('hide').attr('data-original-title', "Disagree").tooltip('fixTitle');
 
                 $("#report").removeAttr("disabled");
-                $("#report").attr("title","Report this narrative");
+                $("#report").tooltip('hide').attr('data-original-title', "Report this narrative").tooltip('fixTitle');
             }
         },
         pause: function(event) {
@@ -262,10 +266,6 @@ function expressOpinion(id, element){
                     </li>
                 </ul>
 
-                <div class="nav navbar-text" style="width:110px;">
-                    <i id="spinner" class="fa fa-spinner fa-spin" style="display:none"></i>
-                    <span class="jp-title">Play something.</span>
-                </div>
                 
                 <div class="nav navbar-text" style="width:20px;">
                     <span id="jp-current"></span>
@@ -283,13 +283,13 @@ function expressOpinion(id, element){
                         <form id='narrative-stance'>    
                             <input type="hidden" name="NarrativeID" id="NarrativeID" value="{{ $narrative->NarrativeID}}"/>
                             <input type="hidden" name="_token" id="crsf_token" value="<?php echo csrf_token(); ?>">
-                            <button type="button" id="agree" class="btn btn-default" disabled="disabled" onclick="expressOpinion(1, $(this));" data-toggle="tooltip" data-placement="bottom" title=""><i class="fa fa-thumbs-up fa-fw"></i></button>
-                            <button type="button" id="disagree" class="btn btn-default" disabled="disabled" onclick="expressOpinion(2, $(this));" data-toggle="tooltip" data-placement="bottom" title=""><i class="fa fa-thumbs-down fa-fw"></i></button>
+                            <button type="button" id="agree" class="btn btn-default" disabled="disabled" onclick="expressOpinion(1, $(this));" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-thumbs-up fa-fw"></i></button>
+                            <button type="button" id="disagree" class="btn btn-default" disabled="disabled" onclick="expressOpinion(2, $(this));" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-thumbs-down fa-fw"></i></button>
                             <!--<button type="button" class="btn btn-default" onclick="expressOpinion(3);"><i class="fa fa-hand-o-right fa-fw"></i></button>-->
                         </form>
                     </div>
                     <div class="pull-right">
-                        <button type="button" class="btn btn-default report" id="report" onclick="" disabled="disabled" data-toggle="modal" data-target="#report-narrative" data-toggle="tooltip" data-placement="bottom" title=""><i class="fa fa-exclamation fa-fw"></i></button>
+                        <button type="button" class="btn btn-default report" id="report" onclick="" disabled="disabled" style="background-color:red;" data-toggle="modal" data-target="#report-narrative" data-toggle="tooltip" data-placement="top" title=""><i class="fa fa-flag fa-fw"></i></button>
                     </div>
                 </div>
 
