@@ -291,4 +291,139 @@ class ApiNarrativeControllerTest extends TestCase
         $this->assertResponseStatus(400);
     }
 
+    /**
+     * Test the update action when attempts to save changes to a narrative fails.
+     *
+     * @covers ApiNarrativeController::update
+     */
+    public function testUpdateWithNarrativeSaveFailure()
+    {
+        $validator = Mockery::mock('Illuminate\Validation\Factory');
+        $validator->shouldReceive('make')->once()->andReturn($validator);
+        $validator->shouldReceive('fails')->once()->andReturn(false);
+        Validator::swap($validator);
+
+        $this->mock->shouldReceive('find')->once()->andReturn($this->mock);
+        $this->mock->shouldReceive('getAttribute')->andReturn(null);
+        $this->mock->shouldReceive('setAttribute')->andReturn(null);
+        $this->mock->shouldReceive('save')->once()->andReturn(false);
+
+        App::instance('Narrative', $this->mock);
+
+        $response = $this->action('PUT', 'ApiNarrativeController@update', array('id' => 0));
+
+        $this->assertResponseStatus(500);
+
+        $jsonData = json_decode($response->getContent());
+
+        $this->assertFalse($jsonData->success);
+    }
+
+    /**
+     * Test the store action when validation fails.
+     *
+     * @covers ApiNarrativeController::store
+     */
+    public function testStoreWithFailedValidation()
+    {
+        $validator = Mockery::mock('Illuminate\Validation\Factory');
+
+        $validator->shouldReceive('make')->once()->andReturn($validator);
+        $validator->shouldReceive('fails')->once()->andReturn(true);
+        $validator->shouldReceive('errors')->once()->andReturn(new Illuminate\Support\MessageBag);
+
+        Validator::swap($validator);
+
+        $response = $this->action(
+            'POST',
+            'ApiNarrativeController@store'
+        );
+
+        $this->assertResponseStatus(400);
+
+        $jsonData = json_decode($response->getContent());
+
+        $this->assertFalse($jsonData->success);
+    }
+
+    /**
+     * Test the store action with an appropriate narrative bundle.
+     *
+     * @covers ApiNarrativeController::store
+     */
+    public function testStoreWithNarrativeArchive()
+    {
+        $this->seed('CategoryTableSeeder');
+
+        $this->mock->shouldReceive('addArchive')->once()->andReturn(true);
+        App::instance('Narrative', $this->mock);
+
+        $file = new Symfony\Component\HttpFoundation\File\UploadedFile(
+            $this->narrativeArchivePath,
+            'unit_testing_narrative_bundle',
+            'application/zip',
+            null,
+            null,
+            true
+        );
+
+        $response = $this->action(
+            'POST',
+            'ApiNarrativeController@store',
+            array(),
+            array(
+                'category' => Category::first()->CategoryID,
+            ),
+            array(
+                'archive' => $file,
+            )
+        );
+
+        $this->assertResponseOk();
+
+        $jsonData = json_decode($response->getContent());
+
+        $this->assertTrue($jsonData->success);
+    }
+
+    /**
+     * Test the store action when a narrative upload fails.
+     *
+     * @covers ApiNarrativeController::store
+     */
+    public function testStoreWithNarrativeProcessFail()
+    {
+        $this->seed('CategoryTableSeeder');
+
+        $this->mock->shouldReceive('addArchive')->once()->andThrow(new RuntimeException);
+        App::instance('Narrative', $this->mock);
+
+        $file = new Symfony\Component\HttpFoundation\File\UploadedFile(
+            $this->narrativeArchivePath,
+            'unit_testing_narrative_bundle',
+            'application/zip',
+            null,
+            null,
+            true
+        );
+
+        $response = $this->action(
+            'POST',
+            'ApiNarrativeController@store',
+            array(),
+            array(
+                'category' => Category::first()->CategoryID,
+            ),
+            array(
+                'archive' => $file,
+            )
+        );
+
+        $this->assertResponseStatus(500);
+
+        $jsonData = json_decode($response->getContent());
+
+        $this->assertFalse($jsonData->success);
+    }
+
 }
