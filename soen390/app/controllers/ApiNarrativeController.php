@@ -106,7 +106,12 @@ class ApiNarrativeController extends \BaseController {
 
 		// Process the archive
 		try {
-			Narrative::addArchive($hashedName, $destinationPath, Input::get('category'), (Input::get('publish') == 'publish'));
+			Narrative::addArchive(
+				$hashedName,
+				$destinationPath,
+				Input::get('category'),
+				Input::get('publish') == 'publish'
+			);
 		} catch (Exception $e) {
 			$errorArray = array($e->getMessage());
 
