@@ -14,7 +14,7 @@ class Comment extends Eloquent
 
     public function narrative()
     {
-        return $this->belongsTo("Narrative", "NarrativeID","NarrativeID");
+        return $this->belongsTo("Narrative", "NarrativeID", "NarrativeID");
     }
 
 }
