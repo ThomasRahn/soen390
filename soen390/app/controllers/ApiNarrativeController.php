@@ -82,21 +82,21 @@ class ApiNarrativeController extends \BaseController {
 	public function store()
 	{
 		$validator = Validator::make(Input::all(), array(
-				'archive' => 'required|mimes:zip',
-				'category' => 'required|exists:Category,CategoryID'
-			));
+			'archive'  => 'required|mimes:zip',
+			'category' => 'required|exists:Category,CategoryID',
+		));
 
 		if ($validator->fails())
 			return Response::json(array(
-					'success' => false,
-					'error' => $validator->errors()->toArray()
-				), 400);
+				'success' => false,
+				'error'   => $validator->errors()->toArray(),
+			), 400);
 
 		$file = Input::file('archive');
 
 		// Figure out a uniquely identifying name for this archive.
-		$originalName = $file->getClientOriginalName();
-		$hashedName = hash('sha256', Session::getId() . $originalName . time());
+		$originalName   = $file->getClientOriginalName();
+		$hashedName     = hash('sha256', Session::getId() . $originalName . time());
 		$hashedFullName = $hashedName . '.' . $file->getClientOriginalExtension();
 
 		$file->move(Config::get('media.paths.uploads'), $hashedFullName);
@@ -115,13 +115,13 @@ class ApiNarrativeController extends \BaseController {
 
 			return Response::json(array(
 				'success' => false,
-				'error' => $errorArray,
+				'error'   => $errorArray,
 			), 500);
 		}
 
 		return Response::json(array(
 			'success' => true,
-			'return' => 'Upload is queued for processing.',
+			'return'  => 'Upload is queued for processing.',
 		));
 	}
 
