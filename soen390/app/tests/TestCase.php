@@ -38,24 +38,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
         parent::tearDown();
 
-        // Delete each processed narrative directory.
+        // Empty out the media extracted and processed directories.
+        $directoriesForDeletion = array();
+        $directoriesForDeletion += File::directories(Config::get('media.paths.processed'));
+        $directoriesForDeletion += File::directories(Config::get('media.paths.extracted'));
 
-        foreach (Narrative::all() as $n) {
-            $path = Config::get('media.paths.processed')
-                    . DIRECTORY_SEPARATOR
-                    . $n->NarrativeID;
-
-            File::deleteDirectory($path);
-        }
-
-        // Delete each extracted directory.
-
-        $extractedDirectories = File::directories(
-                Config::get('media.paths.extracted')
-            );
-
-        foreach ($extractedDirectories as $path)
-            File::deleteDirectory($path);
+        foreach ($directoriesForDeletion as $d)
+        	File::deleteDirectory($d);
     }
 
     protected function addNarrativeToDatabase($published = true)
