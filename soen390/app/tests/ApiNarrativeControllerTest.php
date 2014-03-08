@@ -3,65 +3,21 @@
 class ApiNarrativeControllerTest extends TestCase
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->mock = Mockery::mock('Eloquent', 'Narrative');
+    }
+
     /**
      * Clean up after the test run.
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         Mockery::close();
-
-        // Delete each processed narrative directory.
-        foreach (Narrative::all() as $n) {
-            $path = Config::get('media.paths.processed')
-                    . DIRECTORY_SEPARATOR
-                    . $n->NarrativeID;
-
-            File::deleteDirectory($path);
-        }
-
-        // Delete each extracted directory.
-
-        $extractedDirectories = File::directories(
-                Config::get('media.paths.extracted')
-            );
-
-        foreach ($extractedDirectories as $path)
-            File::deleteDirectory($path);
-    }
-
-    /**
-     * Adds a single narrative to the database.
-     */
-    protected function addNarrativeToDatabase($published = true)
-    {
-        // This should refer to the narrative bundle for unit testing.
-        $narrativeBundle = Config::get('media.paths.uploads')
-            . DIRECTORY_SEPARATOR
-            . 'unit_testing_narrative_bundle.zip';
-
-        $this->assertTrue(File::exists($narrativeBundle), 'The narrative bundle for unit testing is missing.');
-
-        // Seed the required tables first.
-        $this->seed('CategoryTableSeeder');
-        $this->seed('TopicTableSeeder');
-        $this->seed('LanguageTableSeeder');
-
-        $name = time();
-
-        // We need to mock Sonus
-        $sonus = Mockery::mock('Rafasamp\Sonus\Sonus');
-        $sonus->shouldReceive('getMediaInfo')->andReturn(array(
-                'format' => array(
-                    'duration' => '00:00:10.500000',
-                ),
-            ));
-
-        Narrative::addArchive(
-                $name,
-                $narrativeBundle,
-                Category::first()->CategoryID,
-                $published
-            );
     }
 
     /**
@@ -333,6 +289,141 @@ class ApiNarrativeControllerTest extends TestCase
         $response = $this->action('PUT', 'ApiNarrativeController@update', array('id' => $narrative->NarrativeID));
 
         $this->assertResponseStatus(400);
+    }
+
+    /**
+     * Test the update action when attempts to save changes to a narrative fails.
+     *
+     * @covers ApiNarrativeController::update
+     */
+    public function testUpdateWithNarrativeSaveFailure()
+    {
+        $validator = Mockery::mock('Illuminate\Validation\Factory');
+        $validator->shouldReceive('make')->once()->andReturn($validator);
+        $validator->shouldReceive('fails')->once()->andReturn(false);
+        Validator::swap($validator);
+
+        $this->mock->shouldReceive('find')->once()->andReturn($this->mock);
+        $this->mock->shouldReceive('getAttribute')->andReturn(null);
+        $this->mock->shouldReceive('setAttribute')->andReturn(null);
+        $this->mock->shouldReceive('save')->once()->andReturn(false);
+
+        App::instance('Narrative', $this->mock);
+
+        $response = $this->action('PUT', 'ApiNarrativeController@update', array('id' => 0));
+
+        $this->assertResponseStatus(500);
+
+        $jsonData = json_decode($response->getContent());
+
+        $this->assertFalse($jsonData->success);
+    }
+
+    /**
+     * Test the store action when validation fails.
+     *
+     * @covers ApiNarrativeController::store
+     */
+    public function testStoreWithFailedValidation()
+    {
+        $validator = Mockery::mock('Illuminate\Validation\Factory');
+
+        $validator->shouldReceive('make')->once()->andReturn($validator);
+        $validator->shouldReceive('fails')->once()->andReturn(true);
+        $validator->shouldReceive('errors')->once()->andReturn(new Illuminate\Support\MessageBag);
+
+        Validator::swap($validator);
+
+        $response = $this->action(
+            'POST',
+            'ApiNarrativeController@store'
+        );
+
+        $this->assertResponseStatus(400);
+
+        $jsonData = json_decode($response->getContent());
+
+        $this->assertFalse($jsonData->success);
+    }
+
+    /**
+     * Test the store action with an appropriate narrative bundle.
+     *
+     * @covers ApiNarrativeController::store
+     */
+    public function testStoreWithNarrativeArchive()
+    {
+        $this->seed('CategoryTableSeeder');
+
+        $this->mock->shouldReceive('addArchive')->once()->andReturn(true);
+        App::instance('Narrative', $this->mock);
+
+        $file = new Symfony\Component\HttpFoundation\File\UploadedFile(
+            $this->narrativeArchivePath,
+            'unit_testing_narrative_bundle',
+            'application/zip',
+            null,
+            null,
+            true
+        );
+
+        $response = $this->action(
+            'POST',
+            'ApiNarrativeController@store',
+            array(),
+            array(
+                'category' => Category::first()->CategoryID,
+            ),
+            array(
+                'archive' => $file,
+            )
+        );
+
+        $this->assertResponseOk();
+
+        $jsonData = json_decode($response->getContent());
+
+        $this->assertTrue($jsonData->success);
+    }
+
+    /**
+     * Test the store action when a narrative upload fails.
+     *
+     * @covers ApiNarrativeController::store
+     */
+    public function testStoreWithNarrativeProcessFail()
+    {
+        $this->seed('CategoryTableSeeder');
+
+        $this->mock->shouldReceive('addArchive')->once()->andThrow(new RuntimeException);
+        App::instance('Narrative', $this->mock);
+
+        $file = new Symfony\Component\HttpFoundation\File\UploadedFile(
+            $this->narrativeArchivePath,
+            'unit_testing_narrative_bundle',
+            'application/zip',
+            null,
+            null,
+            true
+        );
+
+        $response = $this->action(
+            'POST',
+            'ApiNarrativeController@store',
+            array(),
+            array(
+                'category' => Category::first()->CategoryID,
+            ),
+            array(
+                'archive' => $file,
+            )
+        );
+
+        $this->assertResponseStatus(500);
+
+        $jsonData = json_decode($response->getContent());
+
+        $this->assertFalse($jsonData->success);
     }
 
 }
