@@ -4,21 +4,6 @@ class NarrativeTest extends TestCase
 {
 
     /**
-     * Clean up the `processed` directory.
-     */
-    public function tearDown()
-    {
-        // Delete each processed narrative directory.
-        foreach (Narrative::all() as $n) {
-            $path = Config::get('media.paths.processed')
-                    . DIRECTORY_SEPARATOR
-                    . $n->NarrativeID;
-
-            File::deleteDirectory($path);
-        }
-    }
-
-    /**
      * Test to ensure that the archive is extracted properly.
      *
      * @covers Narrative::addArchive
@@ -46,7 +31,7 @@ class NarrativeTest extends TestCase
         // waiting for things to transcode.
         Queue::shouldReceive('push')->times(8)->andReturn(true);
 
-        Narrative::addArchive(
+        (new Narrative)->addArchive(
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,
@@ -97,7 +82,7 @@ class NarrativeTest extends TestCase
         // waiting for things to transcode.
         Queue::shouldReceive('push')->times(8)->andReturn(true);
 
-        Narrative::addArchive(
+        (new Narrative)->addArchive(
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,
@@ -145,7 +130,7 @@ class NarrativeTest extends TestCase
         // waiting for things to transcode.
         Queue::shouldReceive('push')->times(8)->andReturn(true);
 
-        Narrative::addArchive(
+        (new Narrative)->addArchive(
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,
