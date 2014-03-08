@@ -4,14 +4,6 @@ class NarrativeControllerTest extends TestCase
 {
 
     /**
-     * Clean up after the test run.
-     */
-    public function tearDown()
-    {
-        Mockery::close();
-    }
-
-    /**
      * Attempt to display an non-existant narrative. This should result in a
      * NotFoundHttpException.
      *
