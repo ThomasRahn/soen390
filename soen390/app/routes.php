@@ -88,3 +88,6 @@ Route::group(array('prefix' => 'auth'), function() {
     Route::get('logout', array('uses' => 'AuthController@getLogout', 'as' => 'logout'));
 
 });
+
+// Route for the player interface.
+Route::controller('play/{id}', 'PlayerController');
