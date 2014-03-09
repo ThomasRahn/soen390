@@ -244,7 +244,7 @@ class ApiNarrativeController extends \BaseController
 
 			// Determine an appropriate poster for this track.
 			$tracknumber = intval($a->filename);
-			$posterPath = asset('img/default_narrative.jpg');
+			$posterPath = $imagesArray[0];
 
 			while ($tracknumber > 0) {
 				$poster = $n->media()->images()->where('filename', $tracknumber)->first();
@@ -258,7 +258,7 @@ class ApiNarrativeController extends \BaseController
 			}
 
 			$audioArray[] = array(
-				'title' => $a->id,
+				'title' => $a->filename,
 				'mp3' => $mpeg_link,
 				'oga' => $ogg_link,
 				'poster' => $posterPath,
