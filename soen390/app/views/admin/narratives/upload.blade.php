@@ -9,6 +9,13 @@ Upload Narrative(s)
     .n-upload-form {
         margin-top: 20px;
     }
+    .modal-body {
+        padding-top: 50px;
+    }
+    .progress-bar {
+        font-family: "Roboto Condensed", "Arial Narrow", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 300;
+    }
 </style>
 @stop
 
@@ -17,8 +24,17 @@ Upload Narrative(s)
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <p class="text-center"><i class="fa fa-spin fa-spinner fa-fw fa-3x"></i></p>
-                <p class="text-center"><span class="lead">{{ trans('admin.narratives.upload.uploading.pleaseWait') }}</span><br><small class="text-muted">{{ trans('admin.narratives.upload.uploading.mayTakeAWhile') }}</small></p>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="progress">
+                            <div class="progress-bar upload-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <p class="text-center"><span class="lead">{{ trans('admin.narratives.upload.uploading.pleaseWait') }}</span><br><small class="text-muted">{{ trans('admin.narratives.upload.uploading.mayTakeAWhile') }}</small></p>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" id="cancel-upload-button" class="btn btn-danger"><i class="fa fa-minus-circle fa-fw"></i> Cancel</button>
@@ -84,6 +100,18 @@ Upload Narrative(s)
 <script>
     var xhr = null, uploadCancelled = false;
 
+    function uploadProgressHandler(e) {
+        if (! e.lengthComputable) return;
+
+        var loaded          = e.loaded,
+            total           = e.total,
+            percentComplete = parseInt((loaded / total) * 100),
+            cssWidth        = percentComplete + "%";
+
+        $(".upload-progress-bar").css("width", cssWidth);
+        $(".upload-progress-bar").html(cssWidth);
+    }
+
     $(document).ready(function() {
 
         $("#cancel-upload-button").click(function(e){
@@ -113,7 +141,14 @@ Upload Narrative(s)
                 data: formData,
                 cache: false,
                 processData: false,
-                contentType: false
+                contentType: false,
+                xhr: function() {
+                    myXhr = $.ajaxSettings.xhr();
+
+                    if (myXhr.upload) myXhr.upload.addEventListener('progress', uploadProgressHandler, false);
+
+                    return myXhr;
+                }
             }).done(function(data, status, xhr) {
                 $("#uploadCompletedModal .modal-body").html(
                     "<p class=\"text-center text-success\"><i class=\"fa fa-thumbs-o-up fa-fw fa-3x\"></i></p>" +
