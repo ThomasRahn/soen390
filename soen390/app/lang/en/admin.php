@@ -84,6 +84,10 @@ return array(
                     'legend'      => 'Support Email',
                     'label'       => 'Email Address',
                 ),
+
+            'validator' => array(
+                    'fails' => 'There is a mistake in one of the configuration fields. Please correct it and try to save again.',
+                ),
         ),
 
     'profile' => array(
