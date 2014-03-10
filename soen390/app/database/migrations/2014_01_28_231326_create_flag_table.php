@@ -16,7 +16,7 @@ class CreateFlagTable extends Migration {
 			$table->increments('FlagID');
 			$table->integer('NarrativeID')->nullable();
 			$table->integer('CommentID')->nullable();
-			$table->string('Comment', 200)->nullable();
+			$table->string('Comment')->nullable();
 			$table->timestamp('deleted_at')->nullable();
 		});
 	}
