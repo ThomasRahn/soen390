@@ -30,7 +30,7 @@ Route::group(array('prefix' => 'api'), function() {
     Route::resource('category', 'ApiCategoryController');
 
     // Comment API
-    Route::resource('comments', 'ApiCommentController');
+    Route::controller('comment', 'ApiCommentController');
 });
 
 // Route for content handler
