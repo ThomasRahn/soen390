@@ -1,7 +1,8 @@
 var currentTime = 0,
     totalTime   = 0,
     player      = null,
-    playing     = false;
+    playing     = false,
+    targetTime  = -1;
 
 var currentTrack  = 0,
     trackList     = new Array(),
@@ -151,8 +152,8 @@ function bindPlayerEvents(player) {
                 $(".playback-btn").removeClass("btn-success");
                 $(".playback-btn").addClass("btn-default");
 
-                // Set the progress bar to 100%
-                $(".progress-bar").css("width", "100%");
+                // Set the progress bar to 0%
+                $(".progress-bar").css("width", "");
 
                 // Load the first track again
                 setCurrentTrack(0);
@@ -182,6 +183,31 @@ function bindPlayerEvents(player) {
             $(".playback-btn").addClass("btn-warning");
 
         }
+    });
+
+    // Bind the player "loadstart" event to set the spinner.
+    player.bind("loadstart", function(e) {
+        $(".play-btn i").addClass("fa-spin fa-spinner");
+    });
+
+    // Bind the player "canplay" event; mainly for seeking.
+    player.bind("canplay", function(e) {
+        $(".play-btn i").removeClass("fa-spin fa-spinner");
+
+        // Don't do anything if we're not seeking.
+        if (targetTime < 0) return;
+
+        player.get(0).currentTime = targetTime;
+
+        targetTime = -1;
+
+        updateCurrentProgress();
+
+        player.get(0).play();
+
+        // Reset transition delay in progress bar
+        $(".progress-bar").css("-webkit-transition-duration", "");
+        $(".progress-bar").css("transition-duration", "");
     });
 
 }
@@ -271,24 +297,9 @@ function bindPlayerControlHandlers() {
             break;
         }
 
+        targetTime = parseFloat(trackList[targetTrack].duration) * trackProgress;
+
         setCurrentTrack(targetTrack);
-
-        // We need a delay for the track to load.
-        window.setTimeout(function() {
-            desiredTime = parseFloat(trackList[targetTrack].duration) * trackProgress;
-
-            console.log('Play track ' + currentTrack + ' @ ' + desiredTime);
-
-            player.get(0).currentTime = desiredTime;
-
-            updateCurrentProgress();
-
-            player.get(0).play();
-
-            // Reset transition delay in progress bar
-            $(".progress-bar").css("-webkit-transition-duration", "");
-            $(".progress-bar").css("transition-duration", "");
-        }, 250);
     });
 }
 

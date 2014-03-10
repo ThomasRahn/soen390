@@ -10,7 +10,7 @@
             body {
                 font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
                 font-weight: 400;
-                padding: 10px 40px;
+                padding: 10px;
                 background-image: url("{{ asset('img/exclusive_paper.png') }}");
                 overflow-x: hidden;
             }
@@ -39,6 +39,9 @@
                 font-weight: 300;
                 text-transform: uppercase;
             }
+            legend {
+                font-size: 20px;
+            }
             .brand {
                 font-family: Cinzel, Garamond, "Times New Roman", serif;
                 font-weight: 400;
@@ -46,7 +49,7 @@
                 line-height: 25px;
                 text-transform: uppercase;
                 letter-spacing: 2px;
-                padding-bottom: 10px;
+                padding-bottom: 5px;
                 color: #5e5e5e;
                 -webkit-text-stroke: 0.5px;
                 text-stroke: 0.5px;
@@ -57,7 +60,7 @@
                 padding-bottom: 15px;
             }
             .image-view {
-                height: 480px;
+                height: 450px;
                 background-color: #888;
                 background-image: url("{{ asset('img/default_narrative.jpg') }}");
                 background-position: center center;
@@ -107,6 +110,7 @@
             .controls {
                 text-align: center;
                 margin-top: 25px;
+                margin-bottom: 20px;
             }
             .btn-group {
                 padding-top: 3px;
@@ -142,13 +146,16 @@
                 margin-left: -1px;
                 position: relative;
                 float: left;
-                border-left: 2px solid #b5b5b5;
+                border-left: 1px solid #8c8c8c;
                 z-index: 2;
             }
             .comment-frame {
                 width: 100%;
+                min-height: 340px;
+                bottom: 10px;
                 padding: 0;
-                margin: 20px 0;
+                margin: 15px 0;
+                box-shadow: 0 0 3px 1px #555 inset;
             }
             .vote-btn-group, .tertiary-btn-group {
                 margin-top: -8px;
@@ -157,6 +164,9 @@
             .player-control-btn-group {
                 margin-left: 40px;
                 margin-right: 40px;
+            }
+            .comments-fieldset legend {
+                text-align: right;
             }
         </style>
     </head>
@@ -226,9 +236,9 @@
                 </div>
 
                 <div class="col-sm-6">
-                    {{ Form::open(array('class' => 'form-horizontal')) }}
-                        <fieldset>
-                            <legend>Add a Comment</legend>
+                    {{ Form::open(array('class' => 'form-horizontal comment-form')) }}
+                        <fieldset class="comments-fieldset">
+                            <legend>Discuss This Narrative</legend>
 
                             <div class="form-group">
                                 <label for="name" class="col-xs-1 control-label"><i class="fa fa-fw fa-user"></i></label>
@@ -248,12 +258,13 @@
 
                             <div class="form-group">
                                 <div class="col-xs-11 col-xs-offset-1">
-                                    {{ Form::submit('Post', array('class' => 'btn btn-primary')) }}
-                                    {{ Form::button('Clear', array('type' => 'reset', 'class' => 'btn btn-default')) }}
+                                    {{ Form::submit('Post Comment', array('class' => 'btn btn-primary btn-sm')) }}
+                                    {{ Form::button('Clear', array('type' => 'reset', 'class' => 'btn btn-default btn-sm')) }}
                                 </div>
                             </div>
                         </fieldset>
                     {{ Form::close() }}
+
                     <iframe class="comment-frame" src="{{ $commentFramePath }}" seamless></iframe>
                 </div>
             </div>
@@ -265,13 +276,12 @@
         <script src="{{ asset('js/player.js') }}"></script>
         <script>
             $(document).ready(function() {
-                // Prepare the player with the JSON API path to the
-                // narrative resource.
-
-                preparePlayer("{{ $apiPath }}");
-
                 // Enable tooltips
                 $("div").tooltip();
+
+                // Prepare the player with the JSON API path to the
+                // narrative resource.
+                preparePlayer("{{ $apiPath }}");
             });
         </script>
     </body>
