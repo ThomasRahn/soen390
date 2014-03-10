@@ -156,6 +156,12 @@ function bindPlayerEvents(player) {
 
                 // Load the first track again
                 setCurrentTrack(0);
+
+                // Enable the button groups
+                $(".btn-group").css("opacity", 1);
+                $(".btn-group").tooltip("destroy");
+                $(".btn").removeAttr("disabled");
+
             } else {
                 // Increment the current track
                 setCurrentTrack(currentTrack + 1);
@@ -282,7 +288,7 @@ function bindPlayerControlHandlers() {
             // Reset transition delay in progress bar
             $(".progress-bar").css("-webkit-transition-duration", "");
             $(".progress-bar").css("transition-duration", "");
-        }, 100);
+        }, 250);
     });
 }
 
