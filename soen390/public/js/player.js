@@ -17,6 +17,10 @@ function preparePlayer(jsonApiPath) {
             // Store the tracklist.
             trackList = data.return.audio;
 
+            // Preload the resources.
+            preloadImages(data.return.images);
+            preloadAudio(trackList);
+
             // Tally up the total duration.
             setTotalTime(trackList);
 
@@ -351,5 +355,25 @@ function determineStartPercent(tracks) {
             $("<div />").addClass("track-indicator").css("left", startPercent + "%").appendTo(".track-indicators");
 
         indexTime += parseFloat(track.duration);
+    });
+}
+
+function preloadImages(images) {
+    $.each(images, function(index, link) {
+        new Image().src = link;
+    });
+}
+
+function preloadAudio(audio) {
+    $.each(audio, function(index, obj) {
+        $.ajax({
+            url: obj.mp3,
+            success: function(){}
+        });
+
+        $.ajax({
+            url: obj.oga,
+            success: function(){}
+        });
     });
 }
