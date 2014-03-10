@@ -90,4 +90,4 @@ Route::group(array('prefix' => 'auth'), function() {
 });
 
 // Route for the player interface.
-Route::controller('play/{id}', 'PlayerController');
+Route::controller('player', 'PlayerController');

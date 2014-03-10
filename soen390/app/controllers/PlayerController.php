@@ -6,6 +6,7 @@
  */
 class PlayerController extends \BaseController
 {
+    protected static $restful = true;
     protected $narrative = null;
 
     public function __construct(Narrative $narrative)
@@ -16,7 +17,7 @@ class PlayerController extends \BaseController
     /**
      * @return Response
      */
-    public function getIndex($id)
+    public function getPlay($id)
     {
         $n = $this->narrative->find($id);
 
@@ -24,6 +25,7 @@ class PlayerController extends \BaseController
             App::abort(404, 'Unable to find the requested narrative.');
 
         return View::make('player.popup')
-            ->with('apiPath', action('ApiNarrativeController@show', array('id' => $n->NarrativeID)));
+            ->with('apiPath', action('ApiNarrativeController@show', array('id' => $n->NarrativeID)))
+            ->with('commentFramePath', action('PlayerController@getComments', array('id' => $n->NarrativeID)));
     }
 }
