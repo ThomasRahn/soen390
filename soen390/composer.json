@@ -6,7 +6,8 @@
 	"require": {
 		"laravel/framework": "4.1.*",
 		"rafasamp/sonus": "dev-master",
-		"iron-io/iron_mq": "dev-master"
+		"iron-io/iron_mq": "dev-master",
+		"nesbot/Carbon": "*"
 	},
 	"require-dev": {
 		"pdepend/pdepend": "*",
