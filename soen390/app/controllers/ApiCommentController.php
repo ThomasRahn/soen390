@@ -61,7 +61,7 @@ class ApiCommentController extends \BaseController
             'comment_id'   => $comment->CommentID,
             'narrative_id' => $comment->NarrativeID,
             'parent_id'    => $comment->CommentParentID,
-            'created_at'   => (new Carbon\Carbon($comment->DateCreated))->diffForHumans(),
+            'created_at'   => with(new Carbon\Carbon($comment->DateCreated))->diffForHumans(),
             'deleted_at'   => $comment->deleted_at,
             'name'         => e($comment->Name),
             'agrees'       => $comment->Agrees,
