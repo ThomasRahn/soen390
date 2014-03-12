@@ -35,7 +35,8 @@ function loadComments() {
             );
         });
 
-        $("<ul/>", { html: listItems.join("") }).addClass("media-list").appendTo("body");
+        if(listItems.length > 0)
+            $("<ul/>", { html: listItems.join("") }).addClass("media-list").appendTo("body");
     });
 }
 
