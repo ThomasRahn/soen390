@@ -3,6 +3,12 @@
 class AdminProfileControllerTest extends \TestCase
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->mock = Mockery::mock('Eloquent', 'User');
+    }
+
     public function tearDown()
     {
         parent::tearDown();
@@ -184,6 +190,55 @@ class AdminProfileControllerTest extends \TestCase
                 'email'    => 'admin@user.local',
                 'password' => 'testPassword',
             )));
+    }
+
+    /**
+     * @covers AdminProfileController::postIndex
+     */
+    public function testPostIndexWithModelSaveFailure()
+    {
+        $userPassword = 'testPassword';
+
+        $user = new User(array(
+            'Email' => 'admin@user.local',
+            'Password' => Hash::make($userPassword),
+            'Name' => 'Johnny Testee',
+        ));
+
+        $this->be($user);
+
+        $this->seed('LanguageTableSeeder');
+
+        $language = Language::first();
+
+        $validator = Mockery::mock('Illuminate\Validation\Factory');
+        $validator->shouldReceive('make')->once()->andReturn($validator);
+        $validator->shouldReceive('fails')->once()->andReturn(false);
+        Validator::swap($validator);
+
+        $input = array(
+            'Name'       => 'Johnny Test',
+            'Email'      => 'john@user.local',
+            'LanguageID' => $language->LanguageID, 
+        );
+
+        $this->mock->shouldReceive('getAttribute')->andReturn(null);
+        $this->mock->shouldReceive('setAttribute')->andReturn(null);
+        $this->mock->shouldReceive('save')->once()->andReturn(false);
+
+        App::instance('User', $this->mock);
+
+        Auth::shouldReceive('user')->once()->andReturn($this->mock);
+
+        $response = $this->action(
+                'POST',
+                'AdminProfileController@postIndex',
+                array(),
+                $input
+            );
+
+        $this->assertRedirectedToAction('AdminProfileController@getIndex');
+        $this->assertSessionHas('action.failed', true);
     }
 
 }
