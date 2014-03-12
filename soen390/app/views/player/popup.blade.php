@@ -197,11 +197,11 @@
                         </div>
 
                         <article class="controls">
-                            <div class="btn-group vote-btn-group" data-toggle="tooltip" title="You must view the narrative before you can vote.">
-                                <button type="button" class="btn btn-default agree-btn" disabled="disabled">
+                            <div class="btn-group vote-btn-group" data-toggle="tooltip" title="You may vote after viewing the narrative.">
+                                <button type="button" class="btn btn-default agree-btn" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative.">
                                     <i class="fa fa-thumbs-up fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default disagree-btn" disabled="disabled">
+                                <button type="button" class="btn btn-default disagree-btn" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative.">
                                     <i class="fa fa-thumbs-down fa-fw"></i>
                                 </button>
                             </div>
@@ -218,11 +218,11 @@
                                 </button>
                             </div>
 
-                            <div class="btn-group tertiary-btn-group" data-toggle="tooltip" title="You must view the narrative before you can report or share.">
-                                <button type="button" class="btn btn-default flag-btn" disabled="disabled">
-                                    <i class="fa fa-warning fa-fw"></i>
+                            <div class="btn-group tertiary-btn-group" data-toggle="tooltip" title="You may report and/or share after viewing the narrative.">
+                                <button type="button" class="btn btn-default flag-btn" disabled="disabled" data-toggle="tooltip" title="Report this narrative.">
+                                    <i class="fa fa-flag fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default share-btn" disabled="disabled">
+                                <button type="button" class="btn btn-default share-btn" disabled="disabled" data-toggle="tooltip" title="Share this narrative.">
                                     <i class="fa fa-mail-forward fa-fw"></i>
                                 </button>
                             </div>
@@ -241,23 +241,19 @@
                             <legend>Discuss This Narrative</legend>
 
                             <div class="form-group">
-                                <label for="name" class="col-xs-1 control-label"><i class="fa fa-fw fa-user"></i></label>
-
-                                <div class="col-xs-11">
-                                    {{ Form::text('name', null, array('class' => 'form-control', 'placeholder' => 'Your Name')) }}
+                                <div class="col-xs-12">
+                                    {{ Form::text('name', null, array('class' => 'form-control', 'placeholder' => 'Name (Optional)')) }}
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="comment" class="col-xs-1 control-label"><i class="fa fa-fw fa-comment"></i></label>
-
-                                <div class="col-xs-11">
-                                    {{ Form::textarea('comment', null, array('class' => 'form-control', 'rows' => '3', 'placeholder' => 'Your Comments')) }}
+                                <div class="col-xs-12">
+                                    {{ Form::textarea('comment', null, array('class' => 'form-control', 'rows' => '3', 'placeholder' => 'Comments', 'required' => 'required')) }}
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class="col-xs-11 col-xs-offset-1">
+                                <div class="col-xs-12 text-right">
                                     {{ Form::submit('Post Comment', array('class' => 'btn btn-primary btn-sm')) }}
                                     {{ Form::button('Clear', array('type' => 'reset', 'class' => 'btn btn-default btn-sm')) }}
                                 </div>
