@@ -281,6 +281,8 @@ function bindPlayerControlHandlers() {
 
         console.log("Seek Percent: " + seekPercent);
 
+        $(".progress-bar").css("width", seekPercent + "%");
+
         // Determine which track this percentage corresponds to.
         var targetTrack   = 0,
             trackProgress = 0;
