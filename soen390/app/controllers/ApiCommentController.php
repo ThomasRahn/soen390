@@ -48,6 +48,12 @@ class ApiCommentController extends \BaseController
     }
 
     /**
+     * Given a $comment instance, it will convert that comment's relevant
+     * properties into a keyed array. The resulting array can then be used
+     * in the API response, with keys expected by the UI.
+     *
+     * @param  Comment  $comment
+     * @return array
      */
     protected function convertCommentToArray(Comment $comment)
     {
