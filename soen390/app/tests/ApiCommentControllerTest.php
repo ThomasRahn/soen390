@@ -1,71 +1,112 @@
 <?php
 
+use Carbon\Carbon;
+
 class ApiCommentControllerTest extends TestCase
 {
-    
-    /**
-     * Test the API's index and ensures that response is valid JSON.
-     *
-     * @covers ApiCommentController::index
-     */
-    public function testIndexForJsonResponse()
+
+    public function tearDown()
     {
-        $response = $this->action('GET', 'ApiCommentController@index');
+        parent::tearDown();
+
+        Mockery::close();
+    }
+
+    /**
+     * Test the getNarrative action with an invalid ID. The controller should
+     * return with a 404 status.
+     *
+     * @covers ApiCommentController::getNarrative
+     */
+    public function testGetNarrativeWithInvalidId()
+    {
+        $response = $this->action(
+            'GET',
+            'ApiCommentController@getNarrative',
+            array('id' => 70)
+        );
+
+        $this->assertResponseStatus(404);
+        $this->assertJson($response->getContent());
+        $this->assertFalse(json_decode($response->getContent())->success);
+    }
+
+    /**
+     * Test the getNarrative action with a valid ID. The controller should
+     * return with status 200 and no comments.
+     *
+     * @covers ApiCommentController::getNarrative
+     */
+    public function testGetNarrativeWithValidId()
+    {
+        $this->addNarrativeToDatabase();
+
+        $id = Narrative::first()->NarrativeID;
+
+        $response = $this->action(
+            'GET',
+            'ApiCommentController@getNarrative',
+            array('id' => $id)
+        );
 
         $this->assertResponseOk();
         $this->assertJson($response->getContent());
+        $this->assertTrue(json_decode($response->getContent())->success);
+        $this->assertEmpty(json_decode($response->getContent())->return);
     }
 
-     /**
-     * Test the API's index and ensures that response is valid JSON and has flags.
+    /**
+     * Test the getNarrative action with a valid narrative containing a
+     * single comment.
      *
-     * @covers ApiCommentController::index
+     * @covers ApiCommentController::getNarrative
+     * @covers ApiCommentController::convertCommentToArray
      */
-    public function testIndexWithComments()
+    public function testGetNarrativeWithSingleComment()
     {
-        // Seed necessary values.
-        $this->seed('TopicTableSeeder');
-        $this->seed('CategoryTableSeeder');
-        $this->seed('LanguageTableSeeder');
+        $this->addNarrativeToDatabase();
 
-        // Create a narrative and flag instance.
-        $date = date('Y-m-d H:i:s');
+        $id = Narrative::first()->NarrativeID;
 
-        $narrative = Narrative::create(array(
-                'TopicID'      => 1,
-                'CategoryID'   => 1,
-                'LanguageID'   => 1,
-                'DateCreated'  => $date,
-                'Name'         => 'Test',
-                'Agrees'       => 1,
-                'Disagrees'    => 1,
-                'Indifferents' => 1,
-                'Published'    => true,
-            ));
-        $comment = Comment::create(array(
-                    'NarrativeID'   => Narrative::first()->NarrativeID,
-                    'Name'          => 'Thomas',
-                    'Comment'       => 'Fake comment',
-                    'DateCreated'   => $date,
-                    'Agrees'        => 0,
-                    'Disagrees'     => 0,
-                ));
-    
+        $c = Comment::create(array(
+            'NarrativeID' => $id,
+            'DateCreated' => new DateTime,
+            'Name'        => 'Test User',
+            'Comment'     => 'testGetNarrativeWithSingleComment',
+        ));
 
-        $response = $this->action('GET', 'ApiCommentController@index', array('NarrativeID' => $narrative->NarrativeID));
+        $response = $this->action(
+            'GET',
+            'ApiCommentController@getNarrative',
+            array('id' => $id)
+        );
 
+        $this->assertResponseOk();
         $this->assertJson($response->getContent());
 
-        $jsonResponse = json_decode($response->getContent());
+        $data = json_decode($response->getContent());
 
-        $this->assertEquals(1, count($jsonResponse));
+        $this->assertTrue($data->success);
+        $this->assertCount(1, $data->return);
 
-        $responseComment = $jsonResponse[0];
+        $data = $data->return[0];
 
-        $this->assertEquals($comment->CommentID, $responseComment->id);
-        $this->assertEquals($comment->Name, $responseComment->name);
-        $this->assertEquals($comment->NarrativeID, $responseComment->narrativeID);
-        $this->assertEquals($comment->Comment, $responseComment->comment);
+        $expectedDateString = Carbon::instance($c->DateCreated);
+        $expectedDateString = $expectedDateString->diffForHumans();
+
+        $this->assertEquals(1, $data->comment_id);
+        $this->assertEquals($c->NarrativeID, $data->narrative_id);
+        $this->assertNull($data->parent_id);
+        $this->assertEquals(
+            $expectedDateString,
+            $data->created_at
+        );
+        $this->assertNull($data->deleted_at);
+        $this->assertEquals($c->Name, $data->name);
+        $this->assertEquals(0, $data->agrees);
+        $this->assertEquals(0, $data->disagrees);
+        $this->assertEquals(0, $data->indifferents);
+        $this->assertEquals($c->Comment, $data->body);
     }
 
 }
