@@ -30,7 +30,7 @@ Route::group(array('prefix' => 'api'), function() {
     Route::resource('category', 'ApiCategoryController');
 
     // Comment API
-    Route::resource('comments', 'ApiCommentController');
+    Route::controller('comment', 'ApiCommentController');
 });
 
 // Route for content handler
@@ -88,3 +88,6 @@ Route::group(array('prefix' => 'auth'), function() {
     Route::get('logout', array('uses' => 'AuthController@getLogout', 'as' => 'logout'));
 
 });
+
+// Route for the player interface.
+Route::controller('player', 'PlayerController');

@@ -200,11 +200,11 @@
              * @param langCode string
              */
             function setLanguageFilter(langCode) {
-		var lang = null;
+        		var lang = null;
 
-		if (langCode == "en") lang = "English";
+        		if (langCode == "en") lang = "English";
 
-		if (langCode == "fr") lang = "French";
+        		if (langCode == "fr") lang = "French";
 
                 rectangles.transition()
                           .duration(500)
@@ -224,12 +224,12 @@
                      .friction(0.9)
                      .on('tick', function(e) {
                         return rectangles.each(function(node) {
-                                                var target = (enableSort ? stanceGravityCenters[node.stance] : center);
-                                                node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
-                                                node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
-                                              })
-                                         .attr('x', function(node){return node.x})
-                                         .attr('y', function(node){return node.y});
+                                    var target = (enableSort ? stanceGravityCenters[node.stance] : center);
+                                    node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
+                                    node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
+                                  })
+                             .attr('x', function(node){return node.x})
+                             .attr('y', function(node){return node.y});
                      });
 
                 force.start();

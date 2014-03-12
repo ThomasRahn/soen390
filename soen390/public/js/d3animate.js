@@ -128,12 +128,13 @@ function createVisualization() {
              .on('mouseover', cardMouseOver)
              .on('mouseout', cardMouseOut)
              .on('click', function(node) {
-                var popupWidth = screen.width * 0.75, 
-                    popupHeight = screen.height * 0.75,
-                    left = (screen.width / 2) - (popupWidth / 2),
-                    top = (screen.height / 2) - (popupHeight / 2);
+                var popupWidth  = 1200, 
+                    popupHeight = 665,
+                    left        = (screen.width / 2) - (popupWidth / 2),
+                    top         = 0,
+                    windowHref  = '/player/play/' + node.id;
                     
-                window.open('/narrative/' + node.id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
+                window.open(windowHref, 'Listen to narrative', 'toolbar=no,location=no,resizable=no,scrollbars=yes,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
              });
 }
 

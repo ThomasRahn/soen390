@@ -21,7 +21,7 @@ class CreateNarrativeTable extends Migration {
 			$table->timestamp('DateCreated');
 			$table->timestamp('DateModified')->nullable();
 			$table->timestamp('deleted_at')->nullable();
-			$table->string('Name', 30)->nullable();
+			$table->string('Name')->nullable();
 			$table->integer('Views')->default(0);
 			$table->integer('Agrees')->default(0);
 			$table->integer('Disagrees')->default(0);

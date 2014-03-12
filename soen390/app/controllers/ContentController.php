@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 /**
  * @author  Alan Ly <me@alanly.ca>
  * @package Controller
@@ -18,7 +20,11 @@ class ContentController extends BaseController
 		$storagePath = Config::get('media.paths.processed');
 
 		return Response::download(
-			$storagePath . DIRECTORY_SEPARATOR . $media->narrative_id . DIRECTORY_SEPARATOR . $media->basename
+			$storagePath . DIRECTORY_SEPARATOR . $media->narrative_id . DIRECTORY_SEPARATOR . $media->basename,
+			null,
+			array(
+				'Expires' => Carbon::now()->addDay()->toRFC2822String(),
+			)
 		);
 	}
 

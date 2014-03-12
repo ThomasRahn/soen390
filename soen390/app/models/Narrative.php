@@ -46,6 +46,14 @@ class Narrative extends Eloquent
     }
 
     /**
+     * @codeCoverageIgnore
+     */
+    public function comments()
+    {
+        return $this->hasMany('Comment', 'NarrativeID', 'NarrativeID');
+    }
+
+    /**
      * Creates all Narratives found in an uploaded archive.
      *
      * A directory containing a Narrative is assumed to be made up of a XML
