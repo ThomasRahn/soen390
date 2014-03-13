@@ -35,6 +35,9 @@ Narratives
     td.flags {
         cursor: pointer;
     }
+    .modal-dialog{
+        width:700px;
+    }
 </style>
 @stop
 
@@ -70,6 +73,40 @@ Narratives
         </tr>
     </tbody>
 </table>
+
+<div class="modal fade" id="comment-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Comments</h4>
+      </div>
+      <div class="modal-body">
+            <table class="table comment-table tablesorter">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Agrees</th>
+                        <th>Disagrees</th>
+                        <th>Comment</th>
+                        <th>Reports</th>
+                        <th>Manage</th>
+                    </tr>
+                </thead>
+                <tbody class="table-spinner">
+                    <tr class="active">
+                        <td colspan="9"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 @stop
 
 @section('scripts')
@@ -152,7 +189,7 @@ Narratives
             left = (screen.width / 2) - (popupWidth / 2),
             top = (screen.height / 2) - (popupHeight / 2);
 
-        window.open('/narrative/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
+        window.open('/player/play/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
 
     function remove_narrative(id) {
@@ -175,7 +212,31 @@ Narratives
 
         window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
+    function loadCommentModal(id){  
+        var path = "{{ action('ApiCommentController@getNarrative') }}" +"/"+id;
+        $(".comment-table tbody").empty();
+        $.getJSON(path,function(data){
+                //forloop for comments
+                var rows = [];
 
+                $.each(data['return'],function(index,comment){
+                    rows.push("<tr>"
+                            + "<td>" + comment.comment_id + "</td>"
+                            + "<td>" + comment.name + "</td>"
+                            + "<td>" + comment.agrees + "</td>"
+                            + "<td>" + comment.disagrees + "</td>"
+                            + "<td>" + comment.body + "</td>"
+                            + "<td><a href=\"#\">" + comment.report_count + "</a></td>"
+                            + "</tr>");
+                });
+            $("<tbody/>", {
+                html: rows.join("")
+            }).appendTo(".comment-table");
+
+        });
+
+        $("#comment-modal").modal("show");
+    }
     $.tablesorter.addParser({
         id:     'publishedSort',
         is:     function(s) { return false; },
@@ -198,7 +259,7 @@ Narratives
                         + "<td class=\"id\">" + narrative.id + "</td>"
                         + "<td class=\"name\">" + narrative.name + "</td>"
                         + "<td class=\"views\">" + narrative.views + "</td>"
-                        + "<td class=\"comments\">" + 0 + "</td>"
+                        + "<td class=\"comments\"><a href=\"#\" onclick=\"loadCommentModal("+ narrative.id +")\"data-toggle=\"modal\" data-target=\"#comment-modal\">" + narrative.comments + "</a></td>"
                         + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
                         + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa " + (narrative.published == false ? "fa-square-o" : "fa-check-square-o") + " fa-fw\"></i></td>"

@@ -57,6 +57,7 @@ class ApiCommentController extends \BaseController
      */
     protected function convertCommentToArray(Comment $comment)
     {
+        $flagCount = Flag::where('CommentID',$comment->CommentID)->count();
         return array(
             'comment_id'   => $comment->CommentID,
             'narrative_id' => $comment->NarrativeID,
@@ -68,6 +69,7 @@ class ApiCommentController extends \BaseController
             'disagrees'    => $comment->Disagrees,
             'indifferents' => $comment->Indifferents,
             'body'         => e($comment->Comment),
+            'report_count'   => $flagCount,
         );
     }
 

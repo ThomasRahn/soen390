@@ -266,6 +266,7 @@ class ApiNarrativeController extends \BaseController
 			);
 		}
 		$flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
+		$commentCount = Comment::where('NarrativeID',$n->NarrativeID)->count();
 		// Put this narrative into the array.
 		$narrative = array(
 			'id' => $n->NarrativeID,
@@ -281,6 +282,7 @@ class ApiNarrativeController extends \BaseController
 			'images' => $imagesArray,
 			'audio' => $audioArray,
 			'flags' => $flagCount,
+			'comments' => $commentCount,
 		);
 
 		return $narrative;

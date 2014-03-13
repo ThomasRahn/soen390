@@ -67,6 +67,9 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
         //Remove Narrative
         Route::delete('narrative/{id}', 'AdminNarrativeController@destroy');
 
+        //Narrative Comments
+        Route::get('{id}/comments', 'AdminCommentController@getIndex');
+
     });
 
     // Routing for Configuration

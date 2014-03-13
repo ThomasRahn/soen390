@@ -198,10 +198,10 @@
 
                         <article class="controls">
                             <div class="btn-group vote-btn-group" data-toggle="tooltip" title="You may vote after viewing the narrative.">
-                                <button type="button" class="btn btn-default agree-btn" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative.">
+                                <button type="button" class="btn btn-default agree-btn" id="agree"onclick="expressOpinion(1)" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative.">
                                     <i class="fa fa-thumbs-up fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default disagree-btn" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative.">
+                                <button type="button" class="btn btn-default disagree-btn" id="disagree" onclick="expressOpinion(2)" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative.">
                                     <i class="fa fa-thumbs-down fa-fw"></i>
                                 </button>
                             </div>
@@ -219,7 +219,7 @@
                             </div>
 
                             <div class="btn-group tertiary-btn-group" data-toggle="tooltip" title="You may report and/or share after viewing the narrative.">
-                                <button type="button" class="btn btn-default flag-btn" disabled="disabled" data-toggle="tooltip" title="Report this narrative.">
+                                <button type="button" class="btn btn-default flag-btn" disabled="disabled" title="Report this narrative." data-toggle="modal" data-target="#report-narrative">
                                     <i class="fa fa-flag fa-fw"></i>
                                 </button>
                                 <button type="button" class="btn btn-default share-btn" disabled="disabled" data-toggle="tooltip" title="Share this narrative.">
@@ -265,12 +265,84 @@
                 </div>
             </div>
         </div>
+	   <div class="modal" id="report-narrative">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Report Narrative</h4>
+              </div>
+              <div class="modal-body">
+                <form class="reported-Narrative">
+            
+                </form>
+                <form id='reported-narrative'>
+                    {{ Form::token('crsf_token')}}
+                    {{ Form::textarea('report-comment','I am reporting this narrative because ')}}
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="reportNarrative()">Report</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
 
         <!-- Scripts -->
         <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
         <script src="{{ asset('js/player.js') }}"></script>
         <script>
+            var stance = "";
+            function reportNarrative(){
+                if(narrativeID != -1){
+                    var form = $("#reported-narrative").serialize() + "&NarrativeID="+narrativeID;
+                    $.ajax({//
+                        url:"/flag",
+                        type:"POST",
+                        data:form,
+                        success:function(){//
+                            alert("Narrative Reported.");
+                        }
+                    });
+                    $(".flag-btn").attr("disabled","disabled");
+                    $("#report-narrative").modal("hide");
+                }
+            }
+            function expressOpinion(id){
+                if(narrativeID != -1){
+                    //ajax call with stance to increase agree or disagree or indifferent
+                    var old = false
+
+                    if(stance != ""){//
+                        var old = true;
+                        $("#"+stance).removeAttr("disabled");
+                    }
+                    var token = $("input[name=_token]").val();
+                    if(id == 1)
+                        stance = "agree";
+                    else
+                        stance = "disagree";
+                    
+                    $("#"+stance).attr("disabled","disabled");
+
+                    $.ajax({//
+                        url:"/stance",
+                        type:"POST",
+                        data:{//
+                            NarrativeID: narrativeID,
+                            _token : token,
+                            stance: id,
+                            old : old
+                        },
+                        success:function(){//
+                               alert("Your opinion has been receieved.");
+                        }
+                    });
+                }
+            }
             $(document).ready(function() {
                 // Enable tooltips
                 $("div").tooltip();
