@@ -10,6 +10,8 @@ var currentTrack  = 0,
     progressInter = null;
 
 function preparePlayer(jsonApiPath) {
+    console.log("Calling API...");
+
     // Fetch the narrative details from the API.
     $.getJSON(
         jsonApiPath,
@@ -361,12 +363,16 @@ function determineStartPercent(tracks) {
 }
 
 function preloadImages(images) {
+    console.log("Preloading images...");
+
     $.each(images, function(index, link) {
         new Image().src = link;
     });
 }
 
 function preloadAudio(audio) {
+    console.log("Preloading audio...");
+    
     $.each(audio, function(index, obj) {
         $.ajax({
             url: obj.mp3,
