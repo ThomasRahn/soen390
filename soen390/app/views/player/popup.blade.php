@@ -151,11 +151,13 @@
             }
             .comment-frame {
                 width: 100%;
-                min-height: 340px;
+                height: 340px;
                 bottom: 10px;
-                padding: 0;
+                padding: 10px;
                 margin: 15px 0;
-                box-shadow: 0 0 3px 1px #555 inset;
+                border-radius: 6px;
+                background-color: rgba(255,255,255,0.5);
+                overflow-y: scroll;
             }
             .vote-btn-group, .tertiary-btn-group {
                 margin-top: -8px;
@@ -167,6 +169,19 @@
             }
             .comments-fieldset legend {
                 text-align: right;
+            }
+            .empty-comments {
+                text-align: center;
+            }
+            .comment-post-result {
+                padding-right: 20px;
+            }
+
+            @media (max-width: 768px) {
+                .comment-frame {
+                    overflow-y: visible;
+                    height: auto;
+                }
             }
         </style>
     </head>
@@ -253,15 +268,24 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-xs-12 text-right">
-                                    {{ Form::submit('Post Comment', array('class' => 'btn btn-primary btn-sm')) }}
-                                    {{ Form::button('Clear', array('type' => 'reset', 'class' => 'btn btn-default btn-sm')) }}
+                                <div class="col-xs-12">
+                                    <div class="pull-right">
+                                        <span class="comment-post-result"></span>
+                                        {{ Form::submit('Post Comment', array('class' => 'btn btn-primary btn-sm')) }}
+                                        {{ Form::button('Clear', array('type' => 'reset', 'class' => 'btn btn-default btn-sm')) }}
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
                     {{ Form::close() }}
 
-                    <iframe class="comment-frame" src="{{ $commentFramePath }}" seamless></iframe>
+                    <div class="comment-frame">
+                        <div class="media empty-comment">
+                            <div class="media-body">
+                                <p class="lead">This narrative has no comments yet.<br>Add your voice to the conversation!</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -294,6 +318,7 @@
         <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
         <script src="{{ asset('js/player.js') }}"></script>
+        <script src="{{ asset('js/player_comments.js') }}"></script>
         <script>
             var stance = "";
             function reportNarrative(){
@@ -349,7 +374,11 @@
 
                 // Prepare the player with the JSON API path to the
                 // narrative resource.
-                preparePlayer("{{ $apiPath }}");
+                preparePlayer("{{ $narrativeApiPath }}");
+
+                // Prepare the comments with the JSON API path to the
+                // comment resource.
+                prepareComments("{{ $commentsApiPath }}");
             });
         </script>
     </body>

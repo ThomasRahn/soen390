@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 /**
  * @package Controller
  */
@@ -33,7 +35,7 @@ class ApiCommentController extends \BaseController
             ), 404);
         }
 
-        $comments = $n->comments()->orderBy('DateCreated')->get();
+        $comments = $n->comments()->orderBy('DateCreated', 'desc')->get();
 
         $arrayedComments = array();
 
@@ -45,6 +47,53 @@ class ApiCommentController extends \BaseController
             'success' => true,
             'return'  => $arrayedComments,
         ));
+    }
+
+    public function postNarrative($id)
+    {
+        $n = $this->narrative->find($id);
+
+        if (! $n) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'The requested narrative could not be found.',
+            ), 404);
+        }
+
+        $validator = Validator::make(
+            Input::all(),
+            array(
+                'name'    => 'min:2|max:255',
+                'comment' => 'required|min:10|max:255',
+            )
+        );
+
+        if ($validator->fails()) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => $validator->errors()->toArray(),
+            ), 400);
+        }
+
+        $name = Input::get('name');
+
+        $comment = new Comment(array(
+            'DateCreated' => Carbon::now(),
+            'Name'        => ($name == '') ? 'Anonymous' : $name,
+            'Comment'     => Input::get('comment'),
+        ));
+
+        if ($n->comments()->save($comment)) {
+            return Response::json(array(
+                'success' => true,
+                'return'  => $this->convertCommentToArray($comment),
+            ));
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'Save operation failed.',
+            ));
+        }
     }
 
     /**
@@ -62,7 +111,7 @@ class ApiCommentController extends \BaseController
             'comment_id'   => $comment->CommentID,
             'narrative_id' => $comment->NarrativeID,
             'parent_id'    => $comment->CommentParentID,
-            'created_at'   => with(new Carbon\Carbon($comment->DateCreated))->diffForHumans(),
+            'created_at'   => with(new Carbon($comment->DateCreated))->diffForHumans(),
             'deleted_at'   => $comment->deleted_at,
             'name'         => e($comment->Name),
             'agrees'       => $comment->Agrees,
