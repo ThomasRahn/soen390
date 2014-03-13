@@ -10,6 +10,16 @@ class AdminCommentController extends BaseController {
     {
         return View::make('admin.narratives.comments')->with("NarrativeID",$id);
     }
+
+    public function destroy($id){
+    	$comment = Comment::find($id);
+
+        if (! $comment)
+            return App::abort(404);
+
+        $comment->flags()->delete();
+        $comment->delete();
+    }
 }
 
 

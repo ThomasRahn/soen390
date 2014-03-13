@@ -5,9 +5,6 @@ Flagged Narrative(s)
 @stop
 
 @section('content')
-<div class="narrative_remove text-center">
-    <label>Remove Narrative</label>&nbsp;<button type="button" class="btn btn-default" onclick="remove_narrative({{$NarrativeID}})"><i class="fa fa-trash-o fa-fw"></i></button>
-</div>
 <div class="message">
 </div>
 <table class="table narrative-table table-hover flag-table">

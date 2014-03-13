@@ -83,15 +83,15 @@ Narratives
       </div>
       <div class="modal-body">
             <table class="table comment-table tablesorter">
-                <thead>
+               <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
+                        <th>{{ trans('admin.comments.table.name') }}</th>
                         <th>Agrees</th>
                         <th>Disagrees</th>
-                        <th>Comment</th>
-                        <th>Reports</th>
-                        <th>Manage</th>
+                        <th>Comment</th>  
+                        <th>{{ trans('admin.narratives.table.flags') }}</th>
+                        <th>{{ trans('admin.narratives.table.manage') }}</th>
                     </tr>
                 </thead>
                 <tbody class="table-spinner">
@@ -128,7 +128,7 @@ Narratives
     function handleCategoryChange(e, obj) {
         var select = $(obj),
             row    = select.parent().parent();
-	console.log(obj);
+    	console.log(obj);
 
         console.log("Change category for " + row.data("narrative-id") + " to " + select.val());
 
@@ -212,6 +212,17 @@ Narratives
 
         window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
+    function remove_comment(id) {
+        if(confirm("Are you sure you want to remove the comment?")){
+            $.ajax({//
+                type:'DELETE',
+                url:'/admin/narrative/comment/'+id,
+                success:function(data){//
+                    $('[data-comment-id = '+id+']').remove();
+                }
+            });
+        }
+    }
     function loadCommentModal(id){  
         var path = "{{ action('ApiCommentController@getNarrative') }}" +"/"+id;
         $(".comment-table tbody").empty();
@@ -220,13 +231,14 @@ Narratives
                 var rows = [];
 
                 $.each(data['return'],function(index,comment){
-                    rows.push("<tr>"
+                    rows.push("<tr data-comment-id=\"" + comment.comment_id + "\">"
                             + "<td>" + comment.comment_id + "</td>"
                             + "<td>" + comment.name + "</td>"
                             + "<td>" + comment.agrees + "</td>"
                             + "<td>" + comment.disagrees + "</td>"
                             + "<td>" + comment.body + "</td>"
                             + "<td><a href=\"#\">" + comment.report_count + "</a></td>"
+                            + "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"remove_comment("+ comment.comment_id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td>"
                             + "</tr>");
                 });
             $("<tbody/>", {
