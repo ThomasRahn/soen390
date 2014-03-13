@@ -66,6 +66,7 @@ function registerCommentHandlers() {
         ).done(function(data, status, xhr) {
             $(".comment-post-result").addClass("text-success").html("Comment posted!");
             lastPost = new Date();
+            $(".comment-form")[0].reset();
             loadComments();
         }).fail(function(xhr, status, error) {
             $(".comment-post-result").addClass("text-danger").html("An error occured while trying to post the comment.");  
