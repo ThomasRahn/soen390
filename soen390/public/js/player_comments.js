@@ -20,10 +20,11 @@ function loadComments() {
 
         // Hide the empty comments message if necessary.
         if (comments.length === 0) {
-            $(".empty-comment").css("display", "");
+            $(".placeholder-comment").empty().show();
+            $("<p/>").html("This narrative does not have any comments yet.").appendTo(".placeholder-comment");
             return;
         } else {
-            $(".empty-comment").css("display", "none");
+            $(".placeholder-comment").hide();
         }
 
         var listItems = new Array();

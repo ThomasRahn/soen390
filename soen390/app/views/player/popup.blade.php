@@ -151,7 +151,7 @@
             }
             .comment-frame {
                 width: 100%;
-                height: 340px;
+                height: 320px;
                 bottom: 10px;
                 padding: 10px;
                 margin: 15px 0;
@@ -280,9 +280,9 @@
                     {{ Form::close() }}
 
                     <div class="comment-frame">
-                        <div class="media empty-comment">
+                        <div class="media placeholder-comment">
                             <div class="media-body">
-                                <p class="lead">This narrative has no comments yet.<br>Add your voice to the conversation!</p>
+                                <p class="lead"><i class="fa fa-spin fa-spinner"></i> Loading comments...</p>
                             </div>
                         </div>
                     </div>
