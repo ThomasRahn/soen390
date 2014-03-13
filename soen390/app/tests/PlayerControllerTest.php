@@ -32,8 +32,8 @@ class PlayerControllerTest extends TestCase
 
         $this->assertResponseOk();
         $this->assertEquals('player.popup', $response->original->getName());
-        $this->assertViewHas('apiPath');
-        $this->assertViewHas('commentFramePath');
+        $this->assertViewHas('narrativeApiPath');
+        $this->assertViewHas('commentsApiPath');
     }
 
 }
