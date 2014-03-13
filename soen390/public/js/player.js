@@ -7,6 +7,7 @@ var currentTime = 0,
 var currentTrack  = 0,
     trackList     = new Array(),
     blinkerInter  = null,
+    narrativeID = -1,
     progressInter = null;
 
 function preparePlayer(jsonApiPath) {
@@ -18,7 +19,7 @@ function preparePlayer(jsonApiPath) {
         function(data) {
             // Store the tracklist.
             trackList = data.return.audio;
-
+            narrativeID = data.return.id;
             // Preload the resources.
             preloadImages(data.return.images);
             preloadAudio(trackList);
