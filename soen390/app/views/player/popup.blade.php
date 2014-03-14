@@ -290,7 +290,7 @@
             </div>
         </div>
 
-        <div class="modal" id="report-narrative">
+        <div class="modal fade" id="report-narrative">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
