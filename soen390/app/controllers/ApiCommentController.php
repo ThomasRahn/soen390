@@ -26,7 +26,11 @@ class ApiCommentController extends \BaseController
      */
     public function getNarrative($id)
     {
-        $n = $this->narrative->with('comments')->find($id);
+        if (Auth::check() && Input::get('withUnpublished') === '1') {
+            $n = $this->narrative->with('comments')->find($id);
+        } else {
+            $n = $this->narrative->with('comments')->where('Published', true)->find($id);
+        }
 
         if (! $n) {
             return Response::json(array(
@@ -49,9 +53,16 @@ class ApiCommentController extends \BaseController
         ));
     }
 
+    /**
+     * @return Response
+     */
     public function postNarrative($id)
     {
-        $n = $this->narrative->find($id);
+        if (Auth::check() && Input::get('withUnpublished') === '1') {
+            $n = $this->narrative->find($id);
+        } else {
+            $n = $this->narrative->where('Published', true)->find($id);
+        }
 
         if (! $n) {
             return Response::json(array(

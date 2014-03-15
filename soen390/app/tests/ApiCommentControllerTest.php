@@ -109,4 +109,69 @@ class ApiCommentControllerTest extends TestCase
         $this->assertEquals($c->Comment, $data->body);
     }
 
+    /**
+     * Test retrieving an unpublished narrative.
+     *
+     * @covers ApiCommentController::getNarrative
+     */
+    public function testGetNarrativeWithUnpublishedAsUser()
+    {
+        $this->addNarrativeToDatabase(false);
+
+        $id = Narrative::first()->NarrativeID;
+
+        $c = Comment::create(array(
+            'NarrativeID' => $id,
+            'DateCreated' => new DateTime,
+            'Name'        => 'Test User',
+            'Comment'     => 'testGetNarrativeWithSingleComment',
+        ));
+
+        $response = $this->action(
+            'GET',
+            'ApiCommentController@getNarrative',
+            array('id' => $id),
+            array('withUnpublished' => '1')
+        );
+
+        $this->assertResponseStatus(404);
+    }
+
+    /**
+     * Test retrieving an unpublished narrative.
+     *
+     * @covers ApiCommentController::getNarrative
+     */
+    public function testGetNarrativeWithUnpublishedAsAdmin()
+    {
+        $this->addNarrativeToDatabase(false);
+
+        $id = Narrative::first()->NarrativeID;
+
+        $c = Comment::create(array(
+            'NarrativeID' => $id,
+            'DateCreated' => new DateTime,
+            'Name'        => 'Test User',
+            'Comment'     => 'testGetNarrativeWithSingleComment',
+        ));
+
+        $user = new User(array('email' => 'admin@test.local'));
+
+        $this->be($user);
+
+        $response = $this->action(
+            'GET',
+            'ApiCommentController@getNarrative',
+            array('id' => $id),
+            array('withUnpublished' => '1')
+        );
+
+        $this->assertResponseOk();
+
+        $data = json_decode($response->getContent());
+
+        $this->assertTrue($data->success);
+        $this->assertCount(1, $data->return);
+    }
+
 }
