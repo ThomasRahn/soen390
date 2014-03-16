@@ -174,4 +174,101 @@ class ApiCommentControllerTest extends TestCase
         $this->assertCount(1, $data->return);
     }
 
+    /**
+     * Tests the post action by creating a comment associated to an invalid
+     * narrative.
+     *
+     * @covers ApiCommentController::postNarrative
+     */
+    public function testPostNarrativeWithInvalidNarrative()
+    {
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postNarrative',
+            array('id' => 7),
+            array('name' => 'Test User', 'comment' => 'Test comments.')
+        );
+
+        $this->assertResponseStatus(404);
+    }
+
+    /**
+     * Test the post action by creating a comment associated with a published
+     * narrative.
+     *
+     * @covers ApiCommentController::postNarrative
+     */
+    public function testPostNarrativeWithPublishedNarrative()
+    {
+        $this->addNarrativeToDatabase();
+
+        $comment = new Comment(array(
+            'Name'    => 'Test User',
+            'Comment' => 'Test comments.',
+        ));
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postNarrative',
+            array('id' => 1),
+            array(
+                'name' => $comment->Name,
+                'comment' => $comment->Comment,
+            )
+        );
+
+        $this->assertResponseOk();
+
+        $data = json_decode($response->getContent());
+
+        $this->assertTrue($data->success);
+        $this->assertEquals($comment->Name, $data->return->name);
+        $this->assertEquals($comment->Comment, $data->return->body);
+    }
+
+    /**
+     * Test the post action when validation fails.
+     *
+     * @covers ApiCommentController::postNarrative
+     */
+    public function testPostNarrativeWithFailingValidation()
+    {
+        $this->addNarrativeToDatabase();
+
+        $validator = Mockery::mock('Illuminate\Validation\Factory');
+
+        $validator->shouldReceive('make')->once()->andReturn($validator);
+        $validator->shouldReceive('fails')->once()->andReturn(true);
+        $validator->shouldReceive('errors')->once()->andReturn(new Illuminate\Support\MessageBag);
+
+        Validator::swap($validator);
+
+        $response = $this->action('POST', 'ApiCommentController@postNarrative', array('id' => 1));
+
+        $this->assertResponseStatus(400);
+    }
+
+    /**
+     * Test the post action when Comment saving fails.
+     *
+     * @covers ApiCommentController::postNarrative
+     */
+    public function testPostNarrativeWithCommentSaveFail()
+    {
+        $this->addNarrativeToDatabase();
+
+        $validator = Mockery::mock('Illuminate\Validation\Factory');
+        $validator->shouldReceive('make')->once()->andReturn($validator);
+        $validator->shouldReceive('fails')->once()->andReturn(false);
+        Validator::swap($validator);
+
+        $this->mock = Mockery::mock('Eloquent', 'Comment');
+        $this->mock->shouldReceive('create')->once()->andReturn(false);
+        App::instance('Comment', $this->mock);
+
+        $response = $this->action('POST', 'ApiCommentController@postNarrative', array('id' => 1));
+
+        $this->assertResponseStatus(500);
+    }
+
 }
