@@ -36,7 +36,11 @@ Narratives
         cursor: pointer;
     }
     .modal-dialog{
-        width:700px;
+        width:65%;
+    } 
+    .comment-table{
+        table-layout: fixed;
+        word-wrap:break-word;
     }
 </style>
 @stop
@@ -75,38 +79,38 @@ Narratives
 </table>
 
 <div class="modal fade" id="comment-modal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Comments</h4>
-      </div>
-      <div class="modal-body">
-            <table class="table comment-table tablesorter">
-               <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>{{ trans('admin.comments.table.name') }}</th>
-                        <th>Agrees</th>
-                        <th>Disagrees</th>
-                        <th>Comment</th>  
-                        <th>{{ trans('admin.narratives.table.flags') }}</th>
-                        <th>{{ trans('admin.narratives.table.manage') }}</th>
-                    </tr>
-                </thead>
-                <tbody class="table-spinner">
-                    <tr class="active">
-                        <td colspan="9"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
-                    </tr>
-                </tbody>
-            </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Comments</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table comment-table tablesorter">
+                   <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{{ trans('admin.comments.table.name') }}</th>
+                            <th>{{ trans('admin.comments.table.agrees') }}</th>
+                            <th>{{ trans('admin.comments.table.disagrees') }}</th>
+                            <th style="width:50%">{{ trans('admin.comments.table.comment') }}</th>  
+                            <th>{{ trans('admin.narratives.table.flags') }}</th>
+                            <th>{{ trans('admin.narratives.table.manage') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-spinner">
+                        <tr class="active">
+                            <td colspan="9"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('scripts')
@@ -237,7 +241,7 @@ Narratives
                             + "<td>" + comment.agrees + "</td>"
                             + "<td>" + comment.disagrees + "</td>"
                             + "<td>" + comment.body + "</td>"
-                            + "<td><a href=\"#\">" + comment.report_count + "</a></td>"
+                            + "<td><a href=\"#\" onclick=\"loadCommentFlags("+comment.comment_id+")\">" + comment.report_count + "</a></td>"
                             + "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"remove_comment("+ comment.comment_id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td>"
                             + "</tr>");
                 });
@@ -248,6 +252,23 @@ Narratives
         });
 
         $("#comment-modal").modal("show");
+    }
+    function loadCommentFlags(id){
+        $.ajax({
+            url: "/api/flags/comments",
+            data: {
+                CommentID: id
+            },
+            success:function(data){//
+                var flag_table = "<table>";
+                $.each(data, function(index, flag) {//
+
+                    flag_table += "<tr><td>"+flag.comment+"</td></tr>";
+                });
+                flag_table += "</table>";
+                $('[data-comment-id = '+id+']').after("<tr><td colspan='7'>"+flag_table+"</td></tr>")
+            }
+        });
     }
     $.tablesorter.addParser({
         id:     'publishedSort',
@@ -271,7 +292,7 @@ Narratives
                         + "<td class=\"id\">" + narrative.id + "</td>"
                         + "<td class=\"name\">" + narrative.name + "</td>"
                         + "<td class=\"views\">" + narrative.views + "</td>"
-                        + "<td class=\"comments\"><a href=\"#\" onclick=\"loadCommentModal("+ narrative.id +")\"data-toggle=\"modal\" data-target=\"#comment-modal\">" + narrative.comments + "</a></td>"
+                        + "<td class=\"comments\"><button onclick=\"loadCommentModal("+ narrative.id +")\"data-toggle=\"modal\" data-target=\"#comment-modal\">" + narrative.comments + "</button></td>"
                         + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
                         + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa " + (narrative.published == false ? "fa-square-o" : "fa-check-square-o") + " fa-fw\"></i></td>"
