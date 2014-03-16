@@ -20,10 +20,11 @@ function loadComments() {
 
         // Hide the empty comments message if necessary.
         if (comments.length === 0) {
-            $(".empty-comment").css("display", "");
+            $(".placeholder-comment").empty().show();
+            $("<p/>").html("This narrative does not have any comments yet.").appendTo(".placeholder-comment");
             return;
         } else {
-            $(".empty-comment").css("display", "none");
+            $(".placeholder-comment").hide();
         }
 
         var listItems = new Array();
@@ -65,6 +66,7 @@ function registerCommentHandlers() {
         ).done(function(data, status, xhr) {
             $(".comment-post-result").addClass("text-success").html("Comment posted!");
             lastPost = new Date();
+            $(".comment-form")[0].reset();
             loadComments();
         }).fail(function(xhr, status, error) {
             $(".comment-post-result").addClass("text-danger").html("An error occured while trying to post the comment.");  

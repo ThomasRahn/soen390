@@ -398,6 +398,12 @@ class ApiNarrativeControllerTest extends TestCase
         $this->mock->shouldReceive('addArchive')->once()->andThrow(new RuntimeException);
         App::instance('Narrative', $this->mock);
 
+        $file = Mockery::mock('Illuminate\Filesystem\Filesystem[delete]');
+        $file->shouldReceive('delete')->andReturn(true);
+        File::swap($file);
+
+        Config::set('app.debug', false);
+
         $file = new Symfony\Component\HttpFoundation\File\UploadedFile(
             $this->narrativeArchivePath,
             'unit_testing_narrative_bundle',
@@ -418,6 +424,9 @@ class ApiNarrativeControllerTest extends TestCase
                 'archive' => $file,
             )
         );
+
+        Mockery::close();
+        File::swap(new Illuminate\Filesystem\Filesystem);
 
         $this->assertResponseStatus(500);
 
