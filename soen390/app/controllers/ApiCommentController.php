@@ -58,11 +58,7 @@ class ApiCommentController extends \BaseController
      */
     public function postNarrative($id)
     {
-        if (Auth::check() && Input::get('withUnpublished') === '1') {
-            $n = $this->narrative->find($id);
-        } else {
-            $n = $this->narrative->where('Published', true)->find($id);
-        }
+        $n = $this->narrative->where('Published', true)->find($id);
 
         if (! $n) {
             return Response::json(array(
