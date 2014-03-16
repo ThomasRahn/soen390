@@ -26,7 +26,11 @@ class ApiCommentController extends \BaseController
      */
     public function getNarrative($id)
     {
-        $n = $this->narrative->with('comments')->find($id);
+        if (Auth::check() && Input::get('withUnpublished') === '1') {
+            $n = $this->narrative->with('comments')->find($id);
+        } else {
+            $n = $this->narrative->with('comments')->where('Published', true)->find($id);
+        }
 
         if (! $n) {
             return Response::json(array(
@@ -49,9 +53,12 @@ class ApiCommentController extends \BaseController
         ));
     }
 
+    /**
+     * @return Response
+     */
     public function postNarrative($id)
     {
-        $n = $this->narrative->find($id);
+        $n = $this->narrative->where('Published', true)->find($id);
 
         if (! $n) {
             return Response::json(array(
@@ -64,7 +71,7 @@ class ApiCommentController extends \BaseController
             Input::all(),
             array(
                 'name'    => 'min:2|max:255',
-                'comment' => 'required|min:10|max:255',
+                'comment' => 'required|min:3|max:255',
             )
         );
 
@@ -77,13 +84,14 @@ class ApiCommentController extends \BaseController
 
         $name = Input::get('name');
 
-        $comment = new Comment(array(
+        $params = array(
+            'NarrativeID' => $n->NarrativeID,
             'DateCreated' => Carbon::now(),
             'Name'        => ($name == '') ? 'Anonymous' : $name,
             'Comment'     => Input::get('comment'),
-        ));
+        );
 
-        if ($n->comments()->save($comment)) {
+        if ($comment = $this->comment->create($params)) {
             return Response::json(array(
                 'success' => true,
                 'return'  => $this->convertCommentToArray($comment),
@@ -92,7 +100,7 @@ class ApiCommentController extends \BaseController
             return Response::json(array(
                 'success' => false,
                 'return'  => 'Save operation failed.',
-            ));
+            ), 500);
         }
     }
 

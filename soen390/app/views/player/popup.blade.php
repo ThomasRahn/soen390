@@ -151,7 +151,7 @@
             }
             .comment-frame {
                 width: 100%;
-                height: 340px;
+                height: 320px;
                 bottom: 10px;
                 padding: 10px;
                 margin: 15px 0;
@@ -280,38 +280,41 @@
                     {{ Form::close() }}
 
                     <div class="comment-frame">
-                        <div class="media empty-comment">
+                        <div class="media placeholder-comment">
                             <div class="media-body">
-                                <p class="lead">This narrative has no comments yet.<br>Add your voice to the conversation!</p>
+                                <p class="lead"><i class="fa fa-spin fa-spinner"></i> Loading comments...</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-	   <div class="modal" id="report-narrative">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Report Narrative</h4>
-              </div>
-              <div class="modal-body">
-                <form class="reported-Narrative">
-            
-                </form>
-                <form id='reported-narrative'>
-                    {{ Form::token('crsf_token')}}
-                    {{ Form::textarea('report-comment','I am reporting this narrative because ')}}
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="reportNarrative()">Report</button>
-              </div>
-            </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+
+        <div class="modal fade" id="report-narrative">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Report Inappropriate Narrative</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="reported-narrative">
+                            {{ Form::token("crsf_token")}}
+
+                            <div class="form-group">
+                                {{ Form::textarea("report-comment", "I am reporting this narrative because, ", array("class" => "form-control")) }}
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="reportNarrative()">Send Report</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- Scripts -->
@@ -321,7 +324,8 @@
         <script src="{{ asset('js/player_comments.js') }}"></script>
         <script>
             var stance = "";
-            function reportNarrative(){
+
+            function reportNarrative() {
                 if(narrativeID != -1){
                     var form = $("#reported-narrative").serialize() + "&NarrativeID="+narrativeID;
                     $.ajax({//
@@ -336,7 +340,8 @@
                     $("#report-narrative").modal("hide");
                 }
             }
-            function expressOpinion(id){
+
+            function expressOpinion(id) {
                 if(narrativeID != -1){
                     //ajax call with stance to increase agree or disagree or indifferent
                     var old = false
@@ -368,6 +373,7 @@
                     });
                 }
             }
+
             $(document).ready(function() {
                 // Enable tooltips
                 $("div").tooltip();
