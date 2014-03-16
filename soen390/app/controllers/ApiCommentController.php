@@ -84,13 +84,14 @@ class ApiCommentController extends \BaseController
 
         $name = Input::get('name');
 
-        $comment = new Comment(array(
+        $params = array(
+            'NarrativeID' => $n->NarrativeID,
             'DateCreated' => Carbon::now(),
             'Name'        => ($name == '') ? 'Anonymous' : $name,
             'Comment'     => Input::get('comment'),
-        ));
+        );
 
-        if ($n->comments()->save($comment)) {
+        if ($comment = $this->comment->create($params)) {
             return Response::json(array(
                 'success' => true,
                 'return'  => $this->convertCommentToArray($comment),
@@ -99,7 +100,7 @@ class ApiCommentController extends \BaseController
             return Response::json(array(
                 'success' => false,
                 'return'  => 'Save operation failed.',
-            ));
+            ), 500);
         }
     }
 
