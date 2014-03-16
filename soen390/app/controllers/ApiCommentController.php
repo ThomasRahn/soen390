@@ -75,7 +75,7 @@ class ApiCommentController extends \BaseController
             Input::all(),
             array(
                 'name'    => 'min:2|max:255',
-                'comment' => 'required|min:10|max:255',
+                'comment' => 'required|min:3|max:255',
             )
         );
 
