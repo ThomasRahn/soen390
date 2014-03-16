@@ -14,7 +14,6 @@ class TranscodeAudioTest extends TestCase
         Config::set('media.transcode', true);
         Config::set('app.debug', false);
 
-        $fileOriginal = File::getFacadeRoot();
         $file = Mockery::mock('Illuminate\Filesystem\Filesystem[delete]');
         $file->shouldReceive('delete')->andReturn(true);
         File::swap($file);
@@ -25,11 +24,13 @@ class TranscodeAudioTest extends TestCase
         $sonus->shouldReceive('input')->andReturn($sonus);
         $sonus->shouldReceive('output')->andReturn($sonus);
         $sonus->shouldReceive('go')->andReturn(true);
-        Sonus::swap($sonus);
+        
+        App::instance('Sonus', $sonus);
 
         $this->addNarrativeToDatabase();
 
-        File::swap($fileOriginal);
+        Mockery::close();
+        File::swap(new Illuminate\Filesystem\Filesystem);
 
         $this->assertCount(1, Narrative::all());
         $this->assertCount(16, Narrative::first()->media()->audio()->get());
@@ -46,18 +47,19 @@ class TranscodeAudioTest extends TestCase
         Config::set('media.transcode', false);
         Config::set('app.debug', false);
 
-        $fileOriginal = File::getFacadeRoot();
         $file = Mockery::mock('Illuminate\Filesystem\Filesystem[delete]');
         $file->shouldReceive('delete')->andReturn(true);
         File::swap($file);
 
         $sonus = Mockery::mock('Rafasamp\Sonus\Sonus');
         $sonus->shouldReceive('getMediaInfo')->andReturn(array('format' => array('duration' => '0:0:0.5')));
-        Sonus::swap($sonus);
+        
+        App::instance('Sonus', $sonus);
 
         $this->addNarrativeToDatabase();
 
-        File::swap($fileOriginal);
+        Mockery::close();
+        File::swap(new Illuminate\Filesystem\Filesystem);
 
         $this->assertCount(1, Narrative::all());
         $this->assertCount(8, Narrative::first()->media()->audio()->get());
