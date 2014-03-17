@@ -6,11 +6,6 @@
  */
 class AdminCommentController extends BaseController {
 
-    public function getIndex($id)
-    {
-        return View::make('admin.narratives.comments')->with("NarrativeID",$id);
-    }
-
     public function destroy($id){
     	$comment = Comment::find($id);
 
