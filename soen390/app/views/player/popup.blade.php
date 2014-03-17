@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic|Roboto+Condensed:300,400,700">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/pnotify/1.3/jquery.pnotify.default.css">
         <style>
             body {
                 font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -213,10 +214,10 @@
 
                         <article class="controls">
                             <div class="btn-group vote-btn-group" data-toggle="tooltip" title="You may vote after viewing the narrative.">
-                                <button type="button" class="btn btn-default agree-btn" id="agree"onclick="expressOpinion(1)" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative.">
+                                <button type="button" class="btn btn-default agree-btn" id="agree" onclick="expressOpinion(1, this)" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative.">
                                     <i class="fa fa-thumbs-up fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default disagree-btn" id="disagree" onclick="expressOpinion(2)" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative.">
+                                <button type="button" class="btn btn-default disagree-btn" id="disagree" onclick="expressOpinion(2, this)" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative.">
                                     <i class="fa fa-thumbs-down fa-fw"></i>
                                 </button>
                             </div>
@@ -303,7 +304,7 @@
                             {{ Form::token("crsf_token")}}
 
                             <div class="form-group">
-                                {{ Form::textarea("report-comment", "I am reporting this narrative because, ", array("class" => "form-control")) }}
+                                {{ Form::textarea("report-comment", null, array("class" => "form-control", "placeholder" => "I am reporting this narrative because,")) }}
                             </div>
                         </form>
                     </div>
@@ -320,6 +321,7 @@
         <!-- Scripts -->
         <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
         <script src="{{ asset('js/player.js') }}"></script>
         <script src="{{ asset('js/player_comments.js') }}"></script>
         <script>
@@ -332,8 +334,11 @@
                         url:"/flag",
                         type:"POST",
                         data:form,
-                        success:function(){//
-                            alert("Narrative Reported.");
+                        success: function() {
+                            $.bootstrapGrowl("Report sent!", {type: "success"});
+                        },
+                        error: function() {
+                            $.bootstrapGrowl("Could not send your report due to a server error. Please try again later!", {type: "error"});
                         }
                     });
                     $(".flag-btn").attr("disabled","disabled");
@@ -341,34 +346,40 @@
                 }
             }
 
-            function expressOpinion(id) {
-                if(narrativeID != -1){
+            function expressOpinion(id, elem) {
+                if (narrativeID != -1) {
                     //ajax call with stance to increase agree or disagree or indifferent
                     var old = false
 
-                    if(stance != ""){//
+                    if (stance != "") {
                         var old = true;
-                        $("#"+stance).removeAttr("disabled");
+                        $("#"+stance).removeAttr("disabled")
+                        $("#"+stance).removeClass("btn-success");
                     }
+
                     var token = $("input[name=_token]").val();
+                    
                     if(id == 1)
                         stance = "agree";
                     else
                         stance = "disagree";
-                    
-                    $("#"+stance).attr("disabled","disabled");
 
-                    $.ajax({//
+                    $.ajax({
                         url:"/stance",
                         type:"POST",
-                        data:{//
+                        data: {
                             NarrativeID: narrativeID,
                             _token : token,
                             stance: id,
                             old : old
                         },
-                        success:function(){//
-                               alert("Your opinion has been receieved.");
+                        success: function() {
+                            $.bootstrapGrowl("Opinion saved!", {type: "success"});
+                            $("#"+stance).attr("disabled","disabled")
+                            $("#"+stance).addClass("btn-success");
+                        },
+                        error: function() {
+                            $.bootstrapGrowl("Could not save your opinion due to a server error. Please try again later!", {type: "error"});
                         }
                     });
                 }
