@@ -26,6 +26,9 @@ Route::group(array('prefix' => 'api'), function() {
     // Flag API
     Route::resource('flags','ApiFlagController');
 
+    // Flag comment API
+    Route::resource('flags/comments','ApiFlagController@show');
+
     // Category API
     Route::resource('category', 'ApiCategoryController');
 

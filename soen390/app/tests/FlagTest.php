@@ -122,4 +122,40 @@ class FlagTest extends TestCase
         $this->assertNotNull($narrative);
 
     }
+      /**
+     * Testing relationship from flag to comment
+     * @covers Flag::comment
+     */
+    public function testFlagCommentRelationship()
+    {
+         $narrativeCreated = new Narrative;
+
+        $date = date('Y-m-d H:i:s');
+
+        $narrativeCreated->TopicID = 1;
+        $narrativeCreated->CategoryID = 1;
+        $narrativeCreated->LanguageID = 1;
+        $narrativeCreated->DateCreated = $date;
+        $narrativeCreated->Name = "Test";
+        $narrativeCreated->Agrees = 1;
+        $narrativeCreated->Disagrees = 1;
+        $narrativeCreated->Indifferents = 1;
+        $narrativeCreated->Published = true;
+
+        $narrativeCreated->save();
+
+        $commentCreated = Comment::create(array('NarrativeID'=>1,'Name'=>'test','Agrees'=>0,'Indifferents'=>1,'Disagrees'=>1,'DateCreated'=>date('Y-m-d H:i:s'), 'Comment'=>'TEST'));
+        
+        $flagCreated = new Flag;
+
+        $flagCreated->NarrativeID = NULL;
+        $flagCreated->CommentID = 1;
+        $flagCreated->Comment = "Test";
+
+        $flagCreated->save();
+
+        $comment = Flag::find(1)->comment();
+        $this->assertNotNull($comment);
+
+    }
 }

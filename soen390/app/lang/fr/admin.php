@@ -3,42 +3,43 @@
 return array(
 
     'sidebar' => array(
-            'uploadNarratives' => 'Upload Narrative(s)',
+            'uploadNarratives' => 'Télécharger Narrative(s)',
             'dashboard' => 'Google Analytics',
             'narratives' => 'Manage Narratives',
             'categories' => 'Manage Categories',
             'flagReports' => 'Flag Reports',
-            'configuration' => 'Site Configuration',
-            'openMainSite' => 'View User Site',
-            'signOut' => 'Sign Out',
+            'configuration' => 'Configuration du site',
+            'openMainSite' => 'Voir la page client',
+            'signOut' => 'Deconnection',
             'profile' => 'Profile',
         ),
   'comments' => array(
             'table' => array(
-                    'name' => 'Name',
-                    'views' => 'Views',
-                    'comment' => 'Comment',
-                    'agrees' => 'Agrees',
-                    'disagrees' => 'Disagrees'
+                    'name' => 'Nom',
+                    'views' => 'Vues',
+                    'comment' => 'Commentaire',
+                    'agrees' => 'Pour',
+                    'disagrees' => 'Contre'
                 )
-	),
+        ),
+
 
     'narratives' => array(
             'table' => array(
-                    'name' => 'Name',
-                    'views' => 'Views',
-                    'comments' => 'Comments',
+                    'name' => 'Nom',
+                    'views' => 'Vues',
+                    'comments' => 'Commentaires',
                     'category' => 'Category',
                     'createdAt' => 'Recorded On',
                     'uploadedOn' => 'Uploaded On',
-                    'published' => 'Published?',
+                    'published' => 'Publier?',
                     'manage' => 'Manage',
-		            'comment'=> 'Comment',
-                    'empty' => 'You need to upload some narratives first!',
+	            'comment'=> 'Commentaire',
+                    'empty' => 'Il faut que vous télécharge les narrative!',
                     'loading' => 'Loading narratives...',
                     'inTotal' => 'narrative(s) in total.',
-		            'totalFlags' => 'flag(s) in total.',
-		            'narrativeName'=> 'Narrative Name',
+	            'totalFlags' => 'flag(s) in total.',
+	            'narrativeName'=> 'Nom du narrative',
                     'flags' => 'Flags',
                 ),
 
@@ -93,10 +94,6 @@ return array(
                     'legend'      => 'Support Email',
                     'label'       => 'Email Address',
                 ),
-
-            'validator' => array(
-                    'fails' => 'There is a mistake in one of the configuration fields. Please correct it and try to save again.',
-                ),
         ),
 
     'profile' => array(
@@ -134,9 +131,9 @@ return array(
                 ),
 
             'postIndex' => array(
-                    'validationFails' => '<p>There is a mistake in your form. Please correct it and try again.</p>',
-                    'internalError'   => '<p>Unable to save your changes due to an internal error.</p>',
-                    'success'         => '<p>Your profile has been updated successfully.</p>',
+                    'validationFails' => '<p>Il y a une erreur dans votre formulare. S\'il vous plais correige et esseyer encore..</p>',
+                    'internalError'   => '<p>Impossible de sauver votre information parce ce que une erreur interne.</p>',
+                    'success'         => '<p>Votre profile est changer correctement.</p>',
                 ),
 
         ),

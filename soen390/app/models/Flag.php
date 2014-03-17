@@ -15,5 +15,8 @@ class Flag extends Eloquent{
     {
         return $this->belongsTo('Narrative', 'NarrativeID', 'NarrativeID');
     }
-
+	public function comment()
+    {
+        return $this->belongsTo('Comment', 'CommentID', 'CommentID');
+    }
 }
