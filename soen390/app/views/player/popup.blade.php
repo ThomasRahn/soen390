@@ -300,17 +300,18 @@
                     </div>
 
                     <div class="modal-body">
-                        <form id="reported-narrative">
+                        <form id="narrative-report-form">
                             {{ Form::token("crsf_token")}}
 
                             <div class="form-group">
-                                {{ Form::textarea("report-comment", null, array("class" => "form-control", "placeholder" => "I am reporting this narrative because,")) }}
+                                {{ Form::label("report-comment", "I am reporting this narrative because,", array("class" => "control-label")) }}
+                                {{ Form::textarea("report-comment", null, array("class" => "form-control", "required" => "required")) }}
                             </div>
                         </form>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="reportNarrative()">Send Report</button>
+                        <button type="button" class="btn btn-primary" id="report-submit-btn">Send Report</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
@@ -348,7 +349,7 @@
 
             function reportNarrative() {
                 if(narrativeID != -1){
-                    var form = $("#reported-narrative").serialize() + "&NarrativeID="+narrativeID;
+                    var form = $("#narrative-report-form").serialize() + "&NarrativeID="+narrativeID;
                     $.ajax({//
                         url:"/flag",
                         type:"POST",
@@ -424,6 +425,11 @@
 
                 $("#href-text").mouseenter(function(e){
                     $("#href-text").select();
+                });
+
+                // Bind the narrative report actions
+                $("#report-submit-btn").click(function(e) {
+                    reportNarrative();
                 });
             });
         </script>
