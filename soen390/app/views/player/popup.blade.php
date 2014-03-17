@@ -296,7 +296,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Report Inappropriate Narrative</h4>
+                        <h4 class="modal-title">Report an inappropriate narrative</h4>
                     </div>
 
                     <div class="modal-body">
@@ -317,6 +317,25 @@
             </div>
         </div>
 
+        <div class="modal fade" id="share-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Share this narrative</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <input type="text" class="form-control text-center" id="href-text">
+                                <br>
+                                <p class="text-center text-muted">You can share this narrative by giving out the link above.<br>Copy by selecting the link and pressing <code>Ctrl + C</code> or <code> &#8984; + C</code>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Scripts -->
         <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
@@ -396,6 +415,16 @@
                 // Prepare the comments with the JSON API path to the
                 // comment resource.
                 prepareComments("{{ $commentsApiPath }}");
+
+                // Bind the share button action
+                $(".share-btn").bind("click", function(e) {
+                    $("#href-text").val(window.location.href);
+                    $("#share-modal").modal("show");
+                });
+
+                $("#href-text").mouseenter(function(e){
+                    $("#href-text").select();
+                });
             });
         </script>
     </body>
