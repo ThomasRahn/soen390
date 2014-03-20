@@ -64,7 +64,11 @@ function generateCommentMediaObject(comment) {
         html += "<a href=\"#\" class=\"comment-reply-link\">Reply</a>&mdash;";
     }
 
-    var votedAgrees = (JSON.parse(sessionStorage.commentVote))[comment.comment_id];
+    var votedAgrees = null;
+
+    if (sessionStorage.commentVote) {
+        votedAgrees = (JSON.parse(sessionStorage.commentVote))[comment.comment_id];
+    }
 
     html += "<a href=\"#\" class=\"comment-agree-link" + (votedAgrees === true ? " voted" : "");
     html += "\"><i class=\"fa fa-fw fa-thumbs-up\"></i> " + comment.agrees + "</a>";
