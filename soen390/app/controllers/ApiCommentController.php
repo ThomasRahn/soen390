@@ -54,6 +54,9 @@ class ApiCommentController extends \BaseController
     }
 
     /**
+     * Creates a comment for narrative $id.
+     *
+     * @param  integer  $id
      * @return Response
      */
     public function postNarrative($id)
@@ -120,7 +123,7 @@ class ApiCommentController extends \BaseController
         $flagCount = Flag::where('CommentID',$comment->CommentID)->count();
 
         // Retrieve all subcomments.
-        
+
         $subcomments = array();
 
         foreach($comment->comments()->get() as $c) {
