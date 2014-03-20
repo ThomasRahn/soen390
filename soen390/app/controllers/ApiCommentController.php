@@ -39,7 +39,7 @@ class ApiCommentController extends \BaseController
             ), 404);
         }
 
-        $comments = $n->comments()->orderBy('DateCreated', 'desc')->get();
+        $comments = $n->comments()->whereNull('CommentParentID')->orderBy('DateCreated', 'desc')->get();
 
         $arrayedComments = array();
 
@@ -115,6 +115,7 @@ class ApiCommentController extends \BaseController
     protected function convertCommentToArray(Comment $comment)
     {
         $flagCount = Flag::where('CommentID',$comment->CommentID)->count();
+
         return array(
             'comment_id'   => $comment->CommentID,
             'narrative_id' => $comment->NarrativeID,
