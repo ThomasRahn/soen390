@@ -6,7 +6,6 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic,500|Roboto+Condensed:300,400,700">
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/pnotify/1.3/jquery.pnotify.default.css">
         <style>
             body {
                 font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
