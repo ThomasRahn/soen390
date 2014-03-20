@@ -1,10 +1,10 @@
-var apiPath  = '',
-    comments = new Array(),
-    lastPost = 0;
+var commentApiPath = '',
+    comments       = new Array(),
+    lastPost       = 0;
 
 function prepareComments(path) {
     // Set the appropriate API path
-    apiPath = path;
+    commentApiPath = path;
 
     // Load all comments
     loadComments();
@@ -15,7 +15,7 @@ function prepareComments(path) {
 
 function loadComments() {
     // Fetch comments from the API.
-    $.getJSON(apiPath, function(data) {
+    $.getJSON(commentApiPath, function(data) {
         var jsonReturn = data.return;
 
         // Hide the empty comments message if necessary.
@@ -64,8 +64,12 @@ function generateCommentMediaObject(comment) {
         html += "<a href=\"#\" class=\"comment-reply-link\">Reply</a>&mdash;";
     }
 
-    html += "<a href=\"#\"><i class=\"fa fa-fw fa-thumbs-up\"></i> " + comment.agrees + "</a>";
-    html += "<a href=\"#\"><i class=\"fa fa-fw fa-thumbs-down\"></i> " + comment.disagrees + "</a>";
+    var votedAgrees = (JSON.parse(sessionStorage.commentVote))[comment.comment_id];
+
+    html += "<a href=\"#\" class=\"comment-agree-link" + (votedAgrees === true ? " voted" : "");
+    html += "\"><i class=\"fa fa-fw fa-thumbs-up\"></i> " + comment.agrees + "</a>";
+    html += "<a href=\"#\" class=\"comment-disagree-link" + (votedAgrees === false ? " voted" : "");
+    html += "\"><i class=\"fa fa-fw fa-thumbs-down\"></i> " + comment.disagrees + "</a>";
     html += "</div>";
 
     // Child comments
@@ -86,6 +90,8 @@ function registerCommentHandlers() {
     $(".comment-form").unbind();
     $(".comment-reply-link").unbind();
     $("#subcomment-form").unbind();
+    $(".comment-agree-link").unbind();
+    $(".comment-disagree-link").unbind();
 
     $(".comment-form").bind("submit", function(e) {
         e.preventDefault();
@@ -119,10 +125,25 @@ function registerCommentHandlers() {
         postComment($("#subcomment-form").serialize());
     });
 
+    $(".comment-agree-link").click(function(e) {
+        e.preventDefault();
+
+        var id = $(this).parent().parent().parent().data("comment-id");
+
+        postVote(id, true);
+    });
+
+    $(".comment-disagree-link").click(function(e) {
+        e.preventDefault();
+
+        var id = $(this).parent().parent().parent().data("comment-id");
+
+        postVote(id, false);
+    });
+
 }
 
-function postComment(serializedData)
-{
+function postComment(serializedData) {
     var secondsSinceLastPost = ((new Date()).valueOf() - lastPost) / 1000;
 
     if (secondsSinceLastPost < 60) {
@@ -133,7 +154,7 @@ function postComment(serializedData)
     }
 
     $.post(
-        apiPath,
+        commentApiPath,
         serializedData
     ).done(function(data, status, xhr) {
         $.bootstrapGrowl("Comment posted!", {type: "success"});
@@ -147,5 +168,38 @@ function postComment(serializedData)
         console.log(xhr.responseText);
     }).always(function() {
         $(".comment-post-result").empty();
+    });
+}
+
+function postVote(id, agree) {
+    if (sessionStorage.commentVote === undefined) {
+        sessionStorage.commentVote = JSON.stringify(new Array());
+    }
+
+    var postObj = { "agree": agree };
+
+    var existingVotes = JSON.parse(sessionStorage.commentVote);
+
+    if (existingVotes[id] !== undefined) {
+        if (existingVotes[id] === agree) {
+            return;
+        } else {
+            postObj["swap"] = true;
+        }
+    }
+
+    $.post(
+        "/api/comment/vote/" + id,
+        postObj
+    ).done(function(data, status, xhr) {
+        $.bootstrapGrowl("Opinion sent!", { type: "success" });
+
+        loadComments();
+
+        existingVotes[id] = agree;
+        sessionStorage.commentVote = JSON.stringify(existingVotes);
+    }).fail(function(xhr, status, error) {
+        $.bootstrapGrowl("An error occured while sending vote. Please try again later.", { type: "danger" });
+        console.log(xhr.responseText);
     });
 }
