@@ -120,7 +120,12 @@ class ApiCommentController extends \BaseController
         $flagCount = Flag::where('CommentID',$comment->CommentID)->count();
 
         // Retrieve all subcomments.
-        $subcomments = $comment->comments()->get()->toArray();
+        
+        $subcomments = array();
+
+        foreach($comment->comments()->get() as $c) {
+            $subcomments[] = $this->convertCommentToArray($c);
+        }
 
         return array(
             'comment_id'   => $comment->CommentID,
