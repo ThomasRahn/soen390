@@ -219,6 +219,9 @@
                 padding: 10px 0 0 10px;
                 border-left: 2px solid #e5e5e5;
             }
+            .voted {
+                color: #333 !important;
+            }
 
             @media (max-width: 768px) {
                 .comment-frame {
