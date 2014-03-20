@@ -16,9 +16,15 @@ class Comment extends Eloquent
     {
         return $this->belongsTo("Narrative", "NarrativeID", "NarrativeID");
     }
+
     public function flags()
     {
-    	return $this->hasMany('Flag','CommentID','CommentID');
+        return $this->hasMany('Flag', 'CommentID', 'CommentID');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('Comment', 'CommentParentID', 'CommentID');
     }
 
 }
