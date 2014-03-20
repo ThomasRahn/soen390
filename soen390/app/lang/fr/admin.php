@@ -3,7 +3,7 @@
 return array(
 
     'sidebar' => array(
-            'uploadNarratives' => 'Télécharger Narrative(s)',
+            'uploadNarratives' => 'Telecharger Narrative(s)',
             'dashboard' => 'Google Analytics',
             'narratives' => 'Manage Narratives',
             'categories' => 'Manage Categories',
@@ -35,7 +35,7 @@ return array(
                     'published' => 'Publier?',
                     'manage' => 'Manage',
 	            'comment'=> 'Commentaire',
-                    'empty' => 'Il faut que vous télécharge les narrative!',
+                    'empty' => 'Il faut que vous telecharge les narrative!',
                     'loading' => 'Loading narratives...',
                     'inTotal' => 'narrative(s) in total.',
 	            'totalFlags' => 'flag(s) in total.',
@@ -59,10 +59,10 @@ return array(
                             'publish' => 'Would you like the uploaded narratives to be published and made available on the site immediately? You can publish/unpublish each narrative individually later.',
                         ),
                     'submit' => 'Upload Archive',
-                    'close' => 'Close',
+                    'close' => 'Fermer',
                     'uploading' => array(
-                            'pleaseWait' => 'Uploading, please wait...',
-                            'mayTakeAWhile' => 'This may take a while based on how large the selected file is.',
+                            'pleaseWait' => 'En cours, s\'il vous plait attende...',
+                            'mayTakeAWhile' => 'Il pourrait prends beacoup de temps si la fichier est large.',
                         ),
                     'uploaded' => array(
                             'success' => 'Your archive has been uploaded!',
@@ -74,7 +74,7 @@ return array(
         ),
 
     'configuration' => array(
-            'saveSettings'  => 'Save Settings',
+            'saveSettings'  => 'Sauvegarde Configurations',
             'resetSettings' => 'Undo Changes',
 
             'save' => array(
