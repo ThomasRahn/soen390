@@ -72,6 +72,7 @@ class ApiCommentController extends \BaseController
             array(
                 'name'    => 'min:2|max:255',
                 'comment' => 'required|min:3|max:255',
+                'parent'  => 'exists:Comment,CommentID',
             )
         );
 
@@ -85,10 +86,11 @@ class ApiCommentController extends \BaseController
         $name = Input::get('name');
 
         $params = array(
-            'NarrativeID' => $n->NarrativeID,
-            'DateCreated' => Carbon::now(),
-            'Name'        => ($name == '') ? 'Anonymous' : $name,
-            'Comment'     => Input::get('comment'),
+            'NarrativeID'     => $n->NarrativeID,
+            'CommentParentID' => Input::get('parent', null),
+            'DateCreated'     => Carbon::now(),
+            'Name'            => ($name == '') ? 'Anonymous' : $name,
+            'Comment'         => Input::get('comment'),
         );
 
         if ($comment = $this->comment->create($params)) {
@@ -114,7 +116,11 @@ class ApiCommentController extends \BaseController
      */
     protected function convertCommentToArray(Comment $comment)
     {
+        // Retrieve commment flag count.
         $flagCount = Flag::where('CommentID',$comment->CommentID)->count();
+
+        // Retrieve all subcomments.
+        $subcomments = $comment->comments()->get()->toArray();
 
         return array(
             'comment_id'   => $comment->CommentID,
@@ -127,7 +133,8 @@ class ApiCommentController extends \BaseController
             'disagrees'    => $comment->Disagrees,
             'indifferents' => $comment->Indifferents,
             'body'         => e($comment->Comment),
-            'report_count'   => $flagCount,
+            'report_count' => $flagCount,
+            'children'     => $subcomments,
         );
     }
 
