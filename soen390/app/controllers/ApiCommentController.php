@@ -110,6 +110,73 @@ class ApiCommentController extends \BaseController
     }
 
     /**
+     * Creates a flag for comment $id.
+     *
+     * @param  integer  $id
+     * @return Response
+     */
+    public function postFlag($id)
+    {
+
+    }
+
+    /**
+     * Updates the votes for a comment $id.
+     *
+     * @param  integer  $id
+     * @return Response
+     */
+    public function postVote($id)
+    {
+        if (! Input::has('agree')) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'Missing "agree" (boolean) request parameter.',
+            ), 400);
+        }
+
+        $c = $this->comment->with('narrative')->find($id);
+
+        if (! $c->narrative()->first()->Published) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'The requested comment could not be found.',
+            ), 404);
+        }
+
+        $hasChanged = false;
+        $agree      = Input::get('agree');
+        $swap       = Input::get('swap', false) === 'true';
+
+        if ($agree === 'true') {
+            ++$c->Agrees;
+
+            if ($swap) {
+                --$c->Disagrees;
+            }
+
+            $hasChanged = true;
+        } else if ($agree === 'false') {
+            ++$c->Disagrees;
+
+            if ($swap) {
+                --$c->Agrees;
+            }
+            
+            $hasChanged = true;
+        }
+
+        if ($hasChanged) {
+            $c->save();
+        }
+
+        return Response::json(array(
+            'success' => true,
+            'return'  => $this->convertCommentToArray($c),
+        ));
+    }
+
+    /**
      * Given a $comment instance, it will convert that comment's relevant
      * properties into a keyed array. The resulting array can then be used
      * in the API response, with keys expected by the UI.
