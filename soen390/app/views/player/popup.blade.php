@@ -5,7 +5,7 @@
         <title>You Deliberate Player</title>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic|Roboto+Condensed:300,400,700">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic,500|Roboto+Condensed:300,400,700">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/pnotify/1.3/jquery.pnotify.default.css">
         <style>
             body {
@@ -42,6 +42,9 @@
             }
             legend {
                 font-size: 20px;
+            }
+            textarea {
+                resize: vertical;
             }
             .brand {
                 font-family: Cinzel, Garamond, "Times New Roman", serif;
@@ -177,6 +180,46 @@
             .comment-post-result {
                 padding-right: 20px;
             }
+            .flag-link {
+                margin-left: 5px;
+                color: #555;
+            }
+            .flag-link:hover {
+                color: #800;
+            }
+            .media-heading {
+                text-transform: none;
+                font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-weight: 500;
+            }
+            .media-heading small {
+                font-family: "Roboto Condensed", "Arial Narrow", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 80%;
+                font-weight: 300;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+                margin-left: 5px;
+                color: #aaa;
+            }
+            .media-footer {
+                margin: 5px 0 10px;
+                font-size: 12px;
+                font-weight: 300;
+                font-family: "Roboto Condensed", "Arial Narrow", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                text-transform: uppercase;
+            }
+            .media-footer a {
+                margin: 0 6px;
+                color: #aaa;
+            }
+            .media-footer a:first-of-type {
+                margin-left: 0;
+            }
+            .media .media {
+                margin: 10px 0 0 10px;
+                padding: 10px 0 0 10px;
+                border-left: 2px solid #e5e5e5;
+            }
 
             @media (max-width: 768px) {
                 .comment-frame {
@@ -301,7 +344,7 @@
 
                     <div class="modal-body">
                         <form id="narrative-report-form">
-                            {{ Form::token("crsf_token")}}
+                            {{ Form::token("crsf_token") }}
 
                             <div class="form-group">
                                 {{ Form::label("report-comment", "I am reporting this narrative because,", array("class" => "control-label")) }}
@@ -333,6 +376,50 @@
                                 <p class="text-center text-muted">You can share this narrative by giving out the link above.<br>Copy by selecting the link and pressing <code>Ctrl + C</code> or <code> &#8984; + C</code>.</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="subcomment-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Reply to comment</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <blockquote class="parent-comment-content">
+                            <div class="parent-comment-body">This is a sample comment.</div>
+                            <footer class="parent-comment-name"><cite title="23 days ago">John Smith</cite></footer>
+                        </blockquote>
+
+                        <hr>
+
+                        <form class="form-horizontal" id="subcomment-form">
+                            {{ Form::token() }}
+                            <input type="hidden" name="parent" value="">
+
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-1">
+                                    <input type="text" name="name" class="form-control" placeholder="Nom/Name (Optionnel/Optional)">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-1">
+                                    <textarea name="comment" class="form-control" placeholder="Commentaire/Comments" rows="5"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-1 text-right">
+                                    <button type="submit" class="btn btn-primary">R&eacute;pondre/Reply</button>
+                                    <button type="reset" class="btn btn-default">D&eacute;barrasser/Clear</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
