@@ -108,6 +108,10 @@ Upload Narrative(s)
             percentComplete = parseInt((loaded / total) * 100),
             cssWidth        = percentComplete + "%";
 
+        if (percentComplete > 89) {
+            $("#cancel-upload-button").attr("disabled", "disabled");
+        }
+
         $(".upload-progress-bar").css("width", cssWidth);
         $(".upload-progress-bar").html(cssWidth);
     }
