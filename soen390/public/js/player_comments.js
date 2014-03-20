@@ -184,7 +184,9 @@ function postVote(id, agree) {
 
     var existingVotes = JSON.parse(sessionStorage.commentVote);
 
-    if (existingVotes[id] !== undefined) {
+    console.log(JSON.stringify(existingVotes[id]));
+
+    if (existingVotes[id] !== null && existingVotes[id] !== undefined) {
         if (existingVotes[id] === agree) {
             return;
         } else {
