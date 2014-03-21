@@ -486,6 +486,7 @@
                         }
                     });
                     $(".flag-btn").attr("disabled","disabled");
+                    $(".flag-btn").addClass("btn-danger");
                     $("#report-narrative").modal("hide");
                 }
             }
@@ -498,7 +499,7 @@
                     if (stance != "") {
                         var old = true;
                         $("#"+stance).removeAttr("disabled")
-                        $("#"+stance).removeClass("btn-success");
+                        $("#"+stance).removeClass("btn-success btn-primary");
                     }
 
                     var token = $("input[name=_token]").val();
@@ -520,7 +521,12 @@
                         success: function() {
                             $.bootstrapGrowl("Opinion saved!", {type: "success", align: "left", offset: {from: "bottom", amount: 20}});
                             $("#"+stance).attr("disabled","disabled")
-                            $("#"+stance).addClass("btn-success");
+
+                            if (stance === "agree") {
+                                $("#"+stance).addClass("btn-success");
+                            } else {
+                                $("#"+stance).addClass("btn-primary");
+                            }
                         },
                         error: function() {
                             $.bootstrapGrowl("Could not save your opinion due to a server error. Please try again later!", {type: "error", align: "left", offset: {from: "bottom", amount: 20}});
