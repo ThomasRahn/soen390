@@ -61,7 +61,7 @@ function generateCommentMediaObject(comment) {
     html += "<div class=\"media-footer\">";
 
     if (comment.parent_id === null) {
-        html += "<a href=\"#\" class=\"comment-reply-link\">Reply</a>&mdash;";
+        html += "<a href=\"#\" class=\"comment-reply-link\" title=\"Reply to this comment?\">Reply</a>&mdash;";
     }
 
     var votedAgrees = null;
@@ -71,9 +71,9 @@ function generateCommentMediaObject(comment) {
     }
 
     html += "<a href=\"#\" class=\"comment-agree-link" + (votedAgrees === true ? " voted" : "");
-    html += "\"><i class=\"fa fa-fw fa-thumbs-up\"></i> " + comment.agrees + "</a>";
+    html += "\" title=\"Agree with this comment?\"><i class=\"fa fa-fw fa-thumbs-up\"></i> " + comment.agrees + "</a>";
     html += "<a href=\"#\" class=\"comment-disagree-link" + (votedAgrees === false ? " voted" : "");
-    html += "\"><i class=\"fa fa-fw fa-thumbs-down\"></i> " + comment.disagrees + "</a>";
+    html += "\" title=\"Disagree with this comment?\"><i class=\"fa fa-fw fa-thumbs-down\"></i> " + comment.disagrees + "</a>";
     html += "</div>";
 
     // Child comments
