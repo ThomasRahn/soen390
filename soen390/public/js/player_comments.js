@@ -194,11 +194,13 @@ function postVote(id, agree) {
         }
     }
 
+    console.log("posting = " + JSON.stringify(postObj));
+
     $.post(
         "/api/comment/vote/" + id,
         postObj
     ).done(function(data, status, xhr) {
-        $.bootstrapGrowl("Opinion sent!", { type: "success" });
+        $.bootstrapGrowl("Voted!", { type: "success" });
 
         loadComments();
 
