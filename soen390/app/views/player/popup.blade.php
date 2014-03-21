@@ -222,6 +222,9 @@
             .voted {
                 color: #333 !important;
             }
+            .flagged {
+                color: #a94442 !important;
+            }
 
             @media (max-width: 768px) {
                 .comment-frame {
