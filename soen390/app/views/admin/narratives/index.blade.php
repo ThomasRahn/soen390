@@ -42,6 +42,12 @@ Narratives
         table-layout: fixed;
         word-wrap:break-word;
     }
+    .flag-table{
+        width:75%;
+        margin:auto;
+        table-layout: fixed;
+        word-wrap:break-word;
+    }
 </style>
 @stop
 
@@ -89,11 +95,10 @@ Narratives
                 <table class="table comment-table tablesorter">
                    <thead>
                         <tr>
-                            <th>#</th>
-                            <th>{{ trans('admin.comments.table.name') }}</th>
+                            <th style="width:15%;">{{ trans('admin.comments.table.name') }}</th>
                             <th>{{ trans('admin.comments.table.agrees') }}</th>
                             <th>{{ trans('admin.comments.table.disagrees') }}</th>
-                            <th style="width:50%">{{ trans('admin.comments.table.comment') }}</th>  
+                            <th style="width:50%;">{{ trans('admin.comments.table.comment') }}</th>  
                             <th>{{ trans('admin.narratives.table.flags') }}</th>
                             <th>{{ trans('admin.narratives.table.manage') }}</th>
                         </tr>
@@ -196,7 +201,7 @@ Narratives
         window.open('/player/play/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
 
-    function remove_narrative(id) {
+    function removeNarrative(id) {
         if(confirm("Are you sure you want to remove the entire narrative?")){
             $.ajax({//
                 type:'DELETE',
@@ -216,7 +221,7 @@ Narratives
 
         window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
-    function remove_comment(id) {
+    function removeComment(id) {
         if(confirm("Are you sure you want to remove the comment?")){
             $.ajax({//
                 type:'DELETE',
@@ -236,13 +241,12 @@ Narratives
 
                 $.each(data['return'],function(index,comment){
                     rows.push("<tr data-comment-id=\"" + comment.comment_id + "\">"
-                            + "<td>" + comment.comment_id + "</td>"
                             + "<td>" + comment.name + "</td>"
                             + "<td>" + comment.agrees + "</td>"
                             + "<td>" + comment.disagrees + "</td>"
                             + "<td>" + comment.body + "</td>"
-                            + "<td><a href=\"#\" onclick=\"loadCommentFlags("+comment.comment_id+")\">" + comment.report_count + "</a></td>"
-                            + "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"remove_comment("+ comment.comment_id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td>"
+                            + "<td><a href=\"#\" id=\"num_comment_flags_"+comment.comment_id+"\" onclick=\"loadCommentFlags("+comment.comment_id+")\">" + comment.report_count + "</a></td>"
+                            + "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeComment("+ comment.comment_id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td>"
                             + "</tr>");
                 });
             $("<tbody/>", {
@@ -253,22 +257,42 @@ Narratives
 
         $("#comment-modal").modal("show");
     }
-    function loadCommentFlags(id){
-        $.ajax({
-            url: "/api/flags/comments",
-            data: {
-                CommentID: id
-            },
+    function removeFlag(commentID,id){//
+        $.ajax({//
+            type:'DELETE',
+            url:'/admin/narrative/flag/'+id,
             success:function(data){//
-                var flag_table = "<table>";
-                $.each(data, function(index, flag) {//
-
-                    flag_table += "<tr><td>"+flag.comment+"</td></tr>";
-                });
-                flag_table += "</table>";
-                $('[data-comment-id = '+id+']').after("<tr><td colspan='7'>"+flag_table+"</td></tr>")
+                var flag_num = parseInt($("#num_comment_flags_"+commentID).html()) - 1 ;
+                $("#num_comment_flags_"+commentID).html(flag_num);
+                $("tr#flag_"+id).remove();
+                if($("#flag_comments_table_"+commentID+" tbody tr").length === 0){
+                    loadCommentFlags(commentID);
+                }
             }
         });
+    }
+    function loadCommentFlags(id){
+        if($("#comment_flag_"+id).html() === undefined){
+            $.ajax({//
+                url: "/api/flags/comments",
+                data: {
+                    CommentID: id
+                },
+                success:function(data){//
+                    if(data != ""){
+                        var flag_table = "<table class=\"table flag-table\" id=\"flag_comments_table_"+id+"\"><thead><th>Reason</th><th>Remove</th></thead><tbody>";
+                        $.each(data, function(index, flag) {//
+                            flag_table += "<tr class=\"comment_flags\" id=\"flag_"+flag.id+"\"><td>"+flag.comment+"</td>";
+                            flag_table += "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeFlag("+id+","+flag.id+");\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td></tr>"
+                        });
+                        flag_table += "</tbody></table>";
+                        $('[data-comment-id = '+id+']').after("<tr id=\"comment_flag_"+id+"\"><td colspan='6'>"+flag_table+"</td></tr>");
+                    }
+                }
+            });
+        }else{
+            $("#comment_flag_"+id).remove();
+        }
     }
     $.tablesorter.addParser({
         id:     'publishedSort',
@@ -300,7 +324,7 @@ Narratives
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
                         + "<button type=\"button\" class=\"btn btn-default\" onclick=\"playNarrative("+ narrative.id+")\"><i class=\"fa fa-play fa-fw\"></i></button>"
-                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"remove_narrative("+ narrative.id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"removeNarrative("+ narrative.id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
                         + "</td>"
                         + "</tr>");
                 });
