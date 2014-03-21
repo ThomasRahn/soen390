@@ -496,7 +496,7 @@
 
             $(document).ready(function() {
                 // Enable tooltips
-                $("div").tooltip();
+                $("div,button").tooltip();
 
                 // Prepare the player with the JSON API path to the
                 // narrative resource.
