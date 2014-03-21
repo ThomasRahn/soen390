@@ -518,12 +518,12 @@
                             old : old
                         },
                         success: function() {
-                            $.bootstrapGrowl("Opinion saved!", {type: "success"});
+                            $.bootstrapGrowl("Opinion saved!", {type: "success", align: "left", offset: {from: "bottom", amount: 20}});
                             $("#"+stance).attr("disabled","disabled")
                             $("#"+stance).addClass("btn-success");
                         },
                         error: function() {
-                            $.bootstrapGrowl("Could not save your opinion due to a server error. Please try again later!", {type: "error"});
+                            $.bootstrapGrowl("Could not save your opinion due to a server error. Please try again later!", {type: "error", align: "left", offset: {from: "bottom", amount: 20}});
                         }
                     });
                 }
