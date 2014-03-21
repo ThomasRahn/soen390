@@ -53,7 +53,17 @@ function generateCommentMediaObject(comment) {
     html += "<p class=\"media-heading\">"
     html += comment.name + "<small>" + comment.created_at + "</small>";
 
-    html += "<a href=\"#\" class=\"flag-link\" title=\"Flag spam or abusive comment.\"><i class=\"fa fa-fw fa-flag\"></i></a>";
+    html += "<a href=\"#\" class=\"flag-link";
+
+    if (sessionStorage.commentFlags) {
+        var flags = JSON.parse(sessionStorage.commentFlags);
+
+        if (flags[comment.comment_id] === true) {
+            html += " flagged";
+        }
+    }
+
+    html += "\" title=\"Flag spam or abusive comment.\"><i class=\"fa fa-fw fa-flag\"></i></a>";
     html += "</p>";
     html += comment.body;
 
@@ -234,18 +244,24 @@ function postVote(id, agree) {
 }
 
 function postFlag(id, serializedData) {
+    if (sessionStorage.commentFlags === undefined) {
+        sessionStorage.commentFlags = JSON.stringify(new Array());
+    }
+
     $.post(
         "/api/comment/flag/" + id,
         serializedData
     ).done(function(data, status, xhr) {
         $.bootstrapGrowl("Flagged!", { type: "success" });
 
-        loadComments();
-
         $("#comment-report-form")[0].reset();
         $("#report-comment-modal").modal("hide");
 
-        $(".media[data-comment-id=" + id + "] .flag-link").css("color", "#a94442 !important");
+        var flags = JSON.parse(sessionStorage.commentFlags);
+        flags[id] = true;
+        sessionStorage.commentFlags = JSON.stringify(flags);
+
+        loadComments();
 
     }).fail(function(xhr, status, error) {
         $.bootstrapGrowl("An error occurred while storing the report. Please try again later.", { type: "danger" });
