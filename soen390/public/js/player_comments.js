@@ -52,6 +52,7 @@ function generateCommentMediaObject(comment) {
     html += "<div class=\"media-body\">";
     html += "<p class=\"media-heading\">"
     html += comment.name + "<small>" + comment.created_at + "</small>";
+
     html += "<a href=\"#\" class=\"flag-link\" title=\"Flag spam or abusive comment.\"><i class=\"fa fa-fw fa-flag\"></i></a>";
     html += "</p>";
     html += comment.body;
@@ -96,6 +97,8 @@ function registerCommentHandlers() {
     $("#subcomment-form").unbind();
     $(".comment-agree-link").unbind();
     $(".comment-disagree-link").unbind();
+    $(".flag-link").unbind();
+    $("#comment-report-form").unbind();
 
     $(".comment-form").bind("submit", function(e) {
         e.preventDefault();
@@ -143,6 +146,24 @@ function registerCommentHandlers() {
         var id = $(this).parent().parent().parent().data("comment-id");
 
         postVote(id, false);
+    });
+
+    $(".flag-link").click(function(e) {
+        e.preventDefault();
+
+        var id = $(this).parent().parent().parent().data("comment-id");
+
+        $("#report-comment-id").val(id);
+
+        $("#report-comment-modal").modal("show");
+    });
+
+    $("#comment-report-form").bind("submit", function(e) {
+        e.preventDefault();
+
+        var id = $("#report-comment-id").val();
+
+        postFlag(id, $("#comment-report-form").serialize());
     });
 
 }
@@ -202,12 +223,32 @@ function postVote(id, agree) {
     ).done(function(data, status, xhr) {
         $.bootstrapGrowl("Voted!", { type: "success" });
 
-        loadComments();
-
         existingVotes[id] = agree;
         sessionStorage.commentVote = JSON.stringify(existingVotes);
+
+        loadComments();
     }).fail(function(xhr, status, error) {
-        $.bootstrapGrowl("An error occured while sending vote. Please try again later.", { type: "danger" });
+        $.bootstrapGrowl("An error occurred while storing the vote. Please try again later.", { type: "danger" });
+        console.log(xhr.responseText);
+    });
+}
+
+function postFlag(id, serializedData) {
+    $.post(
+        "/api/comment/flag/" + id,
+        serializedData
+    ).done(function(data, status, xhr) {
+        $.bootstrapGrowl("Flagged!", { type: "success" });
+
+        loadComments();
+
+        $("#comment-report-form")[0].reset();
+        $("#report-comment-modal").modal("hide");
+
+        $(".media[data-comment-id=" + id + "] .flag-link").css("color", "#a94442 !important");
+
+    }).fail(function(xhr, status, error) {
+        $.bootstrapGrowl("An error occurred while storing the report. Please try again later.", { type: "danger" });
         console.log(xhr.responseText);
     });
 }

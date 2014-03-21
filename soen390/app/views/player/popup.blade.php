@@ -427,6 +427,38 @@
             </div>
         </div>
 
+        <div class="modal fade" id="report-comment-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Report an inappropriate comment</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="comment-report-form">
+                            {{ Form::token() }}
+                            <input type="hidden" id="report-comment-id" name="comment-id" value="">
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label for="reasoning" class="control-label">I am reporting this comment because,</label>
+                                    <textarea class="form-control" id="reasoning" name="reasoning" rows="5"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 text-right">
+                                    <button type="submit" class="btn btn-primary">Send Report</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Scripts -->
         <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
