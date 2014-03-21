@@ -117,7 +117,37 @@ class ApiCommentController extends \BaseController
      */
     public function postFlag($id)
     {
+        if (! Input::has('reasoning')) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'Missing "reasoning" (string) request parameter.',
+            ), 400);
+        }
 
+        $c = $this->comment->with('narrative')->find($id);
+
+        if (! $c->narrative()->first()->Published) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'The requested comment could not be found.',
+            ), 404);
+        }
+
+        $f = new Flag(array(
+            'Comment' => Input::get('reasoning'),
+        ));
+
+        if (! $c->flags()->save($f)) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'Save operation failed.',
+            ), 500);
+        }
+
+        return Response::json(array(
+            'success' => true,
+            'return'  => $this->convertCommentToArray($c),
+        ));
     }
 
     /**
