@@ -199,14 +199,23 @@ class ApiCommentController extends \BaseController
             $hasChanged = true;
         }
 
+        $saved = false;
+
         if ($hasChanged) {
-            $c->save();
+            $saved = $c->save();
         }
 
-        return Response::json(array(
-            'success' => true,
-            'return'  => $this->convertCommentToArray($c),
-        ));
+        if ($saved) {
+            return Response::json(array(
+                'success' => true,
+                'return'  => $this->convertCommentToArray($c),
+            ));
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'An error occurred while attempting to save the vote.',
+            ), 500);
+        }
     }
 
     /**
