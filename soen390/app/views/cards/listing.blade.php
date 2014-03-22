@@ -215,24 +215,32 @@
                               return (lang === null || lang === node.lang) ? 1 : 0.2;
                           });
             }
-
             /**
              * Sort narratives on page based on narrative stance value.
              *
              * @param enableSort boolean
              */
             function setStanceSorting(enableSort) {
+
                 force.gravity(layoutGravity)
                      .charge(charge)
                      .friction(0.9)
                      .on('tick', function(e) {
-                        return rectangles.each(function(node) {
+                         rectangles.selectAll(".child").each(function(node) {
                                     var target = (enableSort ? stanceGravityCenters[node.stance] : center);
                                     node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
                                     node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
                                   })
                              .attr('x', function(node){return node.x})
                              .attr('y', function(node){return node.y});
+
+                         rectangles.selectAll(".rect").each(function(node) {
+                                    var target = (enableSort ? stanceGravityCenters[node.stance] : center);
+                                    node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
+                                    node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
+                                  })
+                             .attr('x', function(node){return node.x })
+                             .attr('y', function(node){return node.y + (stdThumbH *0.9)});
                      });
 
                 force.start();

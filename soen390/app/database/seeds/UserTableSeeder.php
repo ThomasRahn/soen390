@@ -13,6 +13,13 @@ class UserTableSeeder extends Seeder
                 'Name'        => 'Thomas Rahn',
                 'LanguageID'  => 1,
             ));
+
+	User::create(array(
+		'Email'	      => 'french@french.ca',
+		'Password'    => Hash::make('French1'),
+		'Name'        => 'Jacque TRrembly',
+		'LanguageID'  => 2
+	));
     }
 
 }
