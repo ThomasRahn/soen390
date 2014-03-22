@@ -68,7 +68,7 @@ class CommentTest extends TestCase
      */
     public function testCommentFlagRelationship()
     {
-         $narrativeCreated = new Narrative;
+        $narrativeCreated = new Narrative;
 
         $date = date('Y-m-d H:i:s');
 
@@ -90,7 +90,51 @@ class CommentTest extends TestCase
         $flag = Comment::find(1)->flags();
 
         $this->assertNotNull($flag);
-       
+    }
+
+    /**
+     * Test the relationship between a Comment and its associate child
+     * comments.
+     *
+     * @covers Comment::comments
+     * @uses   Eloquent
+     */
+    public function testCommentToCommentRelationship()
+    {
+        $this->addNarrativeToDatabase();
+
+        $narrative = Narrative::first();
+
+        $parentComment = Comment::create(array(
+            'NarrativeID' => $narrative->NarrativeID,
+            'Name'        => 'Unit Test User',
+            'Comment'     => 'Unit Test Comment',
+            'DateCreated' => Carbon\Carbon::now(),
+        ));
+
+        $childComments = array();
+
+        $childComments[] = Comment::create(array(
+            'NarrativeID' => $narrative->NarrativeID,
+            'CommentParentID' => $parentComment->CommentID,
+            'Name'            => 'Unit Test User 2',
+            'Comment'         => 'Unit Test Comment 2',
+            'DateCreated'     => Carbon\Carbon::now(),
+        ));
+
+        $childComments[] = Comment::create(array(
+            'NarrativeID' => $narrative->NarrativeID,
+            'CommentParentID' => $parentComment->CommentID,
+            'Name'            => 'Unit Test User 3',
+            'Comment'         => 'Unit Test Comment 3',
+            'DateCreated'     => Carbon\Carbon::now(),
+        ));
+
+        $narrativeComment = $narrative->comments()->first();
+
+        $commentChilds = $narrativeComment->comments()->get();
+
+        $this->assertCount(count($childComments), $commentChilds);
     }
 
     
