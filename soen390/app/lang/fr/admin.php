@@ -3,15 +3,15 @@
 return array(
 
     'sidebar' => array(
-            'uploadNarratives' => 'Telecharger Narrative(s)',
-            'dashboard' => 'Google Analytics',
-            'narratives' => 'Manage Narratives',
-            'categories' => 'Manage Categories',
-            'flagReports' => 'Flag Reports',
+            'uploadNarratives' => 'Télécharger les récits',
+            'dashboard' => 'Tableau de bord',
+            'narratives' => 'Gérer les récits',
+            'categories' => 'Gérer les catégories',
+            'flagReports' => 'Signaler',
             'configuration' => 'Configuration du site',
-            'openMainSite' => 'Voir la page client',
-            'signOut' => 'Deconnection',
-            'profile' => 'Profile',
+            'openMainSite' => 'Voir la page principale',
+            'signOut' => 'Déconnection',
+            'profile' => 'Profil',
         ),
   'comments' => array(
             'table' => array(
@@ -29,90 +29,90 @@ return array(
                     'name' => 'Nom',
                     'views' => 'Vues',
                     'comments' => 'Commentaires',
-                    'category' => 'Category',
-                    'createdAt' => 'Recorded On',
-                    'uploadedOn' => 'Uploaded On',
-                    'published' => 'Publier?',
-                    'manage' => 'Manage',
-	            'comment'=> 'Commentaire',
-                    'empty' => 'Il faut que vous telecharge les narrative!',
-                    'loading' => 'Loading narratives...',
-                    'inTotal' => 'narrative(s) in total.',
-	            'totalFlags' => 'flag(s) in total.',
-	            'narrativeName'=> 'Nom du narrative',
-                    'flags' => 'Flags',
+                    'category' => 'Catégorie',
+                    'createdAt' => 'Créé le',
+                    'uploadedOn' => 'Téléchargé le',
+                    'published' => 'Publié le',
+                    'manage' => 'Gérer',
+                    'comment'=> 'Commentaire',
+                    'empty' => 'Vous devez télécharger les récits',
+                    'loading' => 'Chargement du récit',
+                    'inTotal' => 'Nombre total de récit(s).',
+                    'totalFlags' => 'Nombre total de signalement(s).',
+                    'narrativeName'=> 'Nom du récit',
+                    'flags' => 'Signalements',
                 ),
 
             'tips' => array(
-                    'tip' => 'Tip!',
-                    'updateNarrative' => '<ul><li>You can toggle the publication status of each narrative by clicking on the <i class="fa fa-check-square-o"></i> and <i class="fa fa-square-o"></i>-icon.</li><li>The Category can be changed by clicking on the current label.</li><li>Each column can be sorted by clicking on their respective headers.</li>',
+                    'tip' => 'Astuce!',
+                    'updateNarrative' => '<ul><li>Vous pouvez alterner entre les statuts de publication de chaque récit en cliquant sur <i class="fa fa-check-square-o"></i> et <i class="fa fa-square-o"></i>-icon.</li><li>La catégorie peut être changée en cliquant sur l\'étiquette actuelle.</li><li>Chaque colonne peut être triée en cliquant sur leurs en-têtes respectives.</li>',
                 ),
 
             'update' => array(
-                    'error' => 'An error occured while attempting to update this narrative.',
+                    'error' => 'Une erreur est survenue lors du téléchargement de ce récit.',
                 ),
 
             'upload' => array(
                     'help' => array(
-                            'archive' => 'Select the archive file which contains the narrative(s) that you want to upload. Only .ZIP files are supported at this moment. Archive file must be <strong>:limit</strong> or smaller.',
-                            'category' => 'Select the category that will be applied to all narratives found in the archive. This can be changed individually after.',
-                            'publish' => 'Would you like the uploaded narratives to be published and made available on the site immediately? You can publish/unpublish each narrative individually later.',
+                            'archive' => 'Sélectionner le fichier contenant le(s) récit(s) que vous souhaitez télécharger. Seuls les fichiers .ZIP sont acceptés pour le moment. Le fichier doit être de <strong>:limit</strong> ou moins.',
+                            'category' => 'Sélectionner la catégorie qui s\'appliquera à tous les récits du fichier. Ce paramètre peut être modifié de façon individuelle par la suite.',
+                            'publish' => 'Souhaitez-vous que les récits téléchargés soient publiés et mis en ligne dès maintenant? Vous pouvez publier/retirer chaque récit de façon individuelle par la suite.',
                         ),
-                    'submit' => 'Upload Archive',
+                    'submit' => 'Télécharger le fichier',
                     'close' => 'Fermer',
                     'uploading' => array(
-                            'pleaseWait' => 'En cours, s\'il vous plait attende...',
-                            'mayTakeAWhile' => 'Il pourrait prends beacoup de temps si la fichier est large.',
+                            'pleaseWait' => 'Téléchargement en cours, veuillez attendre s\'il-vous-plaît',
+                            'mayTakeAWhile' => 'Il est possible que le téléchargement prenne plus de temps si le fichier est volumineux.',
                         ),
                     'uploaded' => array(
-                            'success' => 'Your archive has been uploaded!',
-                            'successQueued' => 'It\'s currently queued for further processing and will be available soon.',
-                            'failed' => 'An error occured during the upload process.',
-                            'failedSorry' => ' We\'re sorry for any inconvenience caused. The following is the error message:',
+                            'success' => 'Votre fichier a été téléchargé!',
+                            'successQueued' => 'Le fichier est actuellement en attente pour traitement ultérieur et sera disponible sous peu.',
+                            'failed' => 'Une erreur est survenue lors du processus de téléchargement.',
+                            'failedSorry' => 'Nous nous excusons pour le désagrément occasionné. Le message d\'erreur est le suivant:',
                         ),
                 ),
         ),
 
     'configuration' => array(
-            'saveSettings'  => 'Sauvegarde Configurations',
-            'resetSettings' => 'Undo Changes',
+            'saveSettings'  => 'Paramètres de sauvegarde',
+            'resetSettings' => 'Annuler les changements',
 
             'save' => array(
-                    'success' => '<p>Settings have been updated successfully.</p>',
-                    'failed'  => '<p>Unable to save settings due to an internal error.</p>',
+                    'success' => '<p>Les paramètres ont été mis à jour avec succès.</p>',
+                    'failed'  => '<p>Impossible de sauvegarder les paramètres dû à une erreur interne.</p>',
                 ),
 
             'maintenance' => array(
-                    'description' => 'Enabling maintenance mode will close the client-side interface, displaying a maintenance page to users. This allows you to make major changes to the system without potentially affecting users or to temporarily take the site down.',
-                    'legend'      => 'Maintenance Mode',
-                    'label'       => 'Enable maintenance mode?',
-                    'help'        => 'The administrative interface will always be available.',
+                    'description' => 'Permettre le mode de maintenance fermera l\'interface client et affichera une page de maintenance aux utilisateurs. Ceci vous permet de procéder à des changements majeurs au niveau du système, sans potentiellement affecter les utilisateurs ou d\'avoir à fermer le site temporairement.',
+                    'legend'      => 'Mode de maintenance',
+                    'label'       => 'Autoriser le mode de maintenance?',
+                    'help'        => 'L\'interface administrative sera toujours disponible.',
                 ),
 
             'supportEmail' => array(
-                    'description' => 'This value will determine the recipient address for the support email link on the client site.',
-                    'legend'      => 'Support Email',
-                    'label'       => 'Email Address',
+                    'description' => 'Cette valeur déterminera l\'adresse du destinataire du lien pour le courriel soutien sur le site client.',
+                    'legend'      => 'Courriel de soutien',
+                    'label'       => 'Adresse courriel',
                 ),
         ),
 
     'profile' => array(
 
             'form' => array(
-                    'name' => 'Name',
-                    'email' => 'Email Address',
-                    'language' => 'Language',
-                    'newPassword' => 'New Password',
-                    'confirmPassword' => 'Confirm Password',
-                    'saveChanges' => 'Save Changes',
-                    'undoChanges' => 'Undo Changes',
-                    'changePasswordTip' => '<p class="lead">Changing Passwords</p><p>The password fields only need to be filled-out <strong>if</strong> you want to change your password. If you do not wish to change your password, you can simply leave them blank.</p>',
+                    'name' => 'Nom',
+                    'email' => 'Adresse courriel',
+                    'language' => 'Langue',
+                    'newPassword' => 'Nouveau mot de passe',
+                    'confirmPassword' => 'Confirmer le mot de passe',
+                    'saveChanges' => 'Sauvegarder les changements',
+                    'undoChanges' => 'Annuler les changements',
+                    'changePasswordTip' => '<p class="lead">Changer de mot de passe</p><p>Les champs pour le mot de passe ne doivent être remplis <strong>que si</strong> vous souhaitez changer votre mot de passe. Si vous ne souhaitez pas changer votre mot de passe, vous pouvez simplement les laisser vides.</p>',
                 ),
 
             'postIndex' => array(
-                    'validationFails' => '<p>There is a mistake in your form. Please correct it and try again.</p>',
-                    'internalError'   => '<p>Unable to save your changes due to an internal error.</p>',
-                    'success'         => '<p>Your profile has been updated successfully.</p>',
+                    'validationFails' => '<p>Il y a une erreur dans votre formulaire. Veuillez la corriger et essayer de nouveau.</p>',
+                    'internalError'   => '<p>Impossible de sauvegarder vos changements dû à une erreur interne.</p>',
+                    'success'         => '<p>Votre profil a été mis à jour avec succès.</p>',
                 ),
 
         ),
@@ -120,20 +120,20 @@ return array(
     'profile' => array(
 
             'form' => array(
-                    'name' => 'Name',
-                    'email' => 'Email Address',
-                    'language' => 'Language',
-                    'newPassword' => 'New Password',
-                    'confirmPassword' => 'Confirm Password',
-                    'saveChanges' => 'Save Changes',
-                    'undoChanges' => 'Undo Changes',
-                    'changePasswordTip' => '<p class="lead">Changing Passwords</p><p>The password fields only need to be filled-out <strong>if</strong> you want to change your password. If you do not wish to change your password, you can simply leave them blank.</p>',
+                    'name' => 'Nom',
+                    'email' => 'Adresse courriel',
+                    'language' => 'Langue',
+                    'newPassword' => 'Nouveau mot de passe',
+                    'confirmPassword' => 'Confirmer le mot de passe',
+                    'saveChanges' => 'Sauvegarder les changements',
+                    'undoChanges' => 'Annuler les changements',
+                    'changePasswordTip' => '<p class="lead">Changer de mot de passe</p><p>Les champs pour le mot de passe ne doivent être remplis <strong>que si</strong> vous souhaitez changer votre mot de passe. Si vous ne souhaitez pas changer votre mot de passe, vous pouvez simplement les laisser vides.</p>',
                 ),
 
             'postIndex' => array(
-                    'validationFails' => '<p>Il y a une erreur dans votre formulare. S\'il vous plais correige et esseyer encore..</p>',
-                    'internalError'   => '<p>Impossible de sauver votre information parce ce que une erreur interne.</p>',
-                    'success'         => '<p>Votre profile est changer correctement.</p>',
+                    'validationFails' => '<p>Il y a une erreur dans votre formulaire. Veuillez la corriger et essayer de nouveau.</p>',
+                    'internalError'   => '<p>Impossible de sauvegarder vos changements dû à une erreur interne.</p>',
+                    'success'         => '<p>Votre profil a été mis à jour avec succès.</p>',
                 ),
 
         ),

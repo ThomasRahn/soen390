@@ -4,35 +4,35 @@ return array(
 
     'login' => array(
 
-            'title' => 'Sign In',
+            'title' => 'Se connecter.',
 
-            'invalid' => 'Your email or password is incorrect. Please try again.',
+            'invalid' => 'Votre courriel ou mot de passe est incorrect. S\'il vous plaît essayez de nouveau.',
 
-            'success' => 'You are now logged in.',
+            'success' => 'Vous êtes connecté.',
 
-            'fail' => 'An error occured while attempting to start your session.',
+            'fail' => 'Une erreur s\'est produite lors de tentative de connection.',
 
             'form' => array(
-                    'emailAddress' => 'Email Address',
-                    'password' => 'Password',
-                    'signIn' => 'Sign In',
-                    'rememberMe' => 'Remember Me?',
+                    'emailAddress' => 'Courriel',
+                    'password' => 'Mot de passe',
+                    'signIn' => 'Se connectez',
+                    'rememberMe' => 'Se souvenir de moi?',
                 ),
 
         ),
 
     'logout' => array(
 
-            'success' => 'Your session has been ended.',
+            'success' => 'Votre session a été terminée.',
 
-            'fail' => 'An error occured while attempting to end your session.',
+            'fail' => 'Une erreur s\'est produite lors de la tentative de terminer à votre session.',
 
         ),
 
     'maintenance' => array(
 
-            'title'   => 'Site Maintenance',
-            'message' => '<p class="text-center">The site is currently undergoing maintenance operations and is temporarily unavailable.</p><p class="text-center">Please check back later.</p>',
+            'title'   => 'Maintenance du site',
+            'message' => '<p class="text-center">Le site est actuellement en cours de maintenance et est temporairement indisponible.</p><p class="text-center">S\'il vous plait re-essayer plus tard.</p>',
 
         ),
 
