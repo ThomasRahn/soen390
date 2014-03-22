@@ -126,7 +126,7 @@ class ApiCommentController extends \BaseController
 
         $c = $this->comment->with('narrative')->find($id);
 
-        if (! $c->narrative()->first()->Published) {
+        if (! $c || ! $c->narrative()->first()->Published) {
             return Response::json(array(
                 'success' => false,
                 'return'  => 'The requested comment could not be found.',
