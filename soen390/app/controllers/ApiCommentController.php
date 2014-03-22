@@ -11,14 +11,16 @@ class ApiCommentController extends \BaseController
     protected static $restful = true;
     protected $narrative      = null;
     protected $comment        = null;
+    protected $flag           = null;
 
     /**
      * @codeCoverageIgnore
      */
-    public function __construct(Narrative $narrative, Comment $comment)
+    public function __construct(Narrative $narrative, Comment $comment, Flag $flag)
     {
         $this->narrative = $narrative;
         $this->comment   = $comment;
+        $this->flag      = $flag;
     }
 
     /**
@@ -133,11 +135,12 @@ class ApiCommentController extends \BaseController
             ), 404);
         }
 
-        $f = new Flag(array(
-            'Comment' => Input::get('reasoning'),
+        $f = $this->flag->create(array(
+            'CommentID' => $c->CommentID,
+            'Comment'   => Input::get('reasoning'),
         ));
 
-        if (! $c->flags()->save($f)) {
+        if (! $f) {
             return Response::json(array(
                 'success' => false,
                 'return'  => 'Save operation failed.',
