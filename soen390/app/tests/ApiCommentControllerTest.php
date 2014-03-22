@@ -110,6 +110,65 @@ class ApiCommentControllerTest extends TestCase
     }
 
     /**
+     * Test the getNarrative action with a single comment and multiple child
+     * comments under it.
+     *
+     * @covers ApiCommentController::getNarrative
+     * @covers ApiCommentController::convertCommentToArray
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testGetNarrativeWithChildComments()
+    {
+        $this->addNarrativeToDatabase();
+
+        $id = Narrative::first()->NarrativeID;
+
+        $c = Comment::create(array(
+            'NarrativeID' => $id,
+            'DateCreated' => new DateTime,
+            'Name'        => 'Test User',
+            'Comment'     => 'testGetNarrativeWithSingleComment',
+        ));
+
+        $childComments = array();
+
+        $childComments[] = Comment::create(array(
+            'NarrativeID'     => $id,
+            'CommentParentID' => $c->CommentID,
+            'DateCreated'     => new DateTime,
+            'Name'            => 'Test User 2',
+            'Comment'         => 'Test getNarrative with child comments.',
+        ));
+
+        $childComments[] = Comment::create(array(
+            'NarrativeID'     => $id,
+            'CommentParentID' => $c->CommentID,
+            'DateCreated'     => new DateTime,
+            'Name'            => 'Test User 3',
+            'Comment'         => 'Test getNarrative with child comments.',
+        ));
+
+        $response = $this->action(
+            'GET',
+            'ApiCommentController@getNarrative',
+            array('id' => $id)
+        );
+
+        $data = json_decode($response->getContent());
+
+        $data = $data->return[0];
+
+        $this->assertCount(2, $data->children);
+
+        $this->assertEquals($childComments[0]->Name, $data->children[0]->name);
+        $this->assertEquals($childComments[0]->Comment, $data->children[0]->body);
+
+        $this->assertEquals($childComments[1]->Name, $data->children[1]->name);
+        $this->assertEquals($childComments[1]->Comment, $data->children[1]->body);
+    }
+
+    /**
      * Test retrieving an unpublished narrative.
      *
      * @covers ApiCommentController::getNarrative
@@ -269,6 +328,468 @@ class ApiCommentControllerTest extends TestCase
         $response = $this->action('POST', 'ApiCommentController@postNarrative', array('id' => 1));
 
         $this->assertResponseStatus(500);
+    }
+
+    /**
+     * Test the postFlag action with appropriate values; should result in a
+     * successful operation.
+     *
+     * @covers ApiCommentController::postFlag
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostFlagSuccess()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+        )));
+
+        $c = $n->comments()->first();
+
+        $reasoning = 'Test postFlag success: reasoning';
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postFlag',
+            array('id' => $c->CommentID),
+            array(
+                'reasoning' => $reasoning,
+            )
+        );
+
+        $this->assertResponseOk();
+
+        $data = json_decode($response->getContent());
+
+        $this->assertTrue($data->success);
+
+        $flags = $c->flags()->get();
+
+        $this->assertCount(1, $flags);
+
+        $f = $flags->first();
+
+        $this->assertEquals($reasoning, $f->Comment);
+    }
+
+    /**
+     * Test the postFlag action with the missing `reasoning` parameter.
+     *
+     * @covers ApiCommentController::postFlag
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostFlagWithMissingParameter()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+        )));
+
+        $c = $n->comments()->first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postFlag',
+            array('id' => $c->CommentID)
+        );
+
+        $this->assertResponseStatus(400);
+    }
+
+    /**
+     * Test the postFlag action by attempting to flag a non-existent comment.
+     *
+     * @covers ApiCommentController::postFlag
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostFlagWithMissingComment()
+    {
+        $this->addNarrativeToDatabase();
+
+        $reasoning = 'Test postFlag success: reasoning';
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postFlag',
+            array('id' => 1),
+            array(
+                'reasoning' => $reasoning,
+            )
+        );
+
+        $this->assertResponseStatus(404);
+    }
+
+    /**
+     * Test the postFlag action by attempting to flag an unpublished
+     * narrative's comment.
+     *
+     * @covers ApiCommentController::postFlag
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostFlagWithUnpublishedNarrative()
+    {
+        $this->addNarrativeToDatabase(false);
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+        )));
+
+        $c = $n->comments()->first();
+
+        $reasoning = 'Test postFlag success: reasoning';
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postFlag',
+            array('id' => $c->CommentID),
+            array(
+                'reasoning' => $reasoning,
+            )
+        );
+
+        $this->assertResponseStatus(404);
+    }
+
+    /**
+     * Test the postFlag action with a failing database save attempt.
+     *
+     * @covers ApiCommentController::postFlag
+     * @uses   Narrative
+     * @uses   Comment
+     * @uses   Flag
+     */
+    public function testPostFlagWithSaveFail()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+        )));
+
+        $c = $n->comments()->first();
+
+        $reasoning = 'Test postFlag success: reasoning';
+
+        $flag = Mockery::mock('Eloquent', 'Flag');
+        $flag->shouldReceive('create')->once()->andReturn(false);
+        App::instance('Flag', $flag);
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postFlag',
+            array('id' => $c->CommentID),
+            array(
+                'reasoning' => $reasoning,
+            )
+        );
+
+        $this->assertResponseStatus(500);
+    }
+
+    /**
+     * Test the postVote action with appropriate data to agree with comment.
+     *
+     * @covers ApiCommentController::postVote
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostVoteAgree()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+        )));
+
+        $c = $n->comments()->first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postVote',
+            array('id' => $c->CommentID),
+            array('agree' => 'true')
+        );
+
+        $this->assertResponseOk();
+
+        $data = json_decode($response->getContent());
+
+        $this->assertTrue($data->success);
+        $this->assertEquals($c->Name, $data->return->name);
+        $this->assertEquals(1, $data->return->agrees);
+        $this->assertEquals(0, $data->return->disagrees);
+    }
+
+    /**
+     * Test postVote action with appropriate data to disagree with comment.
+     *
+     * @covers ApiCommentController::postVote
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostVoteDisagree()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+        )));
+
+        $c = $n->comments()->first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postVote',
+            array('id' => $c->CommentID),
+            array('agree' => 'false')
+        );
+
+        $this->assertResponseOk();
+
+        $data = json_decode($response->getContent());
+
+        $this->assertTrue($data->success);
+        $this->assertEquals($c->Name, $data->return->name);
+        $this->assertEquals(0, $data->return->agrees);
+        $this->assertEquals(1, $data->return->disagrees);
+    }
+
+    /**
+     * Test postVote action with option to swap a disagree to agree vote.
+     *
+     * @covers ApiCommentController::postVote
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostVoteWithSwapToAgree()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+            'Agrees'      => 5,
+            'Disagrees'   => 3,
+        )));
+
+        $c = $n->comments()->first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postVote',
+            array('id' => $c->CommentID),
+            array('agree' => 'true', 'swap' => 'true')
+        );
+
+        $this->assertResponseOk();
+
+        $data = json_decode($response->getContent());
+
+        $this->assertTrue($data->success);
+        $this->assertEquals($c->Name, $data->return->name);
+        $this->assertEquals(6, $data->return->agrees);
+        $this->assertEquals(2, $data->return->disagrees);
+    }
+
+    /**
+     * Test postVote action with option to swap an agree to disagree vote.
+     *
+     * @covers ApiCommentController::postVote
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostVoteWithSwapToDisagree()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+            'Agrees'      => 5,
+            'Disagrees'   => 3,
+        )));
+
+        $c = $n->comments()->first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postVote',
+            array('id' => $c->CommentID),
+            array('agree' => 'false', 'swap' => 'true')
+        );
+
+        $this->assertResponseOk();
+
+        $data = json_decode($response->getContent());
+
+        $this->assertTrue($data->success);
+        $this->assertEquals($c->Name, $data->return->name);
+        $this->assertEquals(4, $data->return->agrees);
+        $this->assertEquals(4, $data->return->disagrees);
+    }
+
+    /**
+     * Test the postVote action to ensure that counts are incremented properly.
+     *
+     * @covers ApiCommentController::postVote
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostVoteIncrement()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+            'Agrees'      => 10,
+            'Disagrees'   => 7,
+        )));
+
+        $c = $n->comments()->first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postVote',
+            array('id' => $c->CommentID),
+            array('agree' => 'false')
+        );
+
+        $this->assertResponseOk();
+
+        $data = json_decode($response->getContent());
+
+        $this->assertTrue($data->success);
+        $this->assertEquals($c->Name, $data->return->name);
+        $this->assertEquals(10, $data->return->agrees);
+        $this->assertEquals(8, $data->return->disagrees);
+    }
+
+    /**
+     * Test the postVote action with the missing `agree` parameter.
+     *
+     * @covers ApiCommentController::postVote
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostVoteWithMissingParameter()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+            'Agrees'      => 10,
+            'Disagrees'   => 7,
+        )));
+
+        $c = $n->comments()->first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postVote',
+            array('id' => $c->CommentID)
+        );
+
+        $this->assertResponseStatus(400);
+    }
+
+    /**
+     * Test the postVote action with a non-existent comment.
+     *
+     * @covers ApiCommentController::postVote
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostVoteWithMissingComment()
+    {
+        $this->addNarrativeToDatabase();
+
+        $n = Narrative::first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postVote',
+            array('id' => 1),
+            array('agree' => 'true')
+        );
+
+        $this->assertResponseStatus(404);
+    }
+
+    /**
+     * Test the postVote action with a comment on an unpublished
+     * narrative.
+     *
+     * @covers ApiCommentController::postVote
+     * @uses   Narrative
+     * @uses   Comment
+     */
+    public function testPostVoteWithUnpublishedNarrative()
+    {
+        $this->addNarrativeToDatabase(false);
+
+        $n = Narrative::first();
+
+        $n->comments()->save(new Comment(array(
+            'Name'        => 'Unit Test User 1',
+            'Comment'     => 'Test postFlag success.',
+            'DateCreated' => new DateTime,
+        )));
+
+        $c = $n->comments()->first();
+
+        $response = $this->action(
+            'POST',
+            'ApiCommentController@postVote',
+            array('id' => $c->CommentID),
+            array('agree' => 'true')
+        );
+
+        $this->assertResponseStatus(404);
     }
 
 }
