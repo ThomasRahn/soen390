@@ -210,11 +210,13 @@ class ApiCommentController extends \BaseController
                 'success' => true,
                 'return'  => $this->convertCommentToArray($c),
             ));
+            // @codeCoverageIgnoreStart
         } else {
             return Response::json(array(
                 'success' => false,
                 'return'  => 'An error occurred while attempting to save the vote.',
             ), 500);
+            // @codeCoverageIgnoreEnd
         }
     }
 
