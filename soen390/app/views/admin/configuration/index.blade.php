@@ -45,6 +45,25 @@ Configuration
                 </div>
             </fieldset>
 
+            <fieldset>
+                <legend>{{ trans('admin.configuration.supportEmail.legend') }}</legend>
+
+                <div class="alert alert-default">
+                    <p><small>{{ trans('admin.configuration.supportEmail.description') }}</small></p>
+                </div>
+
+                <div class="form-group{{ $errors->has('support') ? ' has-error' : '' }}">
+                    {{ Form::label('support', trans('admin.configuration.supportEmail.label'), array('class' => 'col-sm-4 control-label')) }}
+
+                    <div class="col-sm-8">
+                        {{ Form::email('support', Configuration::get('supportEmail'), array('class' => 'form-control')) }}
+                        <span class="help-block">
+                            {{ $errors->has('support') ? $errors->first('support') : '' }}
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+
             <div class="form-group">
                 <div class="col-sm-9 col-sm-offset-3">
                     {{ Form::submit(trans('admin.configuration.saveSettings'), array('class' => 'btn btn-primary')) }}

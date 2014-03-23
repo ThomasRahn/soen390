@@ -16,8 +16,8 @@ class CreateTopicTable extends Migration {
 			$table->increments('TopicID');
 			$table->timestamp('DateCreated');
 			$table->timestamp('DateModified')->nullable();
-			$table->string('Name', 50)->nullable();
-			$table->string('Description', 100);
+			$table->string('Name')->nullable();
+			$table->string('Description');
 		});
 	}
 

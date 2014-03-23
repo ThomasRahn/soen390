@@ -12,8 +12,8 @@ var dictionary = {
                         "language": "Language"
                     },
                     "fr": {
-                        "brand": 'Vous <i class="fa fa-comments"></i> D&eacute;lib&eacute;r&eacute;z',
-                        "brandText": 'Vous D&eacute;lib&eacute;r&eacute;z',
+                        "brand": 'Vous <i class="fa fa-comments"></i> D&eacute;lib&eacute;rez',
+                        "brandText": 'Vous D&eacute;lib&eacute;rez',
                         "stance": 'Opinion',
                         "popularity": 'Vues',
                         "spaghetti": "Spaghetti de bras",

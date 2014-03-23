@@ -24,6 +24,7 @@ class AdminConfigController extends \BaseController
     {
         $validator = Validator::make(Input::all(), array(
             'maintenance' => 'in:true,false,1,0',
+            'support'     => 'required|email',
         ));
 
         if ($validator->fails()) {
@@ -41,6 +42,9 @@ class AdminConfigController extends \BaseController
         // Set Maintenance Mode
         $maintenance = Input::get('maintenance', 'false');
         $hasFailed = $hasFailed || (! Configuration::set('maintenance', $maintenance));
+
+        // Set support email address
+        $hasFailed = $hasFailed || (! Configuration::set('supportEmail', Input::get('support')));
 
         return $this->alertAction(
             $hasFailed,

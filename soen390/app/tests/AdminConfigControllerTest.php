@@ -66,6 +66,7 @@ class AdminConfigControllerTest extends TestCase
             array(),
             array(
                 'maintenance' => 'true',
+                'support'     => 'admin@user.local',
             )
         );
 

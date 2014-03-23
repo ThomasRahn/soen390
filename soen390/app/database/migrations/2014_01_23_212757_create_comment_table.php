@@ -18,11 +18,11 @@ class CreateCommentTable extends Migration {
 			$table->integer('CommentParentID')->nullable();
 			$table->timestamp('DateCreated');
 			$table->timestamp('deleted_at')->nullable();
-			$table->string('Name', 20);
+			$table->string('Name');
 			$table->integer('Agrees')->default(0);
 			$table->integer('Disagrees')->default(0);
 			$table->integer('Indifferents')->default(0);
-			$table->string('Comment', 100);
+			$table->text('Comment');
 		});
 	}
 

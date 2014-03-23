@@ -8,24 +8,57 @@ Narratives
 <style>
     th {
         font-weight: 400;
+        cursor: pointer;
+    }
+    .tablesorter-header.tablesorter-headerAsc {
+        background-image: url('//cdn.jsdelivr.net/tablesorter/2.13.3/css/images/black-asc.gif');
+        background-position: left center;
+        background-repeat: no-repeat;
+        font-style: italic;
+    }
+    .tablesorter-header.tablesorter-headerDesc {
+        background-image: url('//cdn.jsdelivr.net/tablesorter/2.13.3/css/images/black-desc.gif');
+        background-position: left center;
+        background-repeat: no-repeat;
+        font-style: italic;
     }
     .table-spinner td {
         text-align: center;
     }
     .table tr {
+                transition: background-color 0.2s linear;
+           -moz-transition: background-color 0.2s linear;
         -webkit-transition: background-color 0.2s linear;
+    }
+    td.category,
+    td.published,
+    td.flags {
+        cursor: pointer;
+    }
+    .modal-dialog{
+        width:65%;
+    } 
+    .comment-table{
+        table-layout: fixed;
+        word-wrap:break-word;
+    }
+    .flag-table{
+        width:75%;
+        margin:auto;
+        table-layout: fixed;
+        word-wrap:break-word;
     }
 </style>
 @stop
 
 @section('content')
-<div class="alert alert-info alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" arai-hidden="true">&times;</button>
+<div class="alert alert-info alert-dismissable fade in">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <p class="lead">{{ trans('admin.narratives.tips.tip') }}</p>
     <p><small>{{ trans('admin.narratives.tips.updateNarrative') }}</small></p>
 </div>
 
-<table class="table narrative-table">
+<table class="table narrative-table tablesorter">
     <thead>
         <tr>
             <th>#</th>
@@ -50,11 +83,45 @@ Narratives
         </tr>
     </tbody>
 </table>
+
+<div class="modal fade" id="comment-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Comments</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table comment-table tablesorter">
+                   <thead>
+                        <tr>
+                            <th style="width:15%;">{{ trans('admin.comments.table.name') }}</th>
+                            <th>{{ trans('admin.comments.table.agrees') }}</th>
+                            <th>{{ trans('admin.comments.table.disagrees') }}</th>
+                            <th style="width:50%;">{{ trans('admin.comments.table.comment') }}</th>  
+                            <th>{{ trans('admin.narratives.table.flags') }}</th>
+                            <th>{{ trans('admin.narratives.table.manage') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-spinner">
+                        <tr class="active">
+                            <td colspan="9"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('scripts')
 <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/tablesorter/2.13.3/js/jquery.tablesorter.min.js"></script>
 
 <script>
     var editingRow = null;
@@ -70,7 +137,7 @@ Narratives
     function handleCategoryChange(e, obj) {
         var select = $(obj),
             row    = select.parent().parent();
-	console.log(obj);
+    	console.log(obj);
 
         console.log("Change category for " + row.data("narrative-id") + " to " + select.val());
 
@@ -124,15 +191,17 @@ Narratives
             dataType: "json"
         });
     }
-    function playNarrative(id){//
+
+    function playNarrative(id) {
         var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
             left = (screen.width / 2) - (popupWidth / 2),
             top = (screen.height / 2) - (popupHeight / 2);
 
-        window.open('/narrative/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
+        window.open('/player/play/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
-    function remove_narrative(id){//
+
+    function removeNarrative(id) {
         if(confirm("Are you sure you want to remove the entire narrative?")){
             $.ajax({//
                 type:'DELETE',
@@ -143,7 +212,8 @@ Narratives
             });
         }
     }
-    function openFlagWindow(id){//
+
+    function openFlagWindow(id) {
       var popupWidth = screen.width * 0.75, 
             popupHeight = screen.height * 0.75,
             left = (screen.width / 2) - (popupWidth / 2),
@@ -151,6 +221,88 @@ Narratives
 
         window.open('/admin/narrative/flag/' + id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
     }
+    function removeComment(id) {
+        if(confirm("Are you sure you want to remove the comment?")){
+            $.ajax({//
+                type:'DELETE',
+                url:'/admin/narrative/comment/'+id,
+                success:function(data){//
+                    $('[data-comment-id = '+id+']').remove();
+                }
+            });
+        }
+    }
+    function loadCommentModal(id){  
+        var path = "{{ action('ApiCommentController@getNarrative') }}" +"/"+id;
+        $(".comment-table tbody").empty();
+        $.getJSON(path,function(data){
+                //forloop for comments
+                var rows = [];
+
+                $.each(data['return'],function(index,comment){
+                    rows.push("<tr data-comment-id=\"" + comment.comment_id + "\">"
+                            + "<td>" + comment.name + "</td>"
+                            + "<td>" + comment.agrees + "</td>"
+                            + "<td>" + comment.disagrees + "</td>"
+                            + "<td>" + comment.body + "</td>"
+                            + "<td><a href=\"#\" id=\"num_comment_flags_"+comment.comment_id+"\" onclick=\"loadCommentFlags("+comment.comment_id+")\">" + comment.report_count + "</a></td>"
+                            + "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeComment("+ comment.comment_id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td>"
+                            + "</tr>");
+                });
+            $("<tbody/>", {
+                html: rows.join("")
+            }).appendTo(".comment-table");
+
+        });
+
+        $("#comment-modal").modal("show");
+    }
+    function removeFlag(commentID,id){//
+        $.ajax({//
+            type:'DELETE',
+            url:'/admin/narrative/flag/'+id,
+            success:function(data){//
+                var flag_num = parseInt($("#num_comment_flags_"+commentID).html()) - 1 ;
+                $("#num_comment_flags_"+commentID).html(flag_num);
+                $("tr#flag_"+id).remove();
+                if($("#flag_comments_table_"+commentID+" tbody tr").length === 0){
+                    loadCommentFlags(commentID);
+                }
+            }
+        });
+    }
+    function loadCommentFlags(id){
+        if($("#comment_flag_"+id).html() === undefined){
+            $.ajax({//
+                url: "/api/flags/comments",
+                data: {
+                    CommentID: id
+                },
+                success:function(data){//
+                    if(data != ""){
+                        var flag_table = "<table class=\"table flag-table\" id=\"flag_comments_table_"+id+"\"><thead><th>Reason</th><th>Remove</th></thead><tbody>";
+                        $.each(data, function(index, flag) {//
+                            flag_table += "<tr class=\"comment_flags\" id=\"flag_"+flag.id+"\"><td>"+flag.comment+"</td>";
+                            flag_table += "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeFlag("+id+","+flag.id+");\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td></tr>"
+                        });
+                        flag_table += "</tbody></table>";
+                        $('[data-comment-id = '+id+']').after("<tr id=\"comment_flag_"+id+"\"><td colspan='6'>"+flag_table+"</td></tr>");
+                    }
+                }
+            });
+        }else{
+            $("#comment_flag_"+id).remove();
+        }
+    }
+    $.tablesorter.addParser({
+        id:     'publishedSort',
+        is:     function(s) { return false; },
+        format: function(s, table, cell, cellIndex) {
+                    return $(cell).attr("data-published");
+                },
+        type:   'text'
+    });
+
     $(document).ready(function () {
 
         // Fetch the narratives from the API and display them.
@@ -164,7 +316,7 @@ Narratives
                         + "<td class=\"id\">" + narrative.id + "</td>"
                         + "<td class=\"name\">" + narrative.name + "</td>"
                         + "<td class=\"views\">" + narrative.views + "</td>"
-                        + "<td class=\"comments\">" + 0 + "</td>"
+                        + "<td class=\"comments\"><button onclick=\"loadCommentModal("+ narrative.id +")\"data-toggle=\"modal\" data-target=\"#comment-modal\">" + narrative.comments + "</button></td>"
                         + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
                         + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa " + (narrative.published == false ? "fa-square-o" : "fa-check-square-o") + " fa-fw\"></i></td>"
@@ -172,7 +324,7 @@ Narratives
                         + "<td>"
                         + "<div class=\"btn-group btn-group-xs\">"
                         + "<button type=\"button\" class=\"btn btn-default\" onclick=\"playNarrative("+ narrative.id+")\"><i class=\"fa fa-play fa-fw\"></i></button>"
-                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"remove_narrative("+ narrative.id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
+                        + "<button type=\"button\" class=\"btn btn-default\" onclick=\"removeNarrative("+ narrative.id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button>"
                         + "</td>"
                         + "</tr>");
                 });
@@ -187,6 +339,12 @@ Narratives
                 }).appendTo(".narrative-table");
 
                 $(".row-count").html(data['return'].length);
+
+                $(".narrative-table").tablesorter({
+                    headers: {
+                        6: { sorter: "publishedSort" }
+                    }
+                });
             }
         );
 

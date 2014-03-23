@@ -4,17 +4,22 @@
  * @author  Alan Ly <me@alanly.ca>
  * @package Controller
  */
-class ApiNarrativeController extends \BaseController {
+class ApiNarrativeController extends \BaseController
+{
+
+	protected $narrative;
 
 	/**
 	 * @codeCoverageIgnore
 	 */
-	public function __construct()
+	public function __construct(Narrative $narrative)
 	{
 		// Ensure that user is authenticated for all write/update routes.
 		$this->beforeFilter('auth.api', array(
 			'except' => array('index', 'show'))
 		);
+
+		$this->narrative = $narrative;
 	}
 
 	/**
@@ -82,31 +87,45 @@ class ApiNarrativeController extends \BaseController {
 	public function store()
 	{
 		$validator = Validator::make(Input::all(), array(
-				'archive' => 'required|mimes:zip',
-				'category' => 'required|exists:Category,CategoryID'
-			));
+			'archive'  => 'required|mimes:zip',
+			'category' => 'required|exists:Category,CategoryID',
+		));
 
 		if ($validator->fails())
 			return Response::json(array(
-					'success' => false,
-					'error' => $validator->errors()->toArray()
-				), 400);
+				'success' => false,
+				'error'   => $validator->errors()->toArray(),
+			), 400);
 
 		$file = Input::file('archive');
 
 		// Figure out a uniquely identifying name for this archive.
-		$originalName = $file->getClientOriginalName();
-		$hashedName = hash('sha256', Session::getId() . $originalName . time());
+		$originalName   = $file->getClientOriginalName();
+		$hashedName     = hash('sha256', Session::getId() . $originalName . time());
 		$hashedFullName = $hashedName . '.' . $file->getClientOriginalExtension();
 
-		$file->move(Config::get('media.paths.uploads'), $hashedFullName);
+		if (App::environment('testing')) {
+			File::copy(
+				$file->getRealPath(),
+				Config::get('media.paths.uploads') . DIRECTORY_SEPARATOR . $hashedFullName
+			);
+		} else {
+			// @codeCoverageIgnoreStart
+			$file->move(Config::get('media.paths.uploads'), $hashedFullName);
+			// @codeCoverageIgnoreEnd
+		}
 
 		// Determine the destination of where the archive has been moved to.
-		$destinationPath = Config::get('media.paths.uploads') . '/' . $hashedFullName;
+		$destinationPath = Config::get('media.paths.uploads') . DIRECTORY_SEPARATOR . $hashedFullName;
 
 		// Process the archive
 		try {
-			Narrative::addArchive($hashedName, $destinationPath, Input::get('category'), (Input::get('publish') == 'publish'));
+			$this->narrative->addArchive(
+				$hashedName,
+				$destinationPath,
+				Input::get('category'),
+				Input::get('publish') == 'publish'
+			);
 		} catch (Exception $e) {
 			$errorArray = array($e->getMessage());
 
@@ -115,13 +134,13 @@ class ApiNarrativeController extends \BaseController {
 
 			return Response::json(array(
 				'success' => false,
-				'error' => $errorArray,
+				'error'   => $errorArray,
 			), 500);
 		}
 
 		return Response::json(array(
 			'success' => true,
-			'return' => 'Upload is queued for processing.',
+			'return'  => 'Upload is queued for processing.',
 		));
 	}
 
@@ -133,7 +152,7 @@ class ApiNarrativeController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$narrative = Narrative::find($id);
+		$narrative = $this->narrative->find($id);
 
 		if ($narrative == null)
 			return Response::json(array(
@@ -227,7 +246,7 @@ class ApiNarrativeController extends \BaseController {
 
 			// Determine an appropriate poster for this track.
 			$tracknumber = intval($a->filename);
-			$posterPath = asset('img/default_narrative.jpg');
+			$posterPath = $imagesArray[0];
 
 			while ($tracknumber > 0) {
 				$poster = $n->media()->images()->where('filename', $tracknumber)->first();
@@ -241,7 +260,7 @@ class ApiNarrativeController extends \BaseController {
 			}
 
 			$audioArray[] = array(
-				'title' => $a->id,
+				'title' => $a->filename,
 				'mp3' => $mpeg_link,
 				'oga' => $ogg_link,
 				'poster' => $posterPath,
@@ -249,6 +268,7 @@ class ApiNarrativeController extends \BaseController {
 			);
 		}
 		$flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
+		$commentCount = Comment::where('NarrativeID',$n->NarrativeID)->count();
 		// Put this narrative into the array.
 		$narrative = array(
 			'id' => $n->NarrativeID,
@@ -264,6 +284,7 @@ class ApiNarrativeController extends \BaseController {
 			'images' => $imagesArray,
 			'audio' => $audioArray,
 			'flags' => $flagCount,
+			'comments' => $commentCount,
 		);
 
 		return $narrative;

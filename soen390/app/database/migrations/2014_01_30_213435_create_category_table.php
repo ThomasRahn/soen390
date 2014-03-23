@@ -14,7 +14,7 @@ class CreateCategoryTable extends Migration {
 		Schema::create('Category', function($table)
 		{
 			$table->increments('CategoryID');
-			$table->string('Description', 20);
+			$table->string('Description');
 		});
 	}
 

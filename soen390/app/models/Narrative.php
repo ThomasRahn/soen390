@@ -46,6 +46,14 @@ class Narrative extends Eloquent
     }
 
     /**
+     * @codeCoverageIgnore
+     */
+    public function comments()
+    {
+        return $this->hasMany('Comment', 'NarrativeID', 'NarrativeID');
+    }
+
+    /**
      * Creates all Narratives found in an uploaded archive.
      *
      * A directory containing a Narrative is assumed to be made up of a XML
@@ -70,18 +78,18 @@ class Narrative extends Eloquent
      * @param  boolean $publish
      * @return void
      */
-    public static function addArchive($name, $path, $category, $publish)
+    public function addArchive($name, $path, $category, $publish)
     {
         // Check to see if the archive file actually exists first.
         if (File::exists($path) === false)
             return;
 
         // Extract the specified archive and retrieve the output path.
-        $outputPath = self::extractArchive($name, $path);
+        $outputPath = $this->extractArchive($name, $path);
 
         // Process the extracted contents for narratives and create them
         // individually.
-        self::findNarratives($outputPath, $category, $publish);
+        $this->findNarratives($outputPath, $category, $publish);
     }
 
     /**
@@ -93,7 +101,7 @@ class Narrative extends Eloquent
      * @param  string  $path
      * @return string
      */
-    private static function extractArchive($name, $path)
+    private function extractArchive($name, $path)
     {
         // Determine the path for the directory that should contain
         // the extracted content.
@@ -140,7 +148,7 @@ class Narrative extends Eloquent
      * @param  boolean $publish
      * @return void
      */
-    private static function findNarratives($path, $category, $publish)
+    private function findNarratives($path, $category, $publish)
     {
         // Look for directories in this $path
         $directories = File::directories($path);
@@ -153,12 +161,12 @@ class Narrative extends Eloquent
 
             // Go into each one to find a narrative.
             foreach ($directories as $d)
-                self::findNarratives($d, $category, $publish);
+                $this->findNarratives($d, $category, $publish);
 
         } else {
 
             // Process a potential narrative.
-            return self::processNarrative($path, $category, $publish);
+            return $this->processNarrative($path, $category, $publish);
 
         }
     }
@@ -179,7 +187,7 @@ class Narrative extends Eloquent
      * @param  boolean $publish
      * @return void
      */
-    private static function processNarrative($path, $category, $publish)
+    private function processNarrative($path, $category, $publish)
     {
         // Look for files in this $path
         $files = File::files($path);
@@ -214,7 +222,7 @@ class Narrative extends Eloquent
         // a complete and valid narrative container.
 
         // Create the narrative and retrieve the instance.
-        $narrative = self::createFromXML($xmlFilePath, $category, $publish);
+        $narrative = $this->createFromXML($xmlFilePath, $category, $publish);
 
         // We no longer need the XML file, so we'll attempt to delete it
         // unless we're in debug mode.
@@ -223,7 +231,7 @@ class Narrative extends Eloquent
 
         // Now that the narrative has been created, we need to process its
         // media files.
-        return self::processMedia($path, $narrative);
+        return $this->processMedia($path, $narrative);
     }
 
     /**
@@ -240,7 +248,7 @@ class Narrative extends Eloquent
      * @param  boolean $publish
      * @return Narrative
      */
-    private static function createFromXML($xmlFilePath, $category, $publish = false)
+    private function createFromXML($xmlFilePath, $category, $publish = false)
     {
         // Let's parse the XML file and create a Narrative instance.
 
@@ -286,7 +294,7 @@ class Narrative extends Eloquent
      * @param  Narrative  $narrative
      * @return void
      */
-    private static function processMedia($path, $narrative)
+    private function processMedia($path, $narrative)
     {
         // Determine the path to the directory that will hold all the
         // processed media files.
@@ -313,11 +321,11 @@ class Narrative extends Eloquent
 
             // If $f is an image, then process it accordingly.
             if (strpos($mimeType, 'image/') === 0)
-                self::processImageMedia($f, $narrative, $mediaOutputPath);
+                $this->processImageMedia($f, $narrative, $mediaOutputPath);
 
             // If $f is an audio, then process it accordingly.
             if (strpos($mimeType, 'audio/') === 0)
-                self::processAudioMedia($f, $narrative);
+                $this->processAudioMedia($f, $narrative);
 
         }
 
@@ -337,7 +345,7 @@ class Narrative extends Eloquent
      * @param  string     $destination
      * @return Media|null
      */
-    private static function processImageMedia($path, $narrative, $destination) {
+    private function processImageMedia($path, $narrative, $destination) {
         // Retrieve details about the image $path
         $pathinfo = pathinfo($path);
 
@@ -375,7 +383,7 @@ class Narrative extends Eloquent
      * @param  Narrative  $narrative
      * @return void
      */
-    private static function processAudioMedia($path, $narrative) {
+    private function processAudioMedia($path, $narrative) {
         // Queue the audio file for transcoding via the `TranscodeAudio`
         // function, using the `transcoding` queue pipe.
         return Queue::push('TranscodeAudio', array(

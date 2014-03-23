@@ -26,11 +26,14 @@ Route::group(array('prefix' => 'api'), function() {
     // Flag API
     Route::resource('flags','ApiFlagController');
 
+    // Flag comment API
+    Route::resource('flags/comments','ApiFlagController@show');
+
     // Category API
     Route::resource('category', 'ApiCategoryController');
 
     // Comment API
-    Route::resource('comments', 'ApiCommentController');
+    Route::controller('comment', 'ApiCommentController');
 });
 
 // Route for content handler
@@ -67,6 +70,9 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
         //Remove Narrative
         Route::delete('narrative/{id}', 'AdminNarrativeController@destroy');
 
+        //Remove comment
+        Route::delete('comment/{id}', 'AdminCommentController@destroy');
+
     });
 
     // Routing for Configuration
@@ -88,3 +94,6 @@ Route::group(array('prefix' => 'auth'), function() {
     Route::get('logout', array('uses' => 'AuthController@getLogout', 'as' => 'logout'));
 
 });
+
+// Route for the player interface.
+Route::controller('player', 'PlayerController');

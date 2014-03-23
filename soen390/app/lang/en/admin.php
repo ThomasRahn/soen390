@@ -13,6 +13,15 @@ return array(
             'signOut' => 'Sign Out',
             'profile' => 'Profile',
         ),
+  'comments' => array(
+            'table' => array(
+                    'name' => 'Name',
+                    'views' => 'Views',
+                    'comment' => 'Comment',
+                    'agrees' => 'Agrees',
+                    'disagrees' => 'Disagrees'
+                )
+	),
 
     'narratives' => array(
             'table' => array(
@@ -35,7 +44,7 @@ return array(
 
             'tips' => array(
                     'tip' => 'Tip!',
-                    'updateNarrative' => 'You can toggle the publication status of each narrative by clicking on the <i class="fa fa-check-square-o"></i> and <i class="fa fa-square-o"></i>-icon. The Category can be changed by clicking on the current label.',
+                    'updateNarrative' => '<ul><li>You can toggle the publication status of each narrative by clicking on the <i class="fa fa-check-square-o"></i> and <i class="fa fa-square-o"></i>-icon.</li><li>The Category can be changed by clicking on the current label.</li><li>Each column can be sorted by clicking on their respective headers.</li>',
                 ),
 
             'update' => array(
@@ -48,7 +57,7 @@ return array(
                             'category' => 'Select the category that will be applied to all narratives found in the archive. This can be changed individually after.',
                             'publish' => 'Would you like the uploaded narratives to be published and made available on the site immediately? You can publish/unpublish each narrative individually later.',
                         ),
-                    'submit' => 'Upload Narrative(s)',
+                    'submit' => 'Upload Archive',
                     'close' => 'Close',
                     'uploading' => array(
                             'pleaseWait' => 'Uploading, please wait...',
@@ -78,6 +87,37 @@ return array(
                     'label'       => 'Enable maintenance mode?',
                     'help'        => 'The administrative interface will always be available.',
                 ),
+
+            'supportEmail' => array(
+                    'description' => 'This value will determine the recipient address for the support email link on the client site.',
+                    'legend'      => 'Support Email',
+                    'label'       => 'Email Address',
+                ),
+
+            'validator' => array(
+                    'fails' => 'There is a mistake in one of the configuration fields. Please correct it and try to save again.',
+                ),
+        ),
+
+    'profile' => array(
+
+            'form' => array(
+                    'name' => 'Name',
+                    'email' => 'Email Address',
+                    'language' => 'Language',
+                    'newPassword' => 'New Password',
+                    'confirmPassword' => 'Confirm Password',
+                    'saveChanges' => 'Save Changes',
+                    'undoChanges' => 'Undo Changes',
+                    'changePasswordTip' => '<p class="lead">Changing Passwords</p><p>The password fields only need to be filled-out <strong>if</strong> you want to change your password. If you do not wish to change your password, you can simply leave them blank.</p>',
+                ),
+
+            'postIndex' => array(
+                    'validationFails' => '<p>There is a mistake in your form. Please correct it and try again.</p>',
+                    'internalError'   => '<p>Unable to save your changes due to an internal error.</p>',
+                    'success'         => '<p>Your profile has been updated successfully.</p>',
+                ),
+
         ),
 
     'profile' => array(

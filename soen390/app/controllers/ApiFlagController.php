@@ -41,4 +41,29 @@ class ApiFlagController extends \BaseController {
         return Response::json($flagArray);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function show()
+    {
+        $comment = Input::get('CommentID');
+
+        $flags = Flag::where('CommentID', $comment)->with('comment')->get();
+
+        $flagArray = array();
+
+        foreach ($flags as $flag) {
+            $flagArray[] = array(
+                    'id'          => $flag->FlagID,
+                    'name'        => $flag->comment()->first()->Name,
+                    'commentID'   => $flag->CommentID,
+                    'comment'     => $flag->Comment,
+                );
+        }
+
+        return Response::json($flagArray);
+    }
+
 }

@@ -14,7 +14,7 @@ class CreateLanguageTable extends Migration {
 		Schema::create('Language', function($table)
 		{
 			$table->increments('LanguageID');
-			$table->string('Description', 20);
+			$table->string('Description');
 		});
 	}
 

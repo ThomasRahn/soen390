@@ -120,11 +120,11 @@
         </div>
 
         <section id="cards-container">
-		<div id="stance-heading">
-			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-up"></i></span>
-			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-ellipsis-h"></i></span>
-			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-down"></i></span>
-		</div>
+    		<div id="stance-heading">
+    			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-up"></i></span>
+    			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-ellipsis-h"></i></span>
+    			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-down"></i></span>
+    		</div>
         </section>
 
         <div class="container">
@@ -142,8 +142,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="container">
             <footer class="navbar navbar-fixed-bottom">
-                <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <a class="text-muted" href="mailto:support@youdeliberate.org" title="Email us for support."><i class="fa fa-envelope-o"></i></a> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
+                <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <a class="text-muted" href="mailto:{{ Configuration::get('supportEmail') }}" title="Email us for support."><i class="fa fa-envelope-o"></i></a> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
             </footer>
         </div>
 
@@ -200,11 +203,11 @@
              * @param langCode string
              */
             function setLanguageFilter(langCode) {
-		var lang = null;
+        		var lang = null;
 
-		if (langCode == "en") lang = "English";
+        		if (langCode == "en") lang = "English";
 
-		if (langCode == "fr") lang = "French";
+        		if (langCode == "fr") lang = "French";
 
                 rectangles.transition()
                           .duration(500)
@@ -212,24 +215,32 @@
                               return (lang === null || lang === node.lang) ? 1 : 0.2;
                           });
             }
-
             /**
              * Sort narratives on page based on narrative stance value.
              *
              * @param enableSort boolean
              */
             function setStanceSorting(enableSort) {
+
                 force.gravity(layoutGravity)
                      .charge(charge)
                      .friction(0.9)
                      .on('tick', function(e) {
-                        return rectangles.each(function(node) {
-                                                var target = (enableSort ? stanceGravityCenters[node.stance] : center);
-                                                node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
-                                                node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
-                                              })
-                                         .attr('x', function(node){return node.x})
-                                         .attr('y', function(node){return node.y});
+                         rectangles.selectAll(".child").each(function(node) {
+                                    var target = (enableSort ? stanceGravityCenters[node.stance] : center);
+                                    node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
+                                    node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
+                                  })
+                             .attr('x', function(node){return node.x})
+                             .attr('y', function(node){return node.y});
+
+                         rectangles.selectAll(".rect").each(function(node) {
+                                    var target = (enableSort ? stanceGravityCenters[node.stance] : center);
+                                    node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
+                                    node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
+                                  })
+                             .attr('x', function(node){return node.x })
+                             .attr('y', function(node){return node.y + (stdThumbH *0.9)});
                      });
 
                 force.start();

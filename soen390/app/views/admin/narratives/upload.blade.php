@@ -9,6 +9,13 @@ Upload Narrative(s)
     .n-upload-form {
         margin-top: 20px;
     }
+    .modal-body {
+        padding-top: 50px;
+    }
+    .progress-bar {
+        font-family: "Roboto Condensed", "Arial Narrow", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 300;
+    }
 </style>
 @stop
 
@@ -17,8 +24,20 @@ Upload Narrative(s)
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <p class="text-center"><i class="fa fa-spin fa-spinner fa-fw fa-3x"></i></p>
-                <p class="text-center"><span class="lead">{{ trans('admin.narratives.upload.uploading.pleaseWait') }}</span><br><small class="text-muted">{{ trans('admin.narratives.upload.uploading.mayTakeAWhile') }}</small></p>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="progress">
+                            <div class="progress-bar upload-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <p class="text-center"><span class="lead">{{ trans('admin.narratives.upload.uploading.pleaseWait') }}</span><br><small class="text-muted">{{ trans('admin.narratives.upload.uploading.mayTakeAWhile') }}</small></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="cancel-upload-button" class="btn btn-danger"><i class="fa fa-minus-circle fa-fw"></i> Cancel</button>
             </div>
         </div>
     </div>
@@ -67,7 +86,7 @@ Upload Narrative(s)
 
             <div class="form-group">
                 <div class="col-sm-9 col-sm-offset-3">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-upload"></i> {{ trans('admin.narratives.upload.submit') }}</button>
+                    <button type="submit" class="btn btn-default">{{ trans('admin.narratives.upload.submit') }}</button>
                 </div>
             </div>
         {{ Form::close() }}
@@ -79,7 +98,35 @@ Upload Narrative(s)
 <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script>
+    var xhr = null, uploadCancelled = false;
+
+    function uploadProgressHandler(e) {
+        if (! e.lengthComputable) return;
+
+        var loaded          = e.loaded,
+            total           = e.total,
+            percentComplete = parseInt((loaded / total) * 100),
+            cssWidth        = percentComplete + "%";
+
+        if (percentComplete > 89) {
+            $("#cancel-upload-button").attr("disabled", "disabled");
+        }
+
+        $(".upload-progress-bar").css("width", cssWidth);
+        $(".upload-progress-bar").html(cssWidth);
+    }
+
     $(document).ready(function() {
+
+        $("#cancel-upload-button").click(function(e){
+            e.preventDefault();
+
+            uploadCancelled = true;
+
+            xhr.abort();
+
+            $("#uploadProgressModal").modal("hide");
+        });
 
         $(".n-upload-form").submit(function(e) {
             e.preventDefault();
@@ -92,13 +139,20 @@ Upload Narrative(s)
 
             var formData = new FormData(form[0]);
 
-            $.ajax({
+            xhr = $.ajax({
                 type: "POST",
                 url: "/api/narrative",
                 data: formData,
                 cache: false,
                 processData: false,
-                contentType: false
+                contentType: false,
+                xhr: function() {
+                    myXhr = $.ajaxSettings.xhr();
+
+                    if (myXhr.upload) myXhr.upload.addEventListener('progress', uploadProgressHandler, false);
+
+                    return myXhr;
+                }
             }).done(function(data, status, xhr) {
                 $("#uploadCompletedModal .modal-body").html(
                     "<p class=\"text-center text-success\"><i class=\"fa fa-thumbs-o-up fa-fw fa-3x\"></i></p>" +
@@ -110,6 +164,11 @@ Upload Narrative(s)
                 $("#uploadProgressModal").modal("hide");
                 $("#uploadCompletedModal").modal("show");
             }).fail(function(xhr, status, error) {
+                if (uploadCancelled === true) {
+                    uploadCancelled = false;
+                    return;
+                }
+
                 $("#uploadCompletedModal .modal-body").html(
                     "<p class=\"text-center text-danger\"><i class=\"fa fa-thumbs-o-down fa-fw fa-3x\"></i></p>" +
                     "<p class=\"text-center\"><span class=\"lead\">{{ trans('admin.narratives.upload.uploaded.failed') }}</span><br><small>{{ trans('admin.narratives.upload.uploaded.failedSorry') }}</small></p>" +

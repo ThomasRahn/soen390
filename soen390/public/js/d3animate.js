@@ -1,6 +1,6 @@
 var data            = null,
     width           = $(window).width(),
-    height          = $(window).height() - 225,
+    height          = $(window).height() - 235,
     visualization   = null,
     layoutGravity   = -0.01,
     damper          = 0.1,
@@ -115,26 +115,61 @@ function createVisualization() {
                       .attr('height', height)
                       .attr('id', 'svg_vis');
 
-    rectangles = visualization.selectAll('image')
+    rectangles = visualization.selectAll('g')
                               .data(nodes, function(node) {return node.id;});
 
-    rectangles.enter()
-             .append('image')
-             .attr('class', 'card')
-             .attr('data-narrative-id', function(node) {return node.id})
-             .attr('width', stdThumbW)
-             .attr('height', stdThumbH)
-             .attr('xlink:href', function(node) {return node.imageLink})
-             .on('mouseover', cardMouseOver)
-             .on('mouseout', cardMouseOut)
-             .on('click', function(node) {
-                var popupWidth = screen.width * 0.75, 
-                    popupHeight = screen.height * 0.75,
-                    left = (screen.width / 2) - (popupWidth / 2),
-                    top = (screen.height / 2) - (popupHeight / 2);
+    rectangles.enter().append("g");
+  
+              
+    rectangles.append('image')  
+            .attr("x", function (d) { return d.x })
+            .attr("y", function (d) { return d.y })
+            .attr("class", "child")
+            .attr('data-narrative-id', function(node) {return node.id})
+            .attr("width",stdThumbW)
+            .attr("height",stdThumbH)
+            .on('mouseover', cardMouseOver)
+            .on('mouseout', cardMouseOut)  
+            .attr('xlink:href', function(node) {return node.imageLink})
+            .on('click', function(node) {
+                 var popupWidth  = 1200, 
+                    popupHeight = 665,
+                    left        = (screen.width / 2) - (popupWidth / 2),
+                    top         = 0,
+                    windowHref  = '/player/play/' + node.id;
                     
-                window.open('/narrative/' + node.id, 'Listen to narrative', 'toolbar=no,location=no,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
+                window.open(windowHref, 'Listen to narrative', 'toolbar=no,location=no,resizable=no,scrollbars=yes,width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top).focus();
              });
+
+    rectangles.append("rect")
+          .attr("x", function (d) { return d.x })
+          .attr("y", function (d) { return d.y + (stdThumbH * 0.9)})
+          .attr("class", "rect")
+          .attr("width", function (d) {
+                    var likes = parseInt(d.yays);
+                    var dislikes = parseInt(d.nays);
+                    var numberOfVotes = likes + dislikes;
+                    var likesRatio = likes / numberOfVotes;
+                    var likesRectangleWidth = (likesRatio * stdThumbW) + (dislikes / numberOfVotes) * stdThumbW;
+                    return likesRectangleWidth;
+                })
+          .attr("height", (stdThumbH * 0.1))
+          .attr("style", "fill:rgb(0,255,0);stroke-width:1;stroke:rgb(0,0,0);");
+
+    rectangles.append("rect")
+          .attr("x", function (d) { return d.x })
+          .attr("y", function (d) { return d.y +(stdThumbH * 0.9)})
+          .attr("class", "rect")
+          .attr("width", function (d) {
+                var likes = parseInt(d.yays);
+                var dislikes = parseInt(d.nays);
+                var numberOfVotes = likes + dislikes;
+                var dislikesRatio = dislikes / numberOfVotes;
+                var dislikesRectangleWidth = dislikesRatio * stdThumbW;
+                return dislikesRectangleWidth;
+            })
+          .attr("height", (stdThumbH * 0.1))
+          .attr("style", "fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)");
 }
 
 function start() {
@@ -149,9 +184,13 @@ function mainGroupFilter() {
          .charge(charge)
          .friction(0.9)
          .on('tick', function(e) {
-            return rectangles.each(moveTowardsCenter(e.alpha))
+             rectangles.selectAll(".child").each(moveTowardsCenter(e.alpha))
                             .attr('x', function(d) {return d.x})
                             .attr('y', function(d) {return d.y});
+
+             rectangles.selectAll(".rect").each(moveTowardsCenter(e.alpha))
+                          .attr('x', function(d) {return d.x})
+                          .attr('y', function(d) {return d.y + (stdThumbH * 0.9)});
          });
     
     force.start();
@@ -165,5 +204,24 @@ function moveTowardsCenter(alpha) {
 }
 
 function charge(d) {
-    return -Math.pow(d.width, 2.0) / 8;
+    return -Math.pow(d.width, 2.0) / 4;
+}
+function calculateSize()
+
+{
+
+    var elementHeight = document.getElementById('svg_vis').clientHeight;
+
+    var elementWidth = document.getElementById('svg_vis').clientWidth;
+
+
+    var area = elementHeight * elementWidth;
+
+    var numberOfCards = nodes.length;
+
+    var cardArea = (area / 10) / (numberOfCards);
+
+
+    return Math.sqrt(cardArea);
+
 }
