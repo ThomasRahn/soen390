@@ -189,8 +189,7 @@ class ApiCommentControllerTest extends TestCase
         $response = $this->action(
             'GET',
             'ApiCommentController@getNarrative',
-            array('id' => $id),
-            array('withUnpublished' => '1')
+            array('id' => $id, 'withUnpublished' => 1)
         );
 
         $this->assertResponseStatus(404);
@@ -221,8 +220,7 @@ class ApiCommentControllerTest extends TestCase
         $response = $this->action(
             'GET',
             'ApiCommentController@getNarrative',
-            array('id' => $id),
-            array('withUnpublished' => '1')
+            array('id' => $id, 'withUnpublished' => 1)
         );
 
         $this->assertResponseOk();
