@@ -5,7 +5,7 @@
         <title>You Deliberate Player</title>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic|Roboto+Condensed:300,400,700">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Cinzel|Roboto:300,300italic,400,400italic,500|Roboto+Condensed:300,400,700">
         <style>
             body {
                 font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -41,6 +41,9 @@
             }
             legend {
                 font-size: 20px;
+            }
+            textarea {
+                resize: vertical;
             }
             .brand {
                 font-family: Cinzel, Garamond, "Times New Roman", serif;
@@ -176,6 +179,52 @@
             .comment-post-result {
                 padding-right: 20px;
             }
+            .flag-link {
+                margin-left: 5px;
+                color: #555;
+            }
+            .flag-link:hover {
+                color: #800;
+            }
+            .media-heading {
+                text-transform: none;
+                font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-weight: 500;
+            }
+            .media-heading small {
+                font-family: "Roboto Condensed", "Arial Narrow", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 80%;
+                font-weight: 300;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+                margin-left: 5px;
+                color: #aaa;
+            }
+            .media-footer {
+                margin: 5px 0 10px;
+                font-size: 12px;
+                font-weight: 300;
+                font-family: "Roboto Condensed", "Arial Narrow", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                text-transform: uppercase;
+            }
+            .media-footer a {
+                margin: 0 6px;
+                color: #aaa;
+            }
+            .media-footer a:first-of-type {
+                margin-left: 0;
+            }
+            .media .media {
+                margin: 10px 0 0 10px;
+                padding: 10px 0 0 10px;
+                border-left: 2px solid #e5e5e5;
+            }
+            .voted {
+                color: #333 !important;
+            }
+            .flagged {
+                color: #a94442 !important;
+            }
 
             @media (max-width: 768px) {
                 .comment-frame {
@@ -213,10 +262,10 @@
 
                         <article class="controls">
                             <div class="btn-group vote-btn-group" data-toggle="tooltip" title="You may vote after viewing the narrative.">
-                                <button type="button" class="btn btn-default agree-btn" id="agree"onclick="expressOpinion(1)" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative.">
+                                <button type="button" class="btn btn-default agree-btn" id="agree" onclick="expressOpinion(1, this)" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative.">
                                     <i class="fa fa-thumbs-up fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default disagree-btn" id="disagree" onclick="expressOpinion(2)" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative.">
+                                <button type="button" class="btn btn-default disagree-btn" id="disagree" onclick="expressOpinion(2, this)" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative.">
                                     <i class="fa fa-thumbs-down fa-fw"></i>
                                 </button>
                             </div>
@@ -295,31 +344,128 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Report Inappropriate Narrative</h4>
+                        <h4 class="modal-title">Report an inappropriate narrative</h4>
                     </div>
 
                     <div class="modal-body">
-                        <form id="reported-narrative">
-                            {{ Form::token("crsf_token")}}
+                        <form id="narrative-report-form">
+                            {{ Form::token("crsf_token") }}
 
                             <div class="form-group">
-                                {{ Form::textarea("report-comment", "I am reporting this narrative because, ", array("class" => "form-control")) }}
+                                {{ Form::label("report-comment", "I am reporting this narrative because,", array("class" => "control-label")) }}
+                                {{ Form::textarea("report-comment", null, array("class" => "form-control", "required" => "required")) }}
                             </div>
                         </form>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="reportNarrative()">Send Report</button>
+                        <button type="button" class="btn btn-primary" id="report-submit-btn">Send Report</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="modal fade" id="share-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Share this narrative</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <input type="text" class="form-control text-center" id="href-text">
+                                <br>
+                                <p class="text-center text-muted">You can share this narrative by giving out the link above.<br>Copy by selecting the link and pressing <code>Ctrl + C</code> or <code> &#8984; + C</code>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="subcomment-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Reply to comment</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <blockquote class="parent-comment-content">
+                            <div class="parent-comment-body">This is a sample comment.</div>
+                            <footer class="parent-comment-name"><cite title="23 days ago">John Smith</cite></footer>
+                        </blockquote>
+
+                        <hr>
+
+                        <form class="form-horizontal" id="subcomment-form">
+                            {{ Form::token() }}
+                            <input type="hidden" name="parent" value="">
+
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-1">
+                                    <input type="text" name="name" class="form-control" placeholder="Nom/Name (Optionnel/Optional)">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-1">
+                                    <textarea name="comment" class="form-control" placeholder="Commentaire/Comments" rows="5"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-10 col-sm-offset-1 text-right">
+                                    <button type="submit" class="btn btn-primary">R&eacute;pondre/Reply</button>
+                                    <button type="reset" class="btn btn-default">D&eacute;barrasser/Clear</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="report-comment-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Report an inappropriate comment</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="comment-report-form">
+                            {{ Form::token() }}
+                            <input type="hidden" id="report-comment-id" name="comment-id" value="">
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label for="reasoning" class="control-label">I am reporting this comment because,</label>
+                                    <textarea class="form-control" id="reasoning" name="reasoning" rows="5"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12 text-right">
+                                    <button type="submit" class="btn btn-primary">Send Report</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Scripts -->
         <script src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
         <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
         <script src="{{ asset('js/player.js') }}"></script>
         <script src="{{ asset('js/player_comments.js') }}"></script>
         <script>
@@ -327,48 +473,63 @@
 
             function reportNarrative() {
                 if(narrativeID != -1){
-                    var form = $("#reported-narrative").serialize() + "&NarrativeID="+narrativeID;
+                    var form = $("#narrative-report-form").serialize() + "&NarrativeID="+narrativeID;
                     $.ajax({//
                         url:"/flag",
                         type:"POST",
                         data:form,
-                        success:function(){//
-                            alert("Narrative Reported.");
+                        success: function() {
+                            $.bootstrapGrowl("Report sent!", {type: "success"});
+                        },
+                        error: function() {
+                            $.bootstrapGrowl("Could not send your report due to a server error. Please try again later!", {type: "error"});
                         }
                     });
                     $(".flag-btn").attr("disabled","disabled");
+                    $(".flag-btn").addClass("btn-danger");
                     $("#report-narrative").modal("hide");
                 }
             }
 
-            function expressOpinion(id) {
-                if(narrativeID != -1){
+            function expressOpinion(id, elem) {
+                if (narrativeID != -1) {
                     //ajax call with stance to increase agree or disagree or indifferent
                     var old = false
 
-                    if(stance != ""){//
+                    if (stance != "") {
                         var old = true;
-                        $("#"+stance).removeAttr("disabled");
+                        $("#"+stance).removeAttr("disabled")
+                        $("#"+stance).removeClass("btn-success btn-primary");
                     }
+
                     var token = $("input[name=_token]").val();
+                    
                     if(id == 1)
                         stance = "agree";
                     else
                         stance = "disagree";
-                    
-                    $("#"+stance).attr("disabled","disabled");
 
-                    $.ajax({//
+                    $.ajax({
                         url:"/stance",
                         type:"POST",
-                        data:{//
+                        data: {
                             NarrativeID: narrativeID,
                             _token : token,
                             stance: id,
                             old : old
                         },
-                        success:function(){//
-                               alert("Your opinion has been receieved.");
+                        success: function() {
+                            $.bootstrapGrowl("Opinion saved!", {type: "success", align: "left", offset: {from: "bottom", amount: 20}});
+                            $("#"+stance).attr("disabled","disabled")
+
+                            if (stance === "agree") {
+                                $("#"+stance).addClass("btn-success");
+                            } else {
+                                $("#"+stance).addClass("btn-primary");
+                            }
+                        },
+                        error: function() {
+                            $.bootstrapGrowl("Could not save your opinion due to a server error. Please try again later!", {type: "error", align: "left", offset: {from: "bottom", amount: 20}});
                         }
                     });
                 }
@@ -376,7 +537,9 @@
 
             $(document).ready(function() {
                 // Enable tooltips
-                $("div").tooltip();
+                $("div,button").tooltip({
+                    container: "body"
+                });
 
                 // Prepare the player with the JSON API path to the
                 // narrative resource.
@@ -385,6 +548,21 @@
                 // Prepare the comments with the JSON API path to the
                 // comment resource.
                 prepareComments("{{ $commentsApiPath }}");
+
+                // Bind the share button action
+                $(".share-btn").bind("click", function(e) {
+                    $("#href-text").val(window.location.href);
+                    $("#share-modal").modal("show");
+                });
+
+                $("#href-text").mouseenter(function(e){
+                    $("#href-text").select();
+                });
+
+                // Bind the narrative report actions
+                $("#report-submit-btn").click(function(e) {
+                    reportNarrative();
+                });
             });
         </script>
     </body>

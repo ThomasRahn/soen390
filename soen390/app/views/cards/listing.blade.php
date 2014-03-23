@@ -120,11 +120,11 @@
         </div>
 
         <section id="cards-container">
-		<div id="stance-heading">
-			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-up"></i></span>
-			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-ellipsis-h"></i></span>
-			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-down"></i></span>
-		</div>
+    		<div id="stance-heading">
+    			<span id="yay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-up"></i></span>
+    			<span id="meh-stance-heading" class="text-muted"><i class="fa fa-ellipsis-h"></i></span>
+    			<span id="nay-stance-heading" class="text-muted"><i class="fa fa-thumbs-o-down"></i></span>
+    		</div>
         </section>
 
         <div class="container">
@@ -142,6 +142,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="container">
             <footer class="navbar navbar-fixed-bottom">
                 <p class="text-center text-muted" style="text-transform:uppercase"><small>&mdash; <a class="text-muted" href="mailto:{{ Configuration::get('supportEmail') }}" title="Email us for support."><i class="fa fa-envelope-o"></i></a> &mdash;</small></p><iframe id="konami" style="display:none"></iframe>
             </footer>

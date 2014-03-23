@@ -1,6 +1,6 @@
 var data            = null,
     width           = $(window).width(),
-    height          = $(window).height() - 225,
+    height          = $(window).height() - 235,
     visualization   = null,
     layoutGravity   = -0.01,
     damper          = 0.1,
