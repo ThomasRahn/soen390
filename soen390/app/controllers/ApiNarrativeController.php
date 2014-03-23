@@ -33,7 +33,7 @@ class ApiNarrativeController extends \BaseController
 
 		// Retrieve all published and unpublished narratives if user is
 		// authenticated and requests so.
-		if (Auth::check() && Input::get('withUnpublished', 0) == 1)
+		if (Auth::check() && Input::get('withUnpublished', 0) == '1')
 			$narratives = Narrative::with('category', 'language', 'media')->get();
 		else
 			$narratives = Narrative::with('category', 'language', 'media')->where('Published', 1)->get();
@@ -58,7 +58,7 @@ class ApiNarrativeController extends \BaseController
 	 */
 	public function show($id)
 	{
-		if (Auth::check() && Input::get('withUnpublished', 0) == 1)
+		if (Auth::check() && Input::get('withUnpublished', 0) == '1')
 			$narrative = Narrative::with('category', 'language', 'media')->find($id);
 		else
 			$narrative = Narrative::with('category', 'language', 'media')->where('Published', 1)->find($id);
