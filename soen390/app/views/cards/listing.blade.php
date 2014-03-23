@@ -285,7 +285,7 @@
             }
 
             $(document).ready(function() {
-                $('button').tooltip();
+                $('button').tooltip({'container': 'body'});
 
                 // Set default language to load.
                 setTranslation('en');
