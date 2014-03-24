@@ -1,7 +1,7 @@
 <?php
 
 return array(
-
+    'greeting'=>'Salut, ',
     'sidebar' => array(
             'uploadNarratives' => 'Télécharger les récits',
             'dashboard' => 'Tableau de bord',
@@ -12,6 +12,7 @@ return array(
             'openMainSite' => 'Voir la page principale',
             'signOut' => 'Déconnection',
             'profile' => 'Profil',
+            'googleAnal'=>'Ouvrir Google Analytics',
         ),
   'comments' => array(
             'table' => array(
@@ -70,6 +71,9 @@ return array(
                             'failed' => 'Une erreur est survenue lors du processus de téléchargement.',
                             'failedSorry' => 'Nous nous excusons pour le désagrément occasionné. Le message d\'erreur est le suivant:',
                         ),
+                    'archiveFile'=>'Fichier archive',
+                    'defaultCategory'=>'Catégorie Default',
+                    'publishOnUpload'=>'Publier en téléchargé',
                 ),
         ),
 

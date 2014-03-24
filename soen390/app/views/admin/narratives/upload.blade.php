@@ -59,7 +59,7 @@ Upload Narrative(s)
     <div class="col-md-6 col-md-offset-3">
         {{ Form::open(array('action' => 'ApiNarrativeController@store', 'class' => 'form-horizontal n-upload-form', 'files' => true)) }}
             <div class="form-group">
-                {{ Form::label('archive', 'Archive File', array('class' => 'col-sm-3 control-label')) }}
+                {{ Form::label('archive', trans("admin.narratives.upload.archiveFile"), array('class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
                     {{ Form::file('archive', array('class' => 'form-control', 'accept' => 'application/zip', 'required' => 'required')) }}
                     <span class="help-block"><small>{{ Lang::get('admin.narratives.upload.help.archive', array('limit' => ini_get('post_max_size'))) }}</small></span>
@@ -67,7 +67,7 @@ Upload Narrative(s)
             </div>
 
             <div class="form-group">
-                {{ Form::label('category', 'Default Category', array('class' => 'col-sm-3 control-label')) }}
+                {{ Form::label('category', trans("admin.narratives.upload.defaultCategory"), array('class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
                     {{ Form::select('category', $categoryArray, null, array('class' => 'form-control', 'required' => 'required')) }}
                     <span class="help-block"><small>{{ trans('admin.narratives.upload.help.category') }}</small></span>
@@ -75,7 +75,7 @@ Upload Narrative(s)
             </div>
 
             <div class="form-group">
-                {{ Form::label('publish', 'Publish on Upload?', array('class' => 'col-sm-3 control-label')) }}
+                {{ Form::label('publish', trans("admin.narratives.upload.publishOnUpload"), array('class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
                     <div class="checkbox">
                         {{ Form::checkbox('publish', 'publish') }}
