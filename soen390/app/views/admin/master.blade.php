@@ -115,13 +115,8 @@
         <header>
             <nav class="navbar navbar-default navbar-fixed-top">
                 <div class="container-fluid">
-<<<<<<< HEAD
-                    <a href="#" class="navbar-brand brand">You <i class="fa fa-comments"></i> Deliberate</a>
-                    <span class="navbar-right navbar-text admin-int-text">{{trans('admin.greeting')}} {{{ Auth::user()->Name }}}! <i class="fa fa-rocket fa-fw"></i></span>
-=======
                     <a href="{{ route('dashboard') }}" class="navbar-brand brand">{{ trans('admin.logo') }}</a>
                     <span class="navbar-right navbar-text admin-int-text">{{{ Auth::user()->Name }}} <i class="fa fa-rocket fa-fw"></i></span>
->>>>>>> 12e5d63bf481ccc194ccbd4ada22ea411bde34b9
                 </div>
             </nav>
         </header>
