@@ -36,4 +36,41 @@ class PlayerControllerTest extends TestCase
         $this->assertViewHas('commentsApiPath');
     }
 
+    /**
+     * Attempt to retrieve the player for an unpublished narrative, as an 
+     * ordinary user.
+     *
+     * @covers PlayerController::getPlay
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function testGetPlayWithUnpublishedAsUser()
+    {
+        $this->addNarrativeToDatabase(false);
+
+        $n = Narrative::first();
+
+        $response = $this->action('GET', 'PlayerController@getPlay', array('id' => $n->NarrativeID), array('withUnpublished' => 1));
+
+        $this->assertResponseStatus(404);
+    }
+
+    /**
+     * Attempt to retrieve the player for an unpublished narrative, as an 
+     * administrator user.
+     *
+     * @covers PlayerController::getPlay
+     */
+    public function testGetPlayWithUnpublishedAsAdmin()
+    {
+        $this->addNarrativeToDatabase(false);
+
+        $n = Narrative::first();
+
+        $this->be(new User(array('email' => 'test@admin.local')));
+
+        $response = $this->action('GET', 'PlayerController@getPlay', array('id' => $n->NarrativeID), array('withUnpublished' => 1));
+
+        $this->assertResponseOk();
+    }
+
 }

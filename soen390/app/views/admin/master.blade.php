@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>You Deliberate: @yield('view_title', 'Administrative Interface')</title>
+        <title>{{ trans('admin.youdeliberate') }}: @yield('view_title', 'Administrative Interface')</title>
 
         <link rel="stylesheet" href="http://cdn.jsdelivr.net/bootstrap/3.1.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="http://cdn.jsdelivr.net/fontawesome/4.0.3/css/font-awesome.min.css">
@@ -115,8 +115,13 @@
         <header>
             <nav class="navbar navbar-default navbar-fixed-top">
                 <div class="container-fluid">
+<<<<<<< HEAD
                     <a href="#" class="navbar-brand brand">You <i class="fa fa-comments"></i> Deliberate</a>
                     <span class="navbar-right navbar-text admin-int-text">{{trans('admin.greeting')}} {{{ Auth::user()->Name }}}! <i class="fa fa-rocket fa-fw"></i></span>
+=======
+                    <a href="{{ route('dashboard') }}" class="navbar-brand brand">{{ trans('admin.logo') }}</a>
+                    <span class="navbar-right navbar-text admin-int-text">{{{ Auth::user()->Name }}} <i class="fa fa-rocket fa-fw"></i></span>
+>>>>>>> 12e5d63bf481ccc194ccbd4ada22ea411bde34b9
                 </div>
             </nav>
         </header>
