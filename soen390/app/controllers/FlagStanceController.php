@@ -21,7 +21,7 @@ class FlagStanceController extends BaseController {
 	public function setStance(){
 		$narrativeID = Input::get('NarrativeID');
 		$stance = Input::get('stance');
-		$old = Input::get('old');
+		$old = Input::get('old') == 'true';
 		$narrative = Narrative::find($narrativeID);
 		if($stance == 1){
 			$narrative->increment('Agrees');	
