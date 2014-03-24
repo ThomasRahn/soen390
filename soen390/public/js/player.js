@@ -19,7 +19,14 @@ function preparePlayer(jsonApiPath) {
         function(data) {
             // Store the tracklist.
             trackList = data.return.audio;
+
+            // Store narrative ID
             narrativeID = data.return.id;
+
+            // Set the current narrative vote counts.
+            $(".narrative-agrees").html(data.return.yays);
+            $(".narrative-disagrees").html(data.return.nays);
+
             // Preload the resources.
             preloadImages(data.return.images);
             preloadAudio(trackList);
