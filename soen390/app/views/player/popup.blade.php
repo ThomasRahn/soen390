@@ -106,10 +106,6 @@
                 font-size: 14px;
                 font-weight: 400;
             }
-            .end-time {
-                position: absolute;
-                right: 15px;
-            }
             .controls {
                 text-align: center;
                 margin-top: 25px;
@@ -225,6 +221,16 @@
             .flagged {
                 color: #a94442 !important;
             }
+            .progress-time-table {
+                width: 100%;
+                margin-bottom: 3px;
+            }
+            .end-time {
+                text-align: right;
+            }
+            .narrative-votes {
+                text-align: center;
+            }
 
             @media (max-width: 768px) {
                 .comment-frame {
@@ -249,8 +255,17 @@
                     </article>
 
                     <footer class="player-footer">
-                        <span class="begin-time progress-time">0:00</span>
-                        <span class="end-time progress-time">0:00</span>
+                        <table class="progress-time-table">
+                            <tr>
+                                <td class="begin-time progress-time">0:00</td>
+                                <td class="narrative-votes text-muted">
+                                    <i class="fa fa-fw fa-thumbs-up"></i> <span class="narrative-agrees">0</span>
+                                    &nbsp;&mdash;&nbsp;
+                                    <i class="fa fa-fw fa-thumbs-down"></i> <span class="narrative-disagrees">0</span>
+                                </td>
+                                <td class="end-time progress-time">0:00</td>
+                            </tr>
+                        </table>
 
                         <div class="progress-super-container">
                             <div class="progress-container">
@@ -500,6 +515,14 @@
                         var old = true;
                         $("#"+stance).removeAttr("disabled")
                         $("#"+stance).removeClass("btn-success btn-primary");
+
+                        if (stance == "agree") {
+                            var oldAgrees = parseInt($(".narrative-agrees").html());
+                            $(".narrative-agrees").html(oldAgrees - 1);
+                        } else if (stance == "disagree") {
+                            var oldDisagrees = parseInt($(".narrative-disagrees").html());
+                            $(".narrative-disagrees").html(oldDisagrees - 1);
+                        }
                     }
 
                     var token = $("input[name=_token]").val();
@@ -524,8 +547,14 @@
 
                             if (stance === "agree") {
                                 $("#"+stance).addClass("btn-success");
+
+                                var oldAgrees = parseInt($(".narrative-agrees").html());
+                                $(".narrative-agrees").html(oldAgrees + 1);
                             } else {
                                 $("#"+stance).addClass("btn-primary");
+
+                                var oldDisagrees = parseInt($(".narrative-disagrees").html());
+                                $(".narrative-disagrees").html(oldDisagrees + 1);
                             }
                         },
                         error: function() {
