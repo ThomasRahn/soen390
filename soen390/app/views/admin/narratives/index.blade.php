@@ -1,7 +1,7 @@
 @extends('admin.master')
 
 @section('view_title')
-Narratives
+{{ trans('admin.sidebar.narratives') }}
 @stop
 
 @section('styles')

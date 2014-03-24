@@ -2,6 +2,9 @@
 
 return array(
 
+    'youdeliberate' => 'You Deliberate',
+    'logo'          => 'You <i class="fa fa-comments"></i> Deliberate',
+
     'sidebar' => array(
             'uploadNarratives' => 'Upload Narrative(s)',
             'dashboard' => 'Google Analytics',
@@ -13,7 +16,12 @@ return array(
             'signOut' => 'Sign Out',
             'profile' => 'Profile',
         ),
-  'comments' => array(
+
+    'dashboard' => array(
+            'open' => 'Open Google Analytics',
+        ),
+
+    'comments' => array(
             'table' => array(
                     'name' => 'Name',
                     'views' => 'Views',
@@ -21,7 +29,7 @@ return array(
                     'agrees' => 'Agrees',
                     'disagrees' => 'Disagrees'
                 )
-	),
+    ),
 
     'narratives' => array(
             'table' => array(
@@ -33,12 +41,12 @@ return array(
                     'uploadedOn' => 'Uploaded On',
                     'published' => 'Published?',
                     'manage' => 'Manage',
-		            'comment'=> 'Comment',
+                    'comment'=> 'Comment',
                     'empty' => 'You need to upload some narratives first!',
                     'loading' => 'Loading narratives...',
                     'inTotal' => 'narrative(s) in total.',
-		            'totalFlags' => 'flag(s) in total.',
-		            'narrativeName'=> 'Narrative Name',
+                    'totalFlags' => 'flag(s) in total.',
+                    'narrativeName'=> 'Narrative Name',
                     'flags' => 'Flags',
                 ),
 
@@ -52,6 +60,11 @@ return array(
                 ),
 
             'upload' => array(
+                    'form' => array(
+                            'archive'  => 'Archive File',
+                            'category' => 'Default Category',
+                            'publish'  => 'Publish on Upload?',
+                        ),
                     'help' => array(
                             'archive' => 'Select the archive file which contains the narrative(s) that you want to upload. Only .ZIP files are supported at this moment. Archive file must be <strong>:limit</strong> or smaller.',
                             'category' => 'Select the category that will be applied to all narratives found in the archive. This can be changed individually after.',

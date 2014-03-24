@@ -20,6 +20,6 @@ Google Analytics
 @section('content')
 <div class="row ga">
     <i class="fa fa-bar-chart-o fa-fw ga-icon"></i><br>
-    <a class="btn btn-success" href="https://www.google.com/analytics/web/?hl=en" target="_blank">OPEN GOOGLE ANALYTICS</a>
+    <a class="btn btn-success" href="https://www.google.com/analytics/web/?hl=en" target="_blank">{{ trans('admin.dashboard.open') }}</a>
 </div>
 @stop

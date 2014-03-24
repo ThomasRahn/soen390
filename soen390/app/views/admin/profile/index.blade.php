@@ -1,7 +1,7 @@
 @extends('admin.master')
 
 @section('view_title')
-Profile
+{{ trans('admin.sidebar.profile') }}
 @stop
 
 @section('styles')

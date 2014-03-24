@@ -22,13 +22,20 @@ class PlayerController extends \BaseController
      */
     public function getPlay($id)
     {
-        $n = $this->narrative->find($id);
+        $wildcards = array('id' => $id);
+
+        if (Auth::check() && Input::get('withUnpublished', 0) == 1) {
+            $wildcards['withUnpublished'] = 1;
+            $n = $this->narrative->find($id);
+        } else {
+            $n = $this->narrative->where('Published', 1)->find($id);
+        }
 
         if (! $n)
             App::abort(404, 'Unable to find the requested narrative.');
 
         return View::make('player.popup')
-            ->with('narrativeApiPath', action('ApiNarrativeController@show', array('id' => $n->NarrativeID)))
-            ->with('commentsApiPath', action('ApiCommentController@getNarrative', array('id' => $n->NarrativeID)));
+            ->with('narrativeApiPath', action('ApiNarrativeController@show', $wildcards))
+            ->with('commentsApiPath', action('ApiCommentController@getNarrative', $wildcards));
     }
 }

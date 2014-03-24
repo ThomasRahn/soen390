@@ -2,9 +2,12 @@
 
 return array(
 
+    'youdeliberate' => 'Vous Délibérez',
+    'logo'          => 'Vous <i class="fa fa-comments"></i> Délibérez',
+
     'sidebar' => array(
             'uploadNarratives' => 'Télécharger les récits',
-            'dashboard' => 'Tableau de bord',
+            'dashboard' => 'Google Analytics',
             'narratives' => 'Gérer les récits',
             'categories' => 'Gérer les catégories',
             'flagReports' => 'Signaler',
@@ -13,7 +16,12 @@ return array(
             'signOut' => 'Déconnection',
             'profile' => 'Profil',
         ),
-  'comments' => array(
+
+    'dashboard' => array(
+            'open' => 'Ouvrir Google Analytics',
+        ),
+
+    'comments' => array(
             'table' => array(
                     'name' => 'Nom',
                     'views' => 'Vues',
@@ -45,7 +53,7 @@ return array(
 
             'tips' => array(
                     'tip' => 'Astuce!',
-                    'updateNarrative' => '<ul><li>Vous pouvez alterner entre les statuts de publication de chaque récit en cliquant sur <i class="fa fa-check-square-o"></i> et <i class="fa fa-square-o"></i>-icon.</li><li>La catégorie peut être changée en cliquant sur l\'étiquette actuelle.</li><li>Chaque colonne peut être triée en cliquant sur leurs en-têtes respectives.</li>',
+                    'updateNarrative' => '<ul><li>Vous pouvez alterner entre les statuts de publication de chaque récit en cliquant sur <i class="fa fa-check-square-o"></i> et <i class="fa fa-square-o"></i>-icône.</li><li>La catégorie peut être changée en cliquant sur l\'étiquette actuelle.</li><li>Chaque colonne peut être triée en cliquant sur leurs en-têtes respectives.</li>',
                 ),
 
             'update' => array(
@@ -53,6 +61,11 @@ return array(
                 ),
 
             'upload' => array(
+                    'form' => array(
+                            'archive'  => 'Fichier d\'archive',
+                            'category' => 'Catégorie défaut',
+                            'publish'  => 'Publier sur téléchargement?',
+                        ),
                     'help' => array(
                             'archive' => 'Sélectionner le fichier contenant le(s) récit(s) que vous souhaitez télécharger. Seuls les fichiers .ZIP sont acceptés pour le moment. Le fichier doit être de <strong>:limit</strong> ou moins.',
                             'category' => 'Sélectionner la catégorie qui s\'appliquera à tous les récits du fichier. Ce paramètre peut être modifié de façon individuelle par la suite.',
@@ -74,7 +87,7 @@ return array(
         ),
 
     'configuration' => array(
-            'saveSettings'  => 'Paramètres de sauvegarde',
+            'saveSettings'  => 'Enregistrer',
             'resetSettings' => 'Annuler les changements',
 
             'save' => array(
@@ -104,28 +117,7 @@ return array(
                     'language' => 'Langue',
                     'newPassword' => 'Nouveau mot de passe',
                     'confirmPassword' => 'Confirmer le mot de passe',
-                    'saveChanges' => 'Sauvegarder les changements',
-                    'undoChanges' => 'Annuler les changements',
-                    'changePasswordTip' => '<p class="lead">Changer de mot de passe</p><p>Les champs pour le mot de passe ne doivent être remplis <strong>que si</strong> vous souhaitez changer votre mot de passe. Si vous ne souhaitez pas changer votre mot de passe, vous pouvez simplement les laisser vides.</p>',
-                ),
-
-            'postIndex' => array(
-                    'validationFails' => '<p>Il y a une erreur dans votre formulaire. Veuillez la corriger et essayer de nouveau.</p>',
-                    'internalError'   => '<p>Impossible de sauvegarder vos changements dû à une erreur interne.</p>',
-                    'success'         => '<p>Votre profil a été mis à jour avec succès.</p>',
-                ),
-
-        ),
-
-    'profile' => array(
-
-            'form' => array(
-                    'name' => 'Nom',
-                    'email' => 'Adresse courriel',
-                    'language' => 'Langue',
-                    'newPassword' => 'Nouveau mot de passe',
-                    'confirmPassword' => 'Confirmer le mot de passe',
-                    'saveChanges' => 'Sauvegarder les changements',
+                    'saveChanges' => 'Enregistrer',
                     'undoChanges' => 'Annuler les changements',
                     'changePasswordTip' => '<p class="lead">Changer de mot de passe</p><p>Les champs pour le mot de passe ne doivent être remplis <strong>que si</strong> vous souhaitez changer votre mot de passe. Si vous ne souhaitez pas changer votre mot de passe, vous pouvez simplement les laisser vides.</p>',
                 ),

@@ -1,7 +1,7 @@
 @extends('admin.master')
 
-@section('title')
-Configuration
+@section('view_title')
+{{ trans('admin.sidebar.configuration') }}
 @stop
 
 @section('styles')
