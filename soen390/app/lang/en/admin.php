@@ -1,10 +1,8 @@
 <?php
 
 return array(
-
     'youdeliberate' => 'You Deliberate',
     'logo'          => 'You <i class="fa fa-comments"></i> Deliberate',
-
     'sidebar' => array(
             'uploadNarratives' => 'Upload Narrative(s)',
             'dashboard' => 'Google Analytics',
@@ -15,6 +13,7 @@ return array(
             'openMainSite' => 'View User Site',
             'signOut' => 'Sign Out',
             'profile' => 'Profile',
+            'googleAnal'=>'Open Google Analytics',
         ),
 
     'dashboard' => array(
@@ -82,6 +81,9 @@ return array(
                             'failed' => 'An error occured during the upload process.',
                             'failedSorry' => ' We\'re sorry for any inconvenience caused. The following is the error message:',
                         ),
+                    'archiveFile'=>'Archive File',
+                    'defaultCategory'=>'Default Category',
+                    'publishOnUpload'=>'Publish on Upload',
                 ),
         ),
 
