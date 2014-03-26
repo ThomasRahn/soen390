@@ -240,7 +240,7 @@
                                     node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
                                   })
                              .attr('x', function(node){return node.x })
-                             .attr('y', function(node){return node.y + (stdThumbH *0.9)});
+                             .attr('y', function(node){return node.y + (narrative_ids[node.id] *0.85)});
                      });
 
                 force.start();
@@ -257,33 +257,85 @@
              * @param enable boolean
              */
             function setSizeByViews(enable) {
-                rectangles.transition()
+                rectangles.selectAll(".child").transition()
                           .duration(750)
                           .attr('width', function(node) {
-                            if (enable)
-                                return parseInt(node.views) * 10 + 30;
-
+                            if (enable){
+                                return parseInt(node.views) * 3;
+                            }
                             return stdThumbW;
                           })
                           .attr('height', function(node) {
-                            if (enable)
-                                return parseInt(node.views) * 10 + 30;
-
+                            if (enable){
+                                narrative_ids[node.id] = parseInt(node.views) * 3;
+                                return parseInt(node.views) * 3;
+                            }
+                            narrative_ids[node.id] = stdThumbH;
                             return stdThumbH;
+                          });
+
+                    rectangles.selectAll(".agree").transition()
+                          .duration(300)
+                          .attr('width', function(node) {
+                            var likes = parseInt(node.yays);
+                            var dislikes = parseInt(node.nays);
+                            var numberOfVotes = likes + dislikes;
+                            var likesRatio = likes / numberOfVotes;
+                            if (enable){
+                                var tempW = parseInt(node.views) * 3;
+                                var likesRectangleWidth = (likesRatio * tempW) + (dislikes / numberOfVotes) * tempW;
+                                return likesRectangleWidth;
+                            }
+                            var likesRectangleWidth = (likesRatio * stdThumbW) + (dislikes / numberOfVotes) * stdThumbW;
+                            return likesRectangleWidth;
+                          })
+                          .attr('height', function(node) {
+                            if (enable){
+                                return (parseInt(node.views) * .3);
+                            }
+                            return stdThumbH * 0.1;
+                          });
+
+                   rectangles.selectAll(".disagree").transition()
+                          .duration(300)
+                          .attr('width', function(node) {
+                            var likes = parseInt(node.yays);
+                            var dislikes = parseInt(node.nays);
+                            var numberOfVotes = likes + dislikes;
+                            var dislikesRatio = dislikes / numberOfVotes;
+                            if (enable){
+                                var tempW = parseInt(node.views) * 3;
+                                var dislikesRectangleWidth = dislikesRatio * tempW;
+                                return dislikesRectangleWidth;
+                            }
+                         
+                            var dislikesRectangleWidth = dislikesRatio * stdThumbW;
+                            return dislikesRectangleWidth;
+                          })
+                          .attr('height', function(node) {
+                            if (enable){
+                                return (parseInt(node.views) * .3);
+                            }
+                            return stdThumbH * 0.1;
                           });
 
                 force.gravity(layoutGravity)
                      .charge(function(node) {
-                        if (enable)
-                            return -Math.pow(parseInt(node.views) * 10 + 30, 2.0) / 8;
-
-                        return -Math.pow(stdThumbW, 2.0) / 8;
+                        if (enable){
+                            return -Math.pow(parseInt(node.views) * 8, 2.0) / 20;
+                        }
+                        return charge(node);
                      })
                      .friction(0.9);
-
                 force.start();
             }
-
+function printObject(o) {
+  var out = '';
+  for (var p in o) {
+    out += p + ': ' + o[p] + '\n';
+  }
+  alert(out);
+}
             $(document).ready(function() {
                 $('button').tooltip({'container': 'body'});
 
@@ -328,6 +380,7 @@
                     } else {
                         $(this).addClass('active');
                         setStanceSorting(true);
+
                     }
                 });
 
@@ -342,6 +395,7 @@
                         $(this).addClass('active');
                         setSizeByViews(true);
                     }
+
                 });
 
                 // Handle Konami code.
