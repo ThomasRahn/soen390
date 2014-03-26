@@ -51,6 +51,7 @@ function createNodes() {
 }
 
 function cardMouseOver(eventNode) {
+    /*
     rectangles.selectAll(".child")
         .attr('width', function(node) {
             if (node === eventNode)
@@ -85,6 +86,13 @@ function cardMouseOver(eventNode) {
                 return $(this).attr('height');
             
         });
+    */
+    $.each(rectangles,function(index,value){
+        if(value.id == eventNode.id){
+            value.style("border","solid 1px black");
+        }
+    });
+
     var yays = parseInt(eventNode.yays),
         nays = parseInt(eventNode.nays),
         mehs = parseInt(eventNode.mehs);
@@ -111,7 +119,7 @@ function cardMouseOver(eventNode) {
 }
 
 function cardMouseOut(eventNode) {
-    rectangles.selectAll(".child")
+    /* rectangles.selectAll(".child")
         .attr('width', function(node) {
             if (node === eventNode)
                 return $(this).attr('width') / 2;
@@ -142,7 +150,7 @@ function cardMouseOut(eventNode) {
             else
                 return $(this).attr('height');
         });
-
+*/
 
     $(".meta-container").css("opacity", 0);
     $(".meta-container").css("display", "block");
@@ -168,8 +176,8 @@ function createVisualization() {
             .attr('data_narrative_id', function(node) {return node.id})
             .attr("width",stdThumbW)
             .attr("height",function(node){ narrative_ids[node.id] = stdThumbH; return stdThumbH;})
-          //  .on('mouseover', cardMouseOver)
-            //.on('mouseout', cardMouseOut)  
+            .on('mouseover', cardMouseOver)
+            .on('mouseout', cardMouseOut)  
             .attr('xlink:href', function(node) {return node.imageLink})
             .on('click', function(node) {
                  var popupWidth  = 1200, 
@@ -190,12 +198,12 @@ function createVisualization() {
                     var likes = parseInt(d.yays);
                     var dislikes = parseInt(d.nays);
                     var numberOfVotes = likes + dislikes;
-                    var likesRatio = likes / numberOfVotes;
-                    var likesRectangleWidth = (likesRatio * stdThumbW) + (dislikes / numberOfVotes) * stdThumbW;
-                    return likesRectangleWidth;
+                    var dislikesRatio = dislikes / numberOfVotes;
+                    var dislikesRectangleWidth = (dislikesRatio * stdThumbW) + (likes / numberOfVotes) * stdThumbW;
+                    return dislikesRectangleWidth;
                 })
           .attr("height", (stdThumbH * 0.1))
-          .attr("style", "fill:rgb(0,255,0);stroke-width:1;stroke:rgb(0,0,0);");
+          .attr("style", "fill:rgb(0,143,211);stroke-width:1;stroke:rgb(94,94,94);display:none;");
 
     rectangles.append("rect")
           .attr('data_narrative_id', function(node) {return node.id})
@@ -206,12 +214,12 @@ function createVisualization() {
                 var likes = parseInt(d.yays);
                 var dislikes = parseInt(d.nays);
                 var numberOfVotes = likes + dislikes;
-                var dislikesRatio = dislikes / numberOfVotes;
-                var dislikesRectangleWidth = dislikesRatio * stdThumbW;
-                return dislikesRectangleWidth;
+                var likesRatio = likes / numberOfVotes;
+                var likesRectangleWidth = likesRatio * stdThumbW;
+                return likesRectangleWidth;
             })
           .attr("height", (stdThumbH * 0.1))
-          .attr("style", "fill:rgb(0,143,221);stroke-width:1;stroke:rgb(0,0,0)");
+          .attr("style", "fill:rgb(0,255,0);stroke-width:1;stroke:rgb(94,94,94);display:none;");
 }
 
 function start() {
