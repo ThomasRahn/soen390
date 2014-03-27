@@ -96,6 +96,9 @@
             .narrative-radios .indifferent {
                 color #333;
             }
+            .current-topic {
+                padding-left: 3px;
+            }
         </style>
     </head>
     <body>
@@ -115,7 +118,20 @@
 
                     <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
                 </div>
-              
+
+                <div class="col-sm-6">
+                    <div class="dropdown pull-right topic-dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="topic-dropdown" data-toggle="dropdown">
+                            <i class="fa fa-plus-square-o"></i>
+                            <span class="current-topic">{{{ $selectedTopic->Description }}}</span>
+                        </button>
+                        <ul class="dropdown-menu topic-list" role="menu">
+                            @foreach ($topics as $t)
+                            <li><a href="/?topic={{{ $t->TopicID }}}"><i class="fa fa-fw fa-caret-right"></i> {{{ $t->Description }}}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </nav>
         </div>
 
@@ -409,6 +425,15 @@ function printObject(o) {
                         $('.spaghetti').html(dictionary[currentLanguage].momSpaghetti);
                         konamiMode = true;
                     }
+                });
+
+                $('.topic-dropdown').on('show.bs.dropdown', function(e){
+                    $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                });
+
+                // ADD SLIDEUP ANIMATION TO DROPDOWN //
+                $('.topic-dropdown').on('hide.bs.dropdown', function(e){
+                    $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                 });
 
             });
