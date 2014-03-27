@@ -14,7 +14,22 @@
 // Route for main front-end view.
 Route::get('/', array('before' => 'maintenance', function()
 {
-	return View::make('cards/listing');
+    $topics = Topic::all();
+    $selectedTopic = null;
+
+    if (Input::has('topic')) {
+        $selectedTopic = Topic::find(Input::get('topic'));
+
+        if (! $selectedTopic) {
+            App::abort(404, 'Selected topic does not exist.');
+        }
+    } else {
+        $selectedTopic = Session::get('selectedTopic', Topic::get()->last());
+    }
+
+	return View::make('cards/listing')
+        ->with('topics', $topics)
+        ->with('selectedTopic', $selectedTopic);
 }));
 
 // Routes for JSON API.
