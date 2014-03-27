@@ -117,6 +117,7 @@
                     <button type="button" class="btn btn-sm btn-default stance-btn" data-toggle="tooltip" data-placement="bottom" title="Separate Narratives by Opinion"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
 
                     <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
+                    <button type="button" class="btn btn-sm btn-default agree-disagree-btn" data-toggle="tooltip" data-placement="bottom" title="Show agrees and disagrees"><i class="fa fa-thumbs-up fa-fw"></i><span class="agree-disagree">Agrees/Disagrees</span><i class="fa fa-thumbs-down fa-fw"></i> </button>
                 </div>
 
                 <div class="col-sm-6">
@@ -267,6 +268,16 @@
                     $('#stance-heading').css('display', 'none');
             }
 
+            function showBar(enable){
+                if(enable){
+                    rectangles.selectAll(".rect")
+                        .style("display","block");
+                }
+                else{
+                    rectangles.selectAll(".rect")
+                        .style("display","none");   
+                }
+            }
             /**
              * Set narrative thumbnail sizing based on number of views.
              *
@@ -412,6 +423,15 @@ function printObject(o) {
                         setSizeByViews(true);
                     }
 
+                });
+                $(".agree-disagree-btn").click(function(e){
+                    if ($(this).hasClass('active')) {
+                        $(this).removeClass('active');
+                        showBar(false);
+                    } else {
+                        $(this).addClass('active');
+                        showBar(true);
+                    }                    
                 });
 
                 // Handle Konami code.
