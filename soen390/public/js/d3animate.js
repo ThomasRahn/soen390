@@ -8,8 +8,12 @@ var data            = null,
     nodes           = Array(),
     force           = null,
     stdThumbW       = 75,
-    stdThumbH       = 75;
-    stdRectH        = 7.5;
+    stdThumbH       = 75,
+    stdRectH        = 7.5,
+    viewFilter      = false,
+    minWidth        = 45;
+
+
 var narrative_ids = [];
 var center = {
     "x": (width / 2),
@@ -87,11 +91,6 @@ function cardMouseOver(eventNode) {
             
         });
     */
-    $.each(rectangles,function(index,value){
-        if(value.id == eventNode.id){
-            value.style("border","solid 1px black");
-        }
-    });
 
     var yays = parseInt(eventNode.yays),
         nays = parseInt(eventNode.nays),
@@ -102,8 +101,9 @@ function cardMouseOver(eventNode) {
         disagreesRatio   = (nays / totalVotes) * 100,
         indifferentRatio = (mehs / totalVotes) * 100;
 
-    if (totalVotes == 0)
+    if (totalVotes == 0){
         agreesRatio = 0, disagreesRatio = 0, indifferentRatio = 0;
+    }
 
     $(".ratio-bar.agrees").css("width", agreesRatio + "%");
     $(".ratio-bar.disagrees").css("width", disagreesRatio + "%");
@@ -160,7 +160,7 @@ function createVisualization() {
     visualization = d3.select('#cards-container')
                       .append('svg')
                       .attr('width', width)
-                      .attr('height', height)
+                      .attr('height', height + (10 * data.length))
                       .attr('id', 'svg_vis');
 
     rectangles = visualization.selectAll('g')
@@ -197,7 +197,7 @@ function createVisualization() {
           .attr("width", function (d) {
                     var likes = parseInt(d.yays);
                     var dislikes = parseInt(d.nays);
-                    var numberOfVotes = likes + dislikes;
+                    var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
                     var dislikesRatio = dislikes / numberOfVotes;
                     var dislikesRectangleWidth = (dislikesRatio * stdThumbW) + (likes / numberOfVotes) * stdThumbW;
                     return dislikesRectangleWidth;
@@ -213,7 +213,7 @@ function createVisualization() {
           .attr("width", function (d) {
                 var likes = parseInt(d.yays);
                 var dislikes = parseInt(d.nays);
-                var numberOfVotes = likes + dislikes;
+                var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
                 var likesRatio = likes / numberOfVotes;
                 var likesRectangleWidth = likesRatio * stdThumbW;
                 return likesRectangleWidth;
@@ -254,7 +254,7 @@ function moveTowardsCenter(alpha) {
 }
 
 function charge(d) {
-    return -Math.pow(d.width, 2.0)/2;
+    return -Math.pow(d.width, 2.0)/3;
 }
 function calculateSize()
 

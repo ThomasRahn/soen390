@@ -223,8 +223,14 @@
              */
             function setStanceSorting(enableSort) {
 
-                force.gravity(layoutGravity)
-                     .charge(charge)
+               force.gravity(layoutGravity)
+                     .charge(function(node){
+                        if(viewFilter){
+                             return -Math.pow(node.width * 6, 2.0) / 22;
+                        }
+                        return charge(node);
+
+                     })
                      .friction(0.9)
                      .on('tick', function(e) {
                          rectangles.selectAll(".child").each(function(node) {
@@ -268,18 +274,22 @@
              * @param enable boolean
              */
             function setSizeByViews(enable) {
+                viewFilter = enable;
                 rectangles.selectAll(".child").transition()
                           .duration(750)
                           .attr('width', function(node) {
                             if (enable){
-                                return parseInt(node.views) * 3;
+                                var width = (parseInt(node.views) * 3) + minWidth;
+                                return (width > 250? 250: width);
                             }
                             return stdThumbW;
                           })
                           .attr('height', function(node) {
                             if (enable){
-                                narrative_ids[node.id] = parseInt(node.views) * 3;
-                                return parseInt(node.views) * 3;
+                                var height = (parseInt(node.views) * 3) + minWidth;
+                                height = height > 250 ? 250: height;
+                                narrative_ids[node.id] = height;
+                                return height;
                             }
                             narrative_ids[node.id] = stdThumbH;
                             return stdThumbH;
@@ -290,10 +300,11 @@
                           .attr('width', function(node) {
                             var likes = parseInt(node.yays);
                             var dislikes = parseInt(node.nays);
-                            var numberOfVotes = likes + dislikes;
+                            var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
                             var likesRatio = likes / numberOfVotes;
                             if (enable){
-                                var tempW = parseInt(node.views) * 3;
+                                var width = (parseInt(node.views) * 3) + minWidth;
+                                var tempW = width > 250 ? 250 : width;
                                 var likesRectangleWidth = (likesRatio * tempW) + (dislikes / numberOfVotes) * tempW;
                                 return likesRectangleWidth;
                             }
@@ -301,10 +312,12 @@
                             return likesRectangleWidth;
                           })
                           .attr('height', function(node) {
-                            if (enable){
+                            /*if (enable){
                                 return (parseInt(node.views) * .3);
+                               
                             }
-                            return stdThumbH * 0.1;
+                            return stdThumbH * 0.1;*/
+                            return narrative_ids[node.id] * 0.10;
                           });
 
                    rectangles.selectAll(".disagree").transition()
@@ -312,10 +325,11 @@
                           .attr('width', function(node) {
                             var likes = parseInt(node.yays);
                             var dislikes = parseInt(node.nays);
-                            var numberOfVotes = likes + dislikes;
+                            var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
                             var dislikesRatio = dislikes / numberOfVotes;
                             if (enable){
-                                var tempW = parseInt(node.views) * 3;
+                                var width = (parseInt(node.views) * 3) + minWidth;
+                                var tempW = width > 250 ? 250 : width;
                                 var dislikesRectangleWidth = dislikesRatio * tempW;
                                 return dislikesRectangleWidth;
                             }
@@ -324,16 +338,17 @@
                             return dislikesRectangleWidth;
                           })
                           .attr('height', function(node) {
-                            if (enable){
-                                return (parseInt(node.views) * .3);
+                            /*if (enable){
+                               return (parseInt(node.views) * .3);
                             }
-                            return stdThumbH * 0.1;
+                            return stdThumbH * 0.1;*/
+                            return narrative_ids[node.id] * 0.10;
                           });
 
                 force.gravity(layoutGravity)
                      .charge(function(node) {
                         if (enable){
-                            return -Math.pow(parseInt(node.views) * 8, 2.0) / 20;
+                            return -Math.pow(node.width * 6, 2.0) / 22;
                         }
                         return charge(node);
                      })
