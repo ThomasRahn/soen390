@@ -55,12 +55,17 @@ class AdminProfileController extends \BaseController
 
         $success = $user->save();
 
-        if (! $success)
+        if (! $success) {
+            $locale = Language::find($user->LanguageID)->Code;
+
+            App::setLocale($locale);
+
             return $this->alertAction(
                     true,
                     trans('admin.profile.postIndex.internalError'),
                     Redirect::action('AdminProfileController@getIndex')->withInput()
                 );
+        }
 
         return $this->alertAction(
                 false,
