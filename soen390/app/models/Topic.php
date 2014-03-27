@@ -11,4 +11,12 @@ class Topic extends Eloquent
     protected $guarded    = array('TopicID');
     public    $timestamps = false;
 
+    /**
+     * @codeCoverageIgnore
+     */
+    public function narratives()
+    {
+        return $this->hasMany('Narrative', 'TopicID', 'TopicID');
+    }
+
 }
