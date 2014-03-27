@@ -114,21 +114,46 @@
                         <button type="button" class="btn btn-default" data-lang="fr" data-toggle="tooltip" data-placement="bottom" title="Highlight French Narratives"><img src="img/fr.png"> FR</button>
                     </div>
 
-                    <button type="button" class="btn btn-sm btn-default stance-btn" data-toggle="tooltip" data-placement="bottom" title="Separate Narratives by Opinion"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
+                    <button type="button" class="btn btn-sm btn-default stance-btn" data-toggle="tooltip" data-placement="bottom" title="Separate Narratives by Opinion">
+                        <i class="fa fa-thumbs-o-up fa-fw"></i>
+                        <i class="fa fa-thumbs-o-down fa-fw"></i>
+                        <span class="stance">Stance</span>
+                    </button>
 
-                    <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
-                    <button type="button" class="btn btn-sm btn-default agree-disagree-btn" data-toggle="tooltip" data-placement="bottom" title="Show agrees and disagrees"><i class="fa fa-thumbs-up fa-fw"></i><span class="agree-disagree">Agrees/Disagrees</span><i class="fa fa-thumbs-down fa-fw"></i> </button>
+                    <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views">
+                        <i class="fa fa-signal fa-fw"></i>
+                        <span class="popularity">Popularity</span>
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-default agree-disagree-btn" data-toggle="tooltip" data-placement="bottom" title="Show Agree/Disagree Split">
+                        <i class="fa fa-thumbs-up fa-fw"></i>
+                        <i class="fa fa-thumbs-down fa-fw"></i>
+                        <span class="agree-disagree">Agree/Disagree</span>
+                    </button>
                 </div>
 
                 <div class="col-sm-6">
-                    <div class="dropdown pull-right topic-dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="topic-dropdown" data-toggle="dropdown">
-                            <i class="fa fa-plus-square-o"></i>
-                            <span class="current-topic">{{{ $selectedTopic->Description }}}</span>
+                    <div class="dropdown pull-right topic-dropdown en">
+                        <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="topic-dropdown" data-toggle="dropdown">
+                            <i class="fa fa-level-down"></i>
+                            <span class="current-topic">{{{ $selectedTopic->translations()->inLocale('en')->first()->translation }}}</span>
                         </button>
+
                         <ul class="dropdown-menu topic-list" role="menu">
                             @foreach ($topics as $t)
-                            <li><a href="/?topic={{{ $t->TopicID }}}"><i class="fa fa-fw fa-caret-right"></i> {{{ $t->Description }}}</a></li>
+                            <li><a href="/?topic={{{ $t->TopicID }}}"><i class="fa fa-fw fa-caret-right"></i> {{{ $t->translations()->inLocale('en')->first()->translation }}}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="dropdown pull-right topic-dropdown fr">
+                        <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="topic-dropdown" data-toggle="dropdown">
+                            <i class="fa fa-level-down"></i>
+                            <span class="current-topic">{{{ $selectedTopic->translations()->inLocale('fr')->first()->translation }}}</span>
+                        </button>
+
+                        <ul class="dropdown-menu topic-list" role="menu">
+                            @foreach ($topics as $t)
+                            <li><a href="/?topic={{{ $t->TopicID }}}"><i class="fa fa-fw fa-caret-right"></i> {{{ $t->translations()->inLocale('fr')->first()->translation }}}</a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -175,7 +200,7 @@
         <script src="{{ asset('js/d3animate.js') }}"></script>
         <script src="{{ asset('js/dictionary.js') }}"></script>
         <script>
-            var currentLanguage = '',
+            var currentLanguage = 'fr',
                 konamiMode      = false,
                 stanceGravityCenters  = {
                     'For': { x: (width / 4), y: (height / 2) },
@@ -189,6 +214,10 @@
              * @param langCode string
              */
             function setTranslation(langCode) {
+                // Hide the opposite language.
+                $('.' + currentLanguage).css('display', 'none');
+                $('.' + langCode).css('display', '');
+
                 // Set Current Language
                 currentLanguage = langCode;
 
