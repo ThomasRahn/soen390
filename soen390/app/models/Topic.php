@@ -6,10 +6,9 @@
 class Topic extends Eloquent
 {
 
-    protected $table      = 'Topic';
-    protected $primaryKey = 'TopicID';
     protected $guarded    = array('TopicID');
-    public    $timestamps = false;
+    protected $primaryKey = 'TopicID';
+    protected $table      = 'Topic';
 
     /**
      * @codeCoverageIgnore
@@ -17,6 +16,14 @@ class Topic extends Eloquent
     public function narratives()
     {
         return $this->hasMany('Narrative', 'TopicID', 'TopicID');
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function translations()
+    {
+        return $this->hasMany('TopicTranslation', 'topic_id', 'TopicID');
     }
 
 }
