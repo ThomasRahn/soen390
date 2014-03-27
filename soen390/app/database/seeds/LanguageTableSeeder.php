@@ -7,8 +7,15 @@ class LanguageTableSeeder extends Seeder
     {
         DB::table('Language')->delete();
 
-        Language::create(array("Description" => "English"));
-        Language::create(array("Description" => "French"));
+        Language::create(array(
+            'Code'        => 'en',
+            'Description' => 'English',
+        ));
+
+        Language::create(array(
+            'Code'        => 'fr',
+            'Description' => 'Français',
+        ));
     }
 
 }
