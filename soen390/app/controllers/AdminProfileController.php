@@ -56,9 +56,6 @@ class AdminProfileController extends \BaseController
         $success = $user->save();
 
         if (! $success) {
-            $locale = Language::find($user->LanguageID)->Code;
-
-            App::setLocale($locale);
 
             return $this->alertAction(
                     true,
@@ -66,6 +63,10 @@ class AdminProfileController extends \BaseController
                     Redirect::action('AdminProfileController@getIndex')->withInput()
                 );
         }
+
+        $locale = Language::find($user->LanguageID)->Code;
+
+        App::setLocale($locale);
 
         return $this->alertAction(
                 false,
