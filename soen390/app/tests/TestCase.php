@@ -32,6 +32,10 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         $this->narrativeArchivePath = Config::get('media.paths.uploads')
             . DIRECTORY_SEPARATOR . 'unit_testing_narrative_bundle.zip';
+
+        $this->seed('CategoryTableSeeder');
+        $this->seed('TopicTableSeeder');
+        $this->seed('LanguageTableSeeder');
     }
 
     public function tearDown()
@@ -51,11 +55,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
         $this->assertTrue(File::exists($this->narrativeArchivePath), 'The narrative bundle for unit testing is missing.');
 
-        // Seed the required tables first.
-        $this->seed('CategoryTableSeeder');
-        $this->seed('TopicTableSeeder');
-        $this->seed('LanguageTableSeeder');
-
         $name = time();
 
         // We need to mock Sonus
@@ -73,7 +72,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
                 $name,
                 $this->narrativeArchivePath,
                 Category::first()->CategoryID,
-                $published
+                $published,
+                Topic::first()->TopicID
             );
     }
 

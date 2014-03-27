@@ -20,11 +20,6 @@ class NarrativeTest extends TestCase
 
         $this->assertTrue(File::exists($narrativeBundle), 'The narrative bundle for unit testing is missing.');
 
-        // Seed the required tables first.
-        $this->seed('CategoryTableSeeder');
-        $this->seed('TopicTableSeeder');
-        $this->seed('LanguageTableSeeder');
-
         $name = time();
 
         // Mock the audio transcoding so that we don't spend any time
@@ -36,7 +31,8 @@ class NarrativeTest extends TestCase
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,
-                true
+                true,
+                Topic::first()->TopicID
             );
 
         $extractedPath = Config::get('media.paths.extracted') 
@@ -72,11 +68,6 @@ class NarrativeTest extends TestCase
 
         $this->assertTrue(File::exists($narrativeBundle), 'The narrative bundle for unit testing is missing.');
 
-        // Seed the required tables first.
-        $this->seed('CategoryTableSeeder');
-        $this->seed('TopicTableSeeder');
-        $this->seed('LanguageTableSeeder');
-
         $name = time();
 
         // Mock the audio transcoding so that we don't spend any time
@@ -88,7 +79,8 @@ class NarrativeTest extends TestCase
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,
-                true
+                true,
+                Topic::first()->TopicID
             );
 
         $extractedPath = Config::get('media.paths.extracted') 
@@ -121,11 +113,6 @@ class NarrativeTest extends TestCase
 
         $this->assertTrue(File::exists($narrativeBundle), 'The narrative bundle for unit testing is missing.');
 
-        // Seed the required tables first.
-        $this->seed('CategoryTableSeeder');
-        $this->seed('TopicTableSeeder');
-        $this->seed('LanguageTableSeeder');
-
         $name = time();
 
         // Mock the audio transcoding so that we don't spend any time
@@ -137,7 +124,8 @@ class NarrativeTest extends TestCase
                 $name,
                 $narrativeBundle,
                 Category::first()->CategoryID,
-                true
+                true,
+                Topic::first()->TopicID
             );
 
         $extractedPath = Config::get('media.paths.extracted') 
