@@ -3,18 +3,19 @@
 return array(
     'youdeliberate' => 'You Deliberate',
     'logo'          => 'You <i class="fa fa-comments"></i> Deliberate',
+
     'sidebar' => array(
-            'uploadNarratives' => 'Upload Narrative(s)',
-            'dashboard' => 'Google Analytics',
-            'narratives' => 'Manage Narratives',
-            'categories' => 'Manage Categories',
-            'flagReports' => 'Flag Reports',
-            'configuration' => 'Site Configuration',
-            'openMainSite' => 'View User Site',
-            'signOut' => 'Sign Out',
-            'profile' => 'Profile',
-            'googleAnal'=>'Open Google Analytics',
-        ),
+        'uploadNarratives' => 'Upload Narrative(s)',
+        'dashboard'        => 'Google Analytics',
+        'narratives'       => 'Manage Narratives',
+        'categories'       => 'Manage Categories',
+        'flagReports'      => 'Flag Reports',
+        'configuration'    => 'Site Configuration',
+        'openMainSite'     => 'View User Site',
+        'signOut'          => 'Sign Out',
+        'profile'          => 'Profile',
+        'topics'           => 'Manage Topics',
+    ),
 
     'dashboard' => array(
             'open' => 'Open Google Analytics',
@@ -155,5 +156,13 @@ return array(
                 ),
 
         ),
+
+    'topic' => array(
+
+        'index' => array(
+
+        ),
+
+    ),
 
 );
