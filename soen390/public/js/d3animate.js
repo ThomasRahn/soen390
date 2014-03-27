@@ -8,8 +8,13 @@ var data            = null,
     nodes           = Array(),
     force           = null,
     stdThumbW       = 75,
-    stdThumbH       = 75;
+    stdThumbH       = 75,
+    stdRectH        = 7.5,
+    viewFilter      = false,
+    minWidth        = 45;
 
+
+var narrative_ids = [];
 var center = {
     "x": (width / 2),
     "y": (height / 2)
@@ -50,7 +55,8 @@ function createNodes() {
 }
 
 function cardMouseOver(eventNode) {
-    rectangles
+    /*
+    rectangles.selectAll(".child")
         .attr('width', function(node) {
             if (node === eventNode)
                 return $(this).attr('width') * 2;
@@ -59,10 +65,32 @@ function cardMouseOver(eventNode) {
         })
         .attr('height', function(node) {
             if (node === eventNode)
+            {
+                narrative_ids[node.id] = $(this).attr('height') * 2;
+                return $(this).attr('height') * 2;
+             }
+            else 
+            {
+                narrative_ids[node.id] = $(this).attr('height');
+                return $(this).attr('height');
+            }
+        });
+
+    rectangles.selectAll(".rect")
+        .attr('width', function(node) {
+            if (node === eventNode)
+                return $(this).attr('width') * 2;
+            else
+                return $(this).attr('width');
+        })
+        .attr('height', function(node) {
+              if (node === eventNode)
                 return $(this).attr('height') * 2;
             else
                 return $(this).attr('height');
+            
         });
+    */
 
     var yays = parseInt(eventNode.yays),
         nays = parseInt(eventNode.nays),
@@ -73,8 +101,9 @@ function cardMouseOver(eventNode) {
         disagreesRatio   = (nays / totalVotes) * 100,
         indifferentRatio = (mehs / totalVotes) * 100;
 
-    if (totalVotes == 0)
+    if (totalVotes == 0){
         agreesRatio = 0, disagreesRatio = 0, indifferentRatio = 0;
+    }
 
     $(".ratio-bar.agrees").css("width", agreesRatio + "%");
     $(".ratio-bar.disagrees").css("width", disagreesRatio + "%");
@@ -90,7 +119,25 @@ function cardMouseOver(eventNode) {
 }
 
 function cardMouseOut(eventNode) {
-    rectangles
+    /* rectangles.selectAll(".child")
+        .attr('width', function(node) {
+            if (node === eventNode)
+                return $(this).attr('width') / 2;
+            else
+                return $(this).attr('width');
+        })
+        .attr('height', function(node) {
+            if (node === eventNode){
+                narrative_ids[node.id] = $(this).attr('height') / 2;
+                return $(this).attr('height') / 2;
+            }
+            else{
+                narrative_ids[node.id] = $(this).attr('height');
+                return $(this).attr('height');
+            }
+        });
+
+     rectangles.selectAll(".rect")
         .attr('width', function(node) {
             if (node === eventNode)
                 return $(this).attr('width') / 2;
@@ -103,6 +150,7 @@ function cardMouseOut(eventNode) {
             else
                 return $(this).attr('height');
         });
+*/
 
     $(".meta-container").css("opacity", 0);
     $(".meta-container").css("display", "block");
@@ -112,22 +160,22 @@ function createVisualization() {
     visualization = d3.select('#cards-container')
                       .append('svg')
                       .attr('width', width)
-                      .attr('height', height)
+                      .attr('height', height + (10 * data.length))
                       .attr('id', 'svg_vis');
 
     rectangles = visualization.selectAll('g')
                               .data(nodes, function(node) {return node.id;});
 
-    rectangles.enter().append("g");
+    rectangles.enter().append("g").attr("class","parent");
   
               
     rectangles.append('image')  
             .attr("x", function (d) { return d.x })
             .attr("y", function (d) { return d.y })
-            .attr("class", "child")
-            .attr('data-narrative-id', function(node) {return node.id})
+            .attr("class", "child card")
+            .attr('data_narrative_id', function(node) {return node.id})
             .attr("width",stdThumbW)
-            .attr("height",stdThumbH)
+            .attr("height",function(node){ narrative_ids[node.id] = stdThumbH; return stdThumbH;})
             .on('mouseover', cardMouseOver)
             .on('mouseout', cardMouseOut)  
             .attr('xlink:href', function(node) {return node.imageLink})
@@ -142,34 +190,36 @@ function createVisualization() {
              });
 
     rectangles.append("rect")
+          .attr('data_narrative_id', function(node) {return node.id})
           .attr("x", function (d) { return d.x })
-          .attr("y", function (d) { return d.y + (stdThumbH * 0.9)})
-          .attr("class", "rect")
+          .attr("y", function (d) { return d.y + (narrative_ids[d.id] * 0.85)})
+          .attr("class", "rect agree")
           .attr("width", function (d) {
                     var likes = parseInt(d.yays);
                     var dislikes = parseInt(d.nays);
-                    var numberOfVotes = likes + dislikes;
-                    var likesRatio = likes / numberOfVotes;
-                    var likesRectangleWidth = (likesRatio * stdThumbW) + (dislikes / numberOfVotes) * stdThumbW;
-                    return likesRectangleWidth;
+                    var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
+                    var dislikesRatio = dislikes / numberOfVotes;
+                    var dislikesRectangleWidth = (dislikesRatio * stdThumbW) + (likes / numberOfVotes) * stdThumbW;
+                    return dislikesRectangleWidth;
                 })
           .attr("height", (stdThumbH * 0.1))
-          .attr("style", "fill:rgb(0,255,0);stroke-width:1;stroke:rgb(0,0,0);");
+          .attr("style", "fill:rgb(0,143,211);stroke-width:1;stroke:rgb(94,94,94);display:none;");
 
     rectangles.append("rect")
+          .attr('data_narrative_id', function(node) {return node.id})
           .attr("x", function (d) { return d.x })
-          .attr("y", function (d) { return d.y +(stdThumbH * 0.9)})
-          .attr("class", "rect")
+          .attr("y", function (d) { return d.y + (narrative_ids[d.id] * 0.85)})
+          .attr("class", "rect disagree")
           .attr("width", function (d) {
                 var likes = parseInt(d.yays);
                 var dislikes = parseInt(d.nays);
-                var numberOfVotes = likes + dislikes;
-                var dislikesRatio = dislikes / numberOfVotes;
-                var dislikesRectangleWidth = dislikesRatio * stdThumbW;
-                return dislikesRectangleWidth;
+                var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
+                var likesRatio = likes / numberOfVotes;
+                var likesRectangleWidth = likesRatio * stdThumbW;
+                return likesRectangleWidth;
             })
           .attr("height", (stdThumbH * 0.1))
-          .attr("style", "fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)");
+          .attr("style", "fill:rgb(0,255,0);stroke-width:1;stroke:rgb(94,94,94);display:none;");
 }
 
 function start() {
@@ -190,7 +240,7 @@ function mainGroupFilter() {
 
              rectangles.selectAll(".rect").each(moveTowardsCenter(e.alpha))
                           .attr('x', function(d) {return d.x})
-                          .attr('y', function(d) {return d.y + (stdThumbH * 0.9)});
+                          .attr('y', function(d) {return d.y + (narrative_ids[d.id] * 0.85);});
          });
     
     force.start();
@@ -204,7 +254,7 @@ function moveTowardsCenter(alpha) {
 }
 
 function charge(d) {
-    return -Math.pow(d.width, 2.0) / 4;
+    return -Math.pow(d.width, 2.0)/3;
 }
 function calculateSize()
 
@@ -224,4 +274,11 @@ function calculateSize()
 
     return Math.sqrt(cardArea);
 
+}
+function printObject(o) {
+  var out = '';
+  for (var p in o) {
+    out += p + ': ' + o[p] + '\n';
+  }
+  alert(out);
 }

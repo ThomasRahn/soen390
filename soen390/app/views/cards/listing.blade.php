@@ -114,6 +114,7 @@
                     <button type="button" class="btn btn-sm btn-default stance-btn" data-toggle="tooltip" data-placement="bottom" title="Separate Narratives by Opinion"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
 
                     <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
+                    <button type="button" class="btn btn-sm btn-default agree-disagree-btn" data-toggle="tooltip" data-placement="bottom" title="Show agrees and disagrees"><i class="fa fa-thumbs-up fa-fw"></i><span class="agree-disagree">Agrees/Disagrees</span><i class="fa fa-thumbs-down fa-fw"></i> </button>
                 </div>
               
             </nav>
@@ -222,8 +223,14 @@
              */
             function setStanceSorting(enableSort) {
 
-                force.gravity(layoutGravity)
-                     .charge(charge)
+               force.gravity(layoutGravity)
+                     .charge(function(node){
+                        if(viewFilter){
+                             return -Math.pow(node.width * 6, 2.0) / 22;
+                        }
+                        return charge(node);
+
+                     })
                      .friction(0.9)
                      .on('tick', function(e) {
                          rectangles.selectAll(".child").each(function(node) {
@@ -240,7 +247,7 @@
                                     node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
                                   })
                              .attr('x', function(node){return node.x })
-                             .attr('y', function(node){return node.y + (stdThumbH *0.9)});
+                             .attr('y', function(node){return node.y + (narrative_ids[node.id] *0.85)});
                      });
 
                 force.start();
@@ -251,39 +258,110 @@
                     $('#stance-heading').css('display', 'none');
             }
 
+            function showBar(enable){
+                if(enable){
+                    rectangles.selectAll(".rect")
+                        .style("display","block");
+                }
+                else{
+                    rectangles.selectAll(".rect")
+                        .style("display","none");   
+                }
+            }
             /**
              * Set narrative thumbnail sizing based on number of views.
              *
              * @param enable boolean
              */
             function setSizeByViews(enable) {
-                rectangles.transition()
+                viewFilter = enable;
+                rectangles.selectAll(".child").transition()
                           .duration(750)
                           .attr('width', function(node) {
-                            if (enable)
-                                return parseInt(node.views) * 10 + 30;
-
+                            if (enable){
+                                var width = (parseInt(node.views) * 3) + minWidth;
+                                return (width > 250? 250: width);
+                            }
                             return stdThumbW;
                           })
                           .attr('height', function(node) {
-                            if (enable)
-                                return parseInt(node.views) * 10 + 30;
-
+                            if (enable){
+                                var height = (parseInt(node.views) * 3) + minWidth;
+                                height = height > 250 ? 250: height;
+                                narrative_ids[node.id] = height;
+                                return height;
+                            }
+                            narrative_ids[node.id] = stdThumbH;
                             return stdThumbH;
+                          });
+
+                    rectangles.selectAll(".agree").transition()
+                          .duration(300)
+                          .attr('width', function(node) {
+                            var likes = parseInt(node.yays);
+                            var dislikes = parseInt(node.nays);
+                            var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
+                            var likesRatio = likes / numberOfVotes;
+                            if (enable){
+                                var width = (parseInt(node.views) * 3) + minWidth;
+                                var tempW = width > 250 ? 250 : width;
+                                var likesRectangleWidth = (likesRatio * tempW) + (dislikes / numberOfVotes) * tempW;
+                                return likesRectangleWidth;
+                            }
+                            var likesRectangleWidth = (likesRatio * stdThumbW) + (dislikes / numberOfVotes) * stdThumbW;
+                            return likesRectangleWidth;
+                          })
+                          .attr('height', function(node) {
+                            /*if (enable){
+                                return (parseInt(node.views) * .3);
+                               
+                            }
+                            return stdThumbH * 0.1;*/
+                            return narrative_ids[node.id] * 0.10;
+                          });
+
+                   rectangles.selectAll(".disagree").transition()
+                          .duration(300)
+                          .attr('width', function(node) {
+                            var likes = parseInt(node.yays);
+                            var dislikes = parseInt(node.nays);
+                            var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
+                            var dislikesRatio = dislikes / numberOfVotes;
+                            if (enable){
+                                var width = (parseInt(node.views) * 3) + minWidth;
+                                var tempW = width > 250 ? 250 : width;
+                                var dislikesRectangleWidth = dislikesRatio * tempW;
+                                return dislikesRectangleWidth;
+                            }
+                         
+                            var dislikesRectangleWidth = dislikesRatio * stdThumbW;
+                            return dislikesRectangleWidth;
+                          })
+                          .attr('height', function(node) {
+                            /*if (enable){
+                               return (parseInt(node.views) * .3);
+                            }
+                            return stdThumbH * 0.1;*/
+                            return narrative_ids[node.id] * 0.10;
                           });
 
                 force.gravity(layoutGravity)
                      .charge(function(node) {
-                        if (enable)
-                            return -Math.pow(parseInt(node.views) * 10 + 30, 2.0) / 8;
-
-                        return -Math.pow(stdThumbW, 2.0) / 8;
+                        if (enable){
+                            return -Math.pow(node.width * 6, 2.0) / 22;
+                        }
+                        return charge(node);
                      })
                      .friction(0.9);
-
                 force.start();
             }
-
+function printObject(o) {
+  var out = '';
+  for (var p in o) {
+    out += p + ': ' + o[p] + '\n';
+  }
+  alert(out);
+}
             $(document).ready(function() {
                 $('button').tooltip({'container': 'body'});
 
@@ -328,6 +406,7 @@
                     } else {
                         $(this).addClass('active');
                         setStanceSorting(true);
+
                     }
                 });
 
@@ -342,6 +421,16 @@
                         $(this).addClass('active');
                         setSizeByViews(true);
                     }
+
+                });
+                $(".agree-disagree-btn").click(function(e){
+                    if ($(this).hasClass('active')) {
+                        $(this).removeClass('active');
+                        showBar(false);
+                    } else {
+                        $(this).addClass('active');
+                        showBar(true);
+                    }                    
                 });
 
                 // Handle Konami code.
