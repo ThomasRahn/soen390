@@ -33,10 +33,13 @@ class ApiNarrativeController extends \BaseController
 
 		// Retrieve all published and unpublished narratives if user is
 		// authenticated and requests so.
-		if (Auth::check() && Input::get('withUnpublished', 0) == '1')
+		if (Auth::check() && Input::get('withUnpublished', 0) == '1') {
 			$narratives = Narrative::with('category', 'language', 'media')->get();
-		else
-			$narratives = Narrative::with('category', 'language', 'media')->where('Published', 1)->get();
+		} else {
+			$topic = Session::get('selectedTopic', Topic::get()->last());
+
+			$narratives = $topic->narratives()->with('category', 'language', 'media')->where('Published', 1)->get();
+		}
 
 		// Create an array to hold all the narratives. This array will be converted into a JSON object.
 		$narrativesArray = array();
