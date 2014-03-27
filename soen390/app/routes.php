@@ -23,6 +23,8 @@ Route::get('/', array('before' => 'maintenance', function()
         if (! $selectedTopic) {
             App::abort(404, 'Selected topic does not exist.');
         }
+
+        Session::set('selectedTopic', $selectedTopic);
     } else {
         $selectedTopic = Session::get('selectedTopic', Topic::get()->last());
     }
