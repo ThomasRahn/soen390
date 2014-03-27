@@ -92,6 +92,8 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
 
     });
 
+    Route::controller('topic', 'AdminTopicController');
+
     // Routing for Configuration
     Route::controller('configuration', 'AdminConfigController');
 
