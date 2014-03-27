@@ -127,7 +127,8 @@ class ApiNarrativeController extends \BaseController
 				$hashedName,
 				$destinationPath,
 				Input::get('category'),
-				Input::get('publish') == 'publish'
+				Input::get('publish') == 'publish',
+				Topic::first()->TopicID
 			);
 		} catch (Exception $e) {
 			$errorArray = array($e->getMessage());
