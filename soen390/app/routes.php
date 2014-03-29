@@ -116,3 +116,9 @@ Route::group(array('prefix' => 'auth'), function() {
 
 // Route for the player interface.
 Route::controller('player', 'PlayerController');
+
+// Route for the trancoding push queue
+Route::any('queue/receive', function()
+{
+    return Queue::marshal();
+});
