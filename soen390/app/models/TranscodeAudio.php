@@ -8,6 +8,11 @@ class TranscodeAudio
 {
     public function fire($job, $data)
     {
+        // Check which attempt this is,
+        if ($job->attempts() > 3) {
+            return Log::error('Unable to transcode for ' . $data['sourceFilePath']);
+        }
+
     	$transcodeEnabled = Config::get('media.transcode');
 
         // Retrieve the given details
@@ -66,6 +71,11 @@ class TranscodeAudio
 	                . DIRECTORY_SEPARATOR 
 	                . $baseName;
 
+                // If the output path already exists then skip.
+                if (File::exists($outputPath)) {
+                    continue;
+                }
+
 	            // If the source file is already in the desired $codec,
 	            // then we'll just move it and skip transcoding to $codec.
 
@@ -80,6 +90,12 @@ class TranscodeAudio
 	                    ->input(escapeshellarg($sourceFilePath))
 	                    ->output(escapeshellarg($outputPath))
 	                    ->go('-acodec ' . $codec . ' -ab 64k -ar 44100');
+
+                    // If the output doesn't exist, then the transcoding failed.
+                    // We will release the job back into the queue and try again.
+                    if (! File::exists($outputPath)) {
+                        return $job->release(5);
+                    }
 
 	            }
 
