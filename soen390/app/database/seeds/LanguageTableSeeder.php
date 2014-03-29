@@ -14,7 +14,7 @@ class LanguageTableSeeder extends Seeder
 
         Language::create(array(
             'Code'        => 'fr',
-            'Description' => 'Français',
+            'Description' => 'French',
         ));
     }
 
