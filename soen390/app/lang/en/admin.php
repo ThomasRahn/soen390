@@ -158,11 +158,14 @@ return array(
         ),
 
     'topic' => array(
-
         'index' => array(
-
+            'table' => array(
+                'code'        => 'Code',
+                'description' => 'Description',
+                'narratives'  => 'Child Narratives',
+                'manage'      => 'Manage',
+            ),
         ),
-
     ),
 
 );
