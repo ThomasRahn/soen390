@@ -77,8 +77,8 @@ class TranscodeAudio
 
 	                // Begin transcoding
 	                Sonus::convert()
-	                    ->input($sourceFilePath)
-	                    ->output($outputPath)
+	                    ->input(escapeshellarg($sourceFilePath))
+	                    ->output(escapeshellarg($outputPath))
 	                    ->go('-acodec ' . $codec . ' -ab 64k -ar 44100');
 
 	            }
