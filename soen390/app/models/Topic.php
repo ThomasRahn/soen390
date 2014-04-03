@@ -26,4 +26,19 @@ class Topic extends Eloquent
         return $this->hasMany('TopicTranslation', 'topic_id', 'TopicID');
     }
 
+    public function toResponseArray()
+    {
+        $response = array(
+            'id'          => $this->TopicID,
+            'name'        => $this->Name,
+            'description' => $this->translations()
+                ->inLocale(App::getLocale())
+                ->first()
+                ->translation,
+            'narrativeCount' => $this->narratives()->count(),
+        );
+
+        return $response;
+    }
+
 }
