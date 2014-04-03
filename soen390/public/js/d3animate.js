@@ -11,12 +11,24 @@ var data            = null,
     stdThumbH       = 75,
     stdRectH        = 7.5,
     viewFilter      = false,
-    minWidth        = 45;
+    increamentValue = 0.7,
+    totalViews      = 0,
+    z               = 0,
+    testValue       = 1,
+    minWidth        = 37;
 
 
 var narrative_ids = [];
 var center = {
     "x": (width / 2),
+    "y": (height / 2)
+};
+var center1 = {
+    "x": (width / 2) + 175,
+    "y": (height / 2)
+};
+var center2 = {
+    "x": (width / 2) - 175,
     "y": (height / 2)
 };
 
@@ -26,16 +38,66 @@ function initializeCards() {
             return console.log("JSON Error Occurred: " + error);
 
         data = json['return'];
-
+        //stdThumbH -= 4.2 * (data.length / 10);
+        //stdThumbW -= 4.2 * (data.length / 10);
+    
+        stdThumbH = $(window).width() / data.length * drorModifier(data.length);
+        stdThumbW = $(window).width() / data.length * drorModifier(data.length);
         createNodes();
         createVisualization();
         start();
         mainGroupFilter();
     });
 }
-
+function drorModifier(z)
+{
+    if (z <= 10)
+        return 0.6
+ 
+    if (z <= 15)
+        return 0.7
+ 
+    if (z <= 20)
+        return 0.8
+ 
+    if (z <= 25)
+        return 0.9
+ 
+    if (z <= 30)
+        return 1
+ 
+    if (z <= 35)
+        return 1.4
+ 
+    if (z <= 40)
+        return 1.5
+ 
+    if (z <= 45)
+        return 1.6
+ 
+    if (z <= 50)
+        return 1.7
+ 
+    if (z <= 55)
+        return 1.8
+ 
+    if (z <= 60)
+        return 1.9
+ 
+    if (z <= 65)
+        return 2.0
+ 
+    if (z <= 70)
+        return 2.2
+ 
+    if (z <= 75)
+        return 2.3
+ 
+    return 2.3
+}
 function createNodes() {
     data.forEach(function(narrative) {
+        totalViews += parseInt(narrative.views);
         nodes.push({
             id:        narrative.id,
             width:     stdThumbW,
@@ -52,6 +114,7 @@ function createNodes() {
             y:         Math.random() * height,
         });
     });
+    z = totalViews / data.length;
 }
 
 function cardMouseOver(eventNode) {
@@ -160,7 +223,7 @@ function createVisualization() {
     visualization = d3.select('#cards-container')
                       .append('svg')
                       .attr('width', width)
-                      .attr('height', height + (10 * data.length))
+                      .attr('height', height)
                       .attr('id', 'svg_vis');
 
     rectangles = visualization.selectAll('g')
@@ -240,7 +303,7 @@ function mainGroupFilter() {
 
              rectangles.selectAll(".rect").each(moveTowardsCenter(e.alpha))
                           .attr('x', function(d) {return d.x})
-                          .attr('y', function(d) {return d.y + (narrative_ids[d.id] * 0.85);});
+                          .attr('y', function(d) {return d.y + (narrative_ids[d.id] * 0.85);});      
          });
     
     force.start();
@@ -248,8 +311,21 @@ function mainGroupFilter() {
 
 function moveTowardsCenter(alpha) {
     return function(d) {
-        d.x = d.x + (center.x - d.x) * (damper + 0.02) * alpha;
-        d.y = d.y + (center.y - d.y) * (damper + 0.02) * alpha;
+        var testX = center.x;
+        var testY = center.y;
+        if(testValue === 2){
+            testX = center1.x;
+            testY = center1.y;
+            testValue++
+        }else if (testValue === 3){
+            testX = center2.x;
+            testY = center2.y;
+            testValue = 1;
+        }else{
+            testValue++;
+        }
+        d.x = d.x + (testX - d.x) * (damper + 0.02) * alpha;
+        d.y = d.y + (testY - d.y) * (damper + 0.02) * alpha;
     };
 }
 
