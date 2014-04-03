@@ -164,7 +164,26 @@ return array(
                 'description' => 'Description',
                 'narratives'  => 'Child Narratives',
                 'manage'      => 'Manage',
+                'add'         => 'Add a new topic',
             ),
+
+            'addModal' => array(
+                'title'     => 'Add a New Topic',
+                'code'      => 'Topic Code',
+                'descEn'    => 'Description (English)',
+                'descFr'    => 'Description (French)',
+                'addButton' => 'Add Topic',
+            ),
+        ),
+
+        'add' => array(
+            'saveFailed' => 'Unable to save Topic instance due to server error.',
+        ),
+
+        'delete' => array(
+            'success'    => 'Topic <code>:code</code> has been deleted. All previously narratives have been moved into the <code>:first</code> topic.',
+            'failure'    => 'Failed to delete topic <code>:code</code> due to a server side error. Changes have not been saved.',
+            'atleastOne' => 'There needs to be at least <strong>one</strong> remaining topic.',
         ),
     ),
 
