@@ -33,9 +33,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $this->narrativeArchivePath = Config::get('media.paths.uploads')
             . DIRECTORY_SEPARATOR . 'unit_testing_narrative_bundle.zip';
 
+        $this->seed('LanguageTableSeeder');
         $this->seed('CategoryTableSeeder');
         $this->seed('TopicTableSeeder');
-        $this->seed('LanguageTableSeeder');
     }
 
     public function tearDown()
