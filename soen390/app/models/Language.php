@@ -11,6 +11,9 @@ class Language extends Eloquent
     public    $timestamps = false;
     public    $guarded    = array('LanguageID');
 
+    /**
+     * @codeCoverageIgnore 
+     */
     public function narrative()
     {
         return $this->hasMany('Narrative', 'LanguageID', 'LanguageID');
