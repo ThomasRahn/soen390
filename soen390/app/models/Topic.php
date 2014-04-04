@@ -36,6 +36,7 @@ class Topic extends Eloquent
                 ->first()
                 ->translation,
             'narrativeCount' => $this->narratives()->count(),
+            'published'   => $this->Published,
         );
 
         return $response;

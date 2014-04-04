@@ -8,7 +8,8 @@ class TopicTableSeeder extends Seeder
         DB::table('Topic')->delete();
 
 		$topic = Topic::create(array(
-            'Name' => 'pipeline',
+            'Name'      => 'pipeline',
+            'Published' => true,
         ));
 
         $topic->translations()->save(

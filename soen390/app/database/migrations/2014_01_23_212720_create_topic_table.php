@@ -16,6 +16,7 @@ class CreateTopicTable extends Migration {
 			$table->increments('TopicID');
 			$table->timestamps();
 			$table->string('Name');
+			$table->boolean('Published');
 		});
 	}
 
