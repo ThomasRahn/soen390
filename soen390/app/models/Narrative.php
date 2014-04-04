@@ -482,25 +482,27 @@ class Narrative extends Eloquent
                 'duration' => $a->audio_duration,
             );
         }
+
         $flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
         $commentCount = Comment::where('NarrativeID',$n->NarrativeID)->count();
+
         // Put this narrative into the array.
         $narrative = array(
-            'id' => $n->NarrativeID,
-            'name' => $n->Name,
-            'stance' => $n->category()->first()->Description,
-            'lang' => $n->language()->first()->Description,
-            'views' => $n->Views,
-            'yays' => $n->Agrees,
-            'nays' => $n->Disagrees,
-            'mehs' => $n->Indifferents,
+            'id'        => $n->NarrativeID,
+            'name'      => $n->Name,
+            'stance'    => $n->category()->first()->Description,
+            'lang'      => $n->language()->first()->Description,
+            'views'     => $n->Views,
+            'yays'      => $n->Agrees,
+            'nays'      => $n->Disagrees,
+            'mehs'      => $n->Indifferents,
             'createdAt' => $n->DateCreated,
             'published' => $n->Published,
-            'images' => $imagesArray,
-            'audio' => $audioArray,
-            'flags' => $flagCount,
-            'comments' => $commentCount,
-            'topic' => $n->topic()->first()->toResponseArray(),
+            'images'    => $imagesArray,
+            'audio'     => $audioArray,
+            'flags'     => $flagCount,
+            'comments'  => $commentCount,
+            'topic'     => $n->topic()->first()->toResponseArray(),
         );
 
         return $narrative;
