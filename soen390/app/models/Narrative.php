@@ -503,6 +503,7 @@ class Narrative extends Eloquent
             'flags'     => $flagCount,
             'comments'  => $commentCount,
             'topic'     => $n->topic()->first()->toResponseArray(),
+            'language'  => $n->language()->first()->Description,
         );
 
         return $narrative;
