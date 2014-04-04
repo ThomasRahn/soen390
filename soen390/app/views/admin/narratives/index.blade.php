@@ -65,6 +65,7 @@
             <th>{{ trans('admin.narratives.table.name') }}</th>
             <th>{{ trans('admin.narratives.table.views') }}</th>
             <th>{{ trans('admin.narratives.table.comments') }}</th>
+            <th>{{ trans('admin.narratives.table.topic') }}</th>
             <th>{{ trans('admin.narratives.table.category') }}</th>
             <th>{{ trans('admin.narratives.table.createdAt') }}</th>
             <th>{{ trans('admin.narratives.table.published') }}</th>
@@ -74,12 +75,12 @@
     </thead>
     <tfoot>
         <tr>
-            <th colspan="9"><small><span class="row-count">0</span> {{ trans('admin.narratives.table.inTotal') }}</small></th>
+            <th colspan="10"><small><span class="row-count">0</span> {{ trans('admin.narratives.table.inTotal') }}</small></th>
         </tr>
     </tfoot>
     <tbody class="table-spinner">
         <tr class="active">
-            <td colspan="9"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
+            <td colspan="10"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
         </tr>
     </tbody>
 </table>
@@ -317,6 +318,7 @@
                         + "<td class=\"name\">" + narrative.name + "</td>"
                         + "<td class=\"views\">" + narrative.views + "</td>"
                         + "<td class=\"comments\"><button onclick=\"loadCommentModal("+ narrative.id +")\"data-toggle=\"modal\" data-target=\"#comment-modal\">" + narrative.comments + "</button></td>"
+                        + "<td class=\"topic\" data-topic=\"" + narrative.topic.id + "\"><code>" + narrative.topic.name + "</code></td>"
                         + "<td class=\"category\" data-category=\"" + narrative.stance + "\">" + narrative.stance + "</td>"
                         + "<td class=\"createdAt\">" + narrative.createdAt + "</td>"
                         + "<td class=\"published\" data-published=\"" + narrative.published + "\"><i class=\"fa " + (narrative.published == false ? "fa-square-o" : "fa-check-square-o") + " fa-fw\"></i></td>"
