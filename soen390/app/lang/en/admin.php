@@ -48,6 +48,8 @@ return array(
                     'totalFlags' => 'flag(s) in total.',
                     'narrativeName'=> 'Narrative Name',
                     'flags' => 'Flags',
+                    'topic' => 'Topic',
+                    'language' => 'Language',
                 ),
 
             'tips' => array(
