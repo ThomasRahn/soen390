@@ -32,6 +32,14 @@ class Narrative extends Eloquent
     /**
      * @codeCoverageIgnore
      */
+    public function topic()
+    {
+        return $this->belongsTo('Topic', 'TopicID', 'TopicID');
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function media()
     {
         return $this->hasMany('Media', 'narrative_id', 'NarrativeID');
