@@ -26,7 +26,12 @@ Route::get('/', array('before' => 'maintenance', function()
 
         Session::set('selectedTopic', $selectedTopic);
     } else {
-        $selectedTopic = Session::get('selectedTopic', Topic::get()->last());
+        $selectedTopic = Session::get('selectedTopic', Topic::where('Published', true)->get()->last());
+        $selectedTopic = Topic::find($selectedTopic->TopicID);
+    }
+
+    if (! $selectedTopic->Published) {
+        App::abort(404, 'Selected topic no longer exists.');
     }
 
 	return View::make('cards/listing')
