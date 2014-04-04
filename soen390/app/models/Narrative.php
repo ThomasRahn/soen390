@@ -500,6 +500,7 @@ class Narrative extends Eloquent
             'audio' => $audioArray,
             'flags' => $flagCount,
             'comments' => $commentCount,
+            'topic' => $n->topic()->first()->toResponseArray(),
         );
 
         return $narrative;
