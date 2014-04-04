@@ -92,6 +92,7 @@ class ApiNarrativeController extends \BaseController
 		$validator = Validator::make(Input::all(), array(
 			'archive'  => 'required|mimes:zip',
 			'category' => 'required|exists:Category,CategoryID',
+			'topic'    => 'required|exists:Topic,TopicID',
 		));
 
 		if ($validator->fails())
@@ -128,7 +129,7 @@ class ApiNarrativeController extends \BaseController
 				$destinationPath,
 				Input::get('category'),
 				Input::get('publish') == 'publish',
-				Topic::first()->TopicID
+				Input::get('topic')
 			);
 		} catch (Exception $e) {
 			$errorArray = array($e->getMessage());
