@@ -1,7 +1,7 @@
 @extends('admin.master')
 
 @section('view_title')
-@lang('admin.sidebar.topics') }}
+@lang('admin.sidebar.topics')
 @stop
 
 @section('styles')
@@ -23,12 +23,13 @@
             <th>@lang('admin.topic.index.table.code')</th>
             <th>@lang('admin.topic.index.table.description')</th>
             <th>@lang('admin.topic.index.table.narratives')</th>
+            <th>@lang('admin.topic.index.table.published')</th>
             <th>@lang('admin.topic.index.table.manage')</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <td colspan="5">
+            <td colspan="6">
                 <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#add-topic-modal">
                     <i class="fa fa-fw fa-plus-circle"></i>
                     @lang('admin.topic.index.table.add')
@@ -39,23 +40,25 @@
     <tbody>
         @if (count($topics) === 0)
         <tr>
-            <td colspan="4">@lang('admin.topic.index.table.empty')</td>
+            <td colspan="6">@lang('admin.topic.index.table.empty')</td>
         </tr>
         @else
-        @foreach ($topics as $t)
-        <tr data-topic-id="{{ $t->id }}">
-            <td class="topic-id">{{{ $t->id }}}</td>
-            <td class="topic-code"><code>{{{ $t->code }}}</code></td>
-            <td class="topic-description">{{{ $t->description }}}</td>
-            <td class="topic-narratives">{{{ $t->narratives }}}</td>
-            <td>
-                <div class="btn-group btn-group-xs">
-                    <button class="btn btn-default btn-edit-topic" data-topic-id="{{ $t->id }}"><i class="fa fa-pencil"></i></button>
-                    <button class="btn btn-default btn-delete-topic" data-topic-id="{{ $t->id }}"><i class="fa fa-trash-o"></i></button>
-                </div>
-            </td>
-        </tr>
-        @endforeach
+            @foreach ($topics as $t)
+            <tr data-topic-id="{{ $t->id }}"{{ $t->published ? '' : ' class="warning"' }}>
+                <td class="topic-id">{{{ $t->id }}}</td>
+                <td class="topic-code"><code>{{{ $t->code }}}</code></td>
+                <td class="topic-description">{{{ $t->description }}}</td>
+                <td class="topic-narratives">{{{ $t->narratives }}}</td>
+                <td class="topic-published">
+                    <button class="btn btn-xs btn-default btn-publish" data-topic-id="{{ $t->id }}">
+                        <i class="fa fa-fw fa-{{ ($t->published == true ? 'check-square-o' : 'square-o') }}"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-default btn-edit-topic" data-topic-id="{{ $t->id }}"><i class="fa fa-pencil"></i></button>
+                </td>
+            </tr>
+            @endforeach
         @endif
     </tbody>
 </table>
@@ -112,6 +115,7 @@
 <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//cdn.jsdelivr.net/tablesorter/2.13.3/js/jquery.tablesorter.min.js"></script>
 <script>
+
     $(document).ready(function() {
 
         // Handle submission of add-topic-form
@@ -126,14 +130,19 @@
 
                 $(".topics-table > tbody:last").append(
                     "<tr data-topic-id=\"" + topic.id + "\" class=\"success\">"
-                    + "<td>" + topic.id + "</td>"
-                    + "<td><code>" + topic.name + "</code></td>"
-                    + "<td>" + topic.description + "</td>"
-                    + "<td>" + topic.narrativeCount + "</td>"
-                    + "<td><div class=\"btn-group btn-group-xs\">"
-                    + "<button type=\"button\" class=\"btn btn-default btn-edit-topic\" data-topic-id=\"" + topic.id + "\"><i class=\"fa fa-pencil\"></i></button>"
-                    + "<button type=\"button\" class=\"btn btn-default btn-delete-topic\" data-topic-id=\"" + topic.id + "\"><i class=\"fa fa-trash-o\"></i></button>"
-                    + "</div></td>"
+                    + "<td class=\"topic-id\">" + topic.id + "</td>"
+                    + "<td class=\"topic-code\"><code>" + topic.name + "</code></td>"
+                    + "<td class=\"topic-description\">" + topic.description + "</td>"
+                    + "<td class=\"topic-narratives\">" + topic.narrativeCount + "</td>"
+                    + "<td class=\"topic-published\">"
+                    + "<button class=\"btn btn-xs btn-default btn-publish\" data-topic-id=\"" + topic.id + "\">"
+                    + "<i class=\"fa fa-fw fa-"
+                    + (topic.published == true ? "check-square-o" : "square-o")
+                    + "\"></i>"
+                    + "</button></td>"
+                    + "<td>"
+                    + "<button type=\"button\" class=\"btn btn-xs btn-default btn-edit-topic\" data-topic-id=\"" + topic.id + "\"><i class=\"fa fa-pencil\"></i></button>"
+                    + "</td>"
                     + "</tr>"
                 );
 
@@ -151,37 +160,30 @@
             });
         });
 
-
-        // Handle delete event
-        $(".btn-delete-topic").click(function(e) {
+        // Handle publish toggling
+        $(".btn-publish").click(function(e) {
             e.preventDefault();
 
             var topicID = $(this).data("topic-id");
-
-            console.log("Request to delete topic ID " + topicID);
+            var row = $(this).parent().parent();
 
             $.ajax({
-                type:     "DELETE",
-                url:      "/admin/topic/index/" + topicID,
-                dataType: "json"
+                type: "PUT",
+                url: "/admin/topic/toggle-publish/" + topicID
             }).done(function(data) {
-                // Display alert
-                $("#action-alert")
-                    .removeClass("hide alert-danger")
-                    .addClass("alert-success")
-                    .html(data.return);
+                console.log(data);
 
-                // Remove relevant row
-                $("tr[data-topic-id='" + topicID + "']").remove();
+                var buttonIcon = $("tr[data-topic-id=" + topicID + "] .btn-publish i");
+
+                if (data.return.published == "1") {
+                    row.removeClass("warning");
+                    buttonIcon.removeClass("fa-square-o fa-check-square-o").addClass("fa-check-square-o");
+                } else {
+                    row.addClass("warning");
+                    buttonIcon.removeClass("fa-square-o fa-check-square-o").addClass("fa-square-o");
+                }
             }).fail(function(jqxhr, textStatus, errorThrown) {
-                console.log(jqxhr.responseText);
                 
-                var data = JSON.parse(jqxhr.responseText);
-
-                $("#action-alert")
-                    .removeClass("hide alert-success")
-                    .addClass("alert-danger")
-                    .html(data.return)
             });
         });
 
