@@ -14,11 +14,11 @@
 // Route for main front-end view.
 Route::get('/', array('before' => 'maintenance', function()
 {
-    $topics = Topic::all();
+    $topics = Topic::where('Published', true)->get();
     $selectedTopic = null;
 
     if (Input::has('topic')) {
-        $selectedTopic = Topic::find(Input::get('topic'));
+        $selectedTopic = Topic::where('Published', true)->find(Input::get('topic'));
 
         if (! $selectedTopic) {
             App::abort(404, 'Selected topic does not exist.');

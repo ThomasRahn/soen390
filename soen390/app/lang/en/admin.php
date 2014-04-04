@@ -136,27 +136,6 @@ return array(
 
         ),
 
-    'profile' => array(
-
-            'form' => array(
-                    'name' => 'Name',
-                    'email' => 'Email Address',
-                    'language' => 'Language',
-                    'newPassword' => 'New Password',
-                    'confirmPassword' => 'Confirm Password',
-                    'saveChanges' => 'Save Changes',
-                    'undoChanges' => 'Undo Changes',
-                    'changePasswordTip' => '<p class="lead">Changing Passwords</p><p>The password fields only need to be filled-out <strong>if</strong> you want to change your password. If you do not wish to change your password, you can simply leave them blank.</p>',
-                ),
-
-            'postIndex' => array(
-                    'validationFails' => '<p>There is a mistake in your form. Please correct it and try again.</p>',
-                    'internalError'   => '<p>Unable to save your changes due to an internal error.</p>',
-                    'success'         => '<p>Your profile has been updated successfully.</p>',
-                ),
-
-        ),
-
     'topic' => array(
         'index' => array(
             'table' => array(
@@ -165,6 +144,7 @@ return array(
                 'narratives'  => 'Child Narratives',
                 'manage'      => 'Manage',
                 'add'         => 'Add a new topic',
+                'published'   => 'Published?',
             ),
 
             'addModal' => array(
@@ -184,6 +164,10 @@ return array(
             'success'    => 'Topic <code>:code</code> has been deleted. All previously narratives have been moved into the <code>:first</code> topic.',
             'failure'    => 'Failed to delete topic <code>:code</code> due to a server side error. Changes have not been saved.',
             'atleastOne' => 'There needs to be at least <strong>one</strong> remaining topic.',
+        ),
+
+        'togglePublish' => array(
+            'failure' => 'Failed to toggle publication status on topic <code>:code</code> due to a server side error. Please try again later.',
         ),
     ),
 

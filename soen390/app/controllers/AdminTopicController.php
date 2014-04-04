@@ -27,6 +27,7 @@ class AdminTopicController extends \BaseController
                 ->inLocale(App::getLocale())
                 ->first()
                 ->translation;
+            $o->published   = $t->Published;
 
             $topics[] = $o;
         }
@@ -62,7 +63,8 @@ class AdminTopicController extends \BaseController
 
         // Create the Topic, which simply requires the "codename", and get its reference.
         $topic = Topic::create(array(
-            'Name' => Input::get('code'),
+            'Name'      => Input::get('code'),
+            'Published' => true,
         ));
 
         $saveSuccess = $topic instanceof Topic;
@@ -153,6 +155,38 @@ class AdminTopicController extends \BaseController
                 array(
                     'success' => false,
                     'return'  => Lang::get('admin.topic.delete.failure', array('code' => $topicCode)),
+                ),
+                500
+            );
+        }
+    }
+
+    /**
+     * @param  int  $id
+     * @return Response
+     */
+    public function putTogglePublish($id)
+    {
+        $topic = Topic::find($id);
+
+        if (! $topic) {
+            App::abort(404, 'The requested Topic instance could not be found.');
+        }
+
+        $topic->Published = ! $topic->Published;
+
+        if ($topic->save()) {
+            return Response::json(
+                array(
+                    'success' => true,
+                    'return'  => $topic->toResponseArray(),
+                )
+            );
+        } else {
+            return Response::json(
+                array(
+                    'success' => false,
+                    'return'  => Lang::get('admin.topic.togglePublish.failure', array('code' => $topic->Name)),
                 ),
                 500
             );
