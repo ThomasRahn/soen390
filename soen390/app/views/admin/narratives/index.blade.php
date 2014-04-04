@@ -105,7 +105,7 @@
                     </thead>
                     <tbody class="table-spinner">
                         <tr class="active">
-                            <td colspan="9"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
+                            <td colspan="6"><span><i class="fa fa-cog fa-spin"></i></span> {{ trans('admin.narratives.table.loading') }}</td>
                         </tr>
                     </tbody>
                 </table>
