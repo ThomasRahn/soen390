@@ -102,7 +102,6 @@ class ApiCommentControllerTest extends TestCase
             $expectedDateString,
             $data->created_at
         );
-        $this->assertNull($data->deleted_at);
         $this->assertEquals($c->Name, $data->name);
         $this->assertEquals(0, $data->agrees);
         $this->assertEquals(0, $data->disagrees);
