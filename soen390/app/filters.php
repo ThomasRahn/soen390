@@ -16,13 +16,9 @@ App::before(function($request)
 
 	if (Auth::check()) {
 		$user = Auth::user();
-		$language = $user->language()->first()->Description;
+		$localeCode = $user->language()->first()->Code;
 
-		if ($language == 'English')
-			App::setLocale('en');
-
-		if ($language == 'French')
-			App::setLocale('fr');
+		App::setLocale($localeCode);
 	}
 
 });

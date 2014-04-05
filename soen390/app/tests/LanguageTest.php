@@ -2,66 +2,22 @@
 
 class LanguageTest extends TestCase
 {
-    
-    /**
-     * Test the API's index and ensures that response is valid JSON.
-     *
-     */
-    public function testIndex()
+
+    public function setUp()
     {
-        /*$response = $this->call('GET', 'api/topic');
+        parent::setUp();
 
-        $this->assertResponseOk();
-
-        json_decode($response->getContent());
-
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());*/
+        Artisan::call('migrate');
     }
+
     /**
-     * Ensure Languages get fetched.
-     *
-     */
-    public function testTopicRetrieval()
-    {
-        /*$narratives = Narrative::all();
-
-        $this->assertNotEmpty($narratives);*/
-
-    }
-    /**
-     * Ensure Languages gets created.
-     *
-     */
-    public function testLanguageCreation()
-    {
-        $languageCreated = new Language;
-
-        $languageCreated->Description = "Test";
-
-        $languageCreated->save();
-
-        $insertedId = $languageCreated->LanguageID;
-
-        $languageFetched = Language::find($insertedId);
-
-        $this->assertEquals("Test", $languageFetched->Description);
-
-        $languageFetched->delete();
-
-        $languageFetched = Language::find($insertedId);
-
-        $this->assertNull($languageFetched);
-
-    }
-      /**
      * @covers Language::narrative
      */
     public function testLanguageNarrativesRelation()
     {
         $languageCreated = new Language;
-        $languageCreated->LanguageID = 1;
         $languageCreated->Description = "Test";
-
+        $languageCreated->Code = "Test";
         $languageCreated->save();
 
         $narrativeCreated = new Narrative;
@@ -70,7 +26,7 @@ class LanguageTest extends TestCase
 
         $narrativeCreated->TopicID = 1;
         $narrativeCreated->CategoryID = 1;
-        $narrativeCreated->LanguageID = 1;
+        $narrativeCreated->LanguageID = $languageCreated->LanguageID;
         $narrativeCreated->DateCreated = $date;
         $narrativeCreated->Name = "Test";
         $narrativeCreated->Agrees = 1;
@@ -80,10 +36,7 @@ class LanguageTest extends TestCase
 
         $narrativeCreated->save();
 
-        $narratives = Language::find(1)->narrative();
-        $this->assertTrue($narratives->count() > 0);
-
-        
-
+        $narratives = $languageCreated->narrative();
+        $this->assertCount(1, $narratives->get());
     }
 }

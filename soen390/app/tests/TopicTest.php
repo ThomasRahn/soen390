@@ -2,40 +2,38 @@
 
 class TopicTest extends TestCase
 {
-
     /**
-     * Ensure Topic gets created.
-     *
-     * @covers Topic::save
-     * @covers Topic::delete
-     * @covers Topic::find
+     * @covers Topic::toResponseArray
+     * @covers Topic::getTranslationsAsArray
+     * @uses   Language
      */
-    public function testCategoryCreation()
+    public function testToResponseArray()
     {
-        $topicCreated = new Topic;
+        $this->seed('LanguageTableSeeder');
 
-        $date = new DateTime;
+        $topic = Topic::create(array(
+            'Name'      => 'test-topic',
+            'Published' => true,
+        ));
 
-        $topicCreated->Description = "Test";
-        $topicCreated->DateCreated = $date;
-        $topicCreated->DateModified = $date;
-        $topicCreated->Name = "Test";
+        $topic->translations()->save(new TopicTranslation(array(
+            'language_id' => Language::where('Code', 'en')->first()->LanguageID,
+            'translation' => 'english translation',
+        )));
 
-        $topicCreated->save();
+        $topic->translations()->save(new TopicTranslation(array(
+            'language_id' => Language::where('Code', 'fr')->first()->LanguageID,
+            'translation' => 'french translation',
+        )));
 
-        $insertedId = $topicCreated->TopicID;
+        $result = $topic->toResponseArray();
 
-        $topicFetched = Topic::find($insertedId);
-
-        $this->assertEquals("Test", $topicFetched->Description);
-        $this->assertEquals("Test", $topicFetched->Name);
-
-        $topicFetched->delete();
-
-        $topicFetched = Topic::find($insertedId);
-
-        $this->assertNull($topicFetched);
-
+        $this->assertEquals($topic->TopicID, $result['id']);
+        $this->assertEquals($topic->Name, $result['name']);
+        $this->assertEquals($topic->Published, $result['published']);
+        $this->assertEquals(
+            $topic->translations()->inLocale('en')->first()->translation,
+            $result['descriptions']['en']['translation']
+        );
     }
-
 }

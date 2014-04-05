@@ -48,8 +48,8 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'thomas@rahn.ca',
-				'password' => 'Thomas1',
+				'email' => 'admin@user.local',
+				'password' => 'admin',
 				'_token' => csrf_token(),
 				)
 			);
@@ -71,7 +71,7 @@ class AuthControllerTest extends TestCase
 			'auth/login',
 			array(
 				'email' => 'jane@doe.com',
-				'password' => 'Thomas1',
+				'password' => 'admin',
 				'_token' => csrf_token(),
 				)
 			);
@@ -92,7 +92,7 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'thomas@rahn.ca',
+				'email' => 'admin@user.local',
 				'password' => 'abc123',
 				'_token' => csrf_token(),
 				)
@@ -134,8 +134,8 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'THOMAS@RAHN.CA',
-				'password' => 'Thomas1',
+				'email' => 'ADMIN@USER.LOCAL',
+				'password' => 'admin',
 				'_token' => csrf_token(),
 				)
 			);
@@ -155,8 +155,8 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'thomas@rahn.ca',
-				'password' => 'THOMAS1',
+				'email' => 'admin@user.local',
+				'password' => 'ADMIN',
 				'_token' => csrf_token(),
 				)
 			);
@@ -178,8 +178,8 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'thomas@rahn.ca',
-				'password' => 'Thomas1',
+				'email' => 'admin@user.local',
+				'password' => 'admin',
 				'_token' => csrf_token(),
 				)
 			);
@@ -211,8 +211,8 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'thomas@rahn.ca',
-				'password' => 'Thomas1',
+				'email' => 'admin@user.local',
+				'password' => 'admin',
 				'_token' => csrf_token(),
 				)
 			);
@@ -235,8 +235,8 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'thomas@rahn.ca',
-				'password' => 'Thomas1',
+				'email' => 'admin@user.local',
+				'password' => 'admin',
 				'_token' => csrf_token(),
 				)
 			);
@@ -252,7 +252,7 @@ class AuthControllerTest extends TestCase
 	 */
 	public function testPostLoginNeedRehash()
 	{
-		$hash = Hash::make('Thomas1');
+		$hash = Hash::make('admin');
 
 		Hash::shouldReceive('needsRehash')->once()->andReturn(true);
 		Hash::shouldReceive('make')->once()->andReturn($hash);
@@ -262,8 +262,8 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'thomas@rahn.ca',
-				'password' => 'Thomas1',
+				'email' => 'admin@user.local',
+				'password' => 'admin',
 				'_token' => csrf_token(),
 				)
 			);

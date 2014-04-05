@@ -32,6 +32,14 @@ class Narrative extends Eloquent
     /**
      * @codeCoverageIgnore
      */
+    public function topic()
+    {
+        return $this->belongsTo('Topic', 'TopicID', 'TopicID');
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function media()
     {
         return $this->hasMany('Media', 'narrative_id', 'NarrativeID');
@@ -72,13 +80,17 @@ class Narrative extends Eloquent
      * The $published value will determine whether each Narrative found will
      * be made available for viewing by end-users.
      *
+     * The $topic is the ID representative of the Topic that will contain all
+     * the narratives in the archive.
+     *
      * @param  string  $name
      * @param  string  $path
      * @param  integer $category
      * @param  boolean $publish
+     * @param  integer $topic
      * @return void
      */
-    public function addArchive($name, $path, $category, $publish)
+    public function addArchive($name, $path, $category, $publish, $topic)
     {
         // Check to see if the archive file actually exists first.
         if (File::exists($path) === false)
@@ -89,7 +101,7 @@ class Narrative extends Eloquent
 
         // Process the extracted contents for narratives and create them
         // individually.
-        $this->findNarratives($outputPath, $category, $publish);
+        $this->findNarratives($outputPath, $category, $publish, $topic);
     }
 
     /**
@@ -143,12 +155,16 @@ class Narrative extends Eloquent
      * The $publish attribute specifies whether or not all created
      * narratives will be made available for public viewing at creation.
      *
+     * The $topic is the ID representative of the Topic that will contain all
+     * the narratives in the archive.
+     *
      * @param  string  $path
      * @param  integer $category
      * @param  boolean $publish
+     * @param  integer $topic
      * @return void
      */
-    private function findNarratives($path, $category, $publish)
+    private function findNarratives($path, $category, $publish, $topic)
     {
         // Look for directories in this $path
         $directories = File::directories($path);
@@ -161,12 +177,12 @@ class Narrative extends Eloquent
 
             // Go into each one to find a narrative.
             foreach ($directories as $d)
-                $this->findNarratives($d, $category, $publish);
+                $this->findNarratives($d, $category, $publish, $topic);
 
         } else {
 
             // Process a potential narrative.
-            return $this->processNarrative($path, $category, $publish);
+            return $this->processNarrative($path, $category, $publish, $topic);
 
         }
     }
@@ -182,12 +198,16 @@ class Narrative extends Eloquent
      * The $publish attribute specifies whether or not all created
      * narratives will be made available for public viewing at creation.
      *
+     * The $topic is the ID representative of the Topic that will contain all
+     * the narratives in the archive.
+     *
      * @param  string  $path
      * @param  integer $category
      * @param  boolean $publish
+     * @param  integer $topic
      * @return void
      */
-    private function processNarrative($path, $category, $publish)
+    private function processNarrative($path, $category, $publish, $topic)
     {
         // Look for files in this $path
         $files = File::files($path);
@@ -222,7 +242,7 @@ class Narrative extends Eloquent
         // a complete and valid narrative container.
 
         // Create the narrative and retrieve the instance.
-        $narrative = $this->createFromXML($xmlFilePath, $category, $publish);
+        $narrative = $this->createFromXML($xmlFilePath, $category, $publish, $topic);
 
         // We no longer need the XML file, so we'll attempt to delete it
         // unless we're in debug mode.
@@ -243,12 +263,16 @@ class Narrative extends Eloquent
      * The $publish attribute specifies whether or not all created
      * narratives will be made available for public viewing at creation.
      *
+     * The $topic is the ID representative of the Topic that will contain all
+     * the narratives in the archive.
+     *
      * @param  string  $xmlFilePath
      * @param  integer $category
      * @param  boolean $publish
+     * @param  integer $topic
      * @return Narrative
      */
-    private function createFromXML($xmlFilePath, $category, $publish = false)
+    private function createFromXML($xmlFilePath, $category, $publish = false, $topic)
     {
         // Let's parse the XML file and create a Narrative instance.
 
@@ -265,7 +289,7 @@ class Narrative extends Eloquent
         // Create the narrative instance with the data.
         $narrative = Narrative::create(array(
                 'Name'        => $xmlFileElement->narrativeName,
-                'TopicID'     => Topic::first()->TopicID,
+                'TopicID'     => $topic,
                 'CategoryID'  => $category,
                 'LanguageID'  => $language->LanguageID,
                 'DateCreated' => DateTime::createFromFormat(
@@ -390,6 +414,99 @@ class Narrative extends Eloquent
                 'sourceFilePath' => $path,
                 'narrativeID'    => $narrative->NarrativeID,
             ),'transcoding');
+    }
+
+    /**
+     * Returns this narrative as an array, appropriatelyformatted for
+     * a JSON response.
+     *
+     * @return array
+     */
+    public function toResponseArray()
+    {
+        $n = $this;
+
+        // Get all images for this narrative.
+        $images = $n->media()->images()->orderBy('filename')->get();
+        $imagesArray = array();
+
+        foreach ($images as $i)
+            $imagesArray[] = action('ContentController@getContent', array('id' => $i->id));
+
+        // Set default image if there are none.
+        if (count($imagesArray) == 0)
+            $imagesArray[] = asset('img/default_narrative.jpg');
+
+        // Get all the audio for this narrative, in a format compatible with JPlayer.
+        $audio = $n->media()->audio()->groupBy('filename')->orderBy('filename')->get();
+        $audioArray = array();
+
+        foreach ($audio as $a) {
+            
+            // Retrieve the audio and get their media address.
+
+            $a_mpeg = $n->media()->audio()
+                ->where('filename', $a->filename)
+                ->where('audio_codec', 'mp3')
+                ->first();
+
+            $a_ogg  = $n->media()->audio()
+                ->where('filename', $a->filename)
+                ->where('audio_codec', 'ogg')
+                ->first();
+
+            $mpeg_link = (! $a_mpeg) ? '' : action('ContentController@getContent', array('id' => $a_mpeg->id));
+
+            $ogg_link = (! $a_ogg) ? '' : action('ContentController@getContent', array('id' => $a_ogg->id));
+
+            // Determine an appropriate poster for this track.
+            $tracknumber = intval($a->filename);
+            $posterPath = $imagesArray[0];
+
+            while ($tracknumber > 0) {
+                $poster = $n->media()->images()->where('filename', $tracknumber)->first();
+
+                if ($poster != null) {
+                    $posterPath = action('ContentController@getContent', array('id' => $poster->id));
+                    break;
+                }
+
+                $tracknumber--;
+            }
+
+            $audioArray[] = array(
+                'title' => $a->filename,
+                'mp3' => $mpeg_link,
+                'oga' => $ogg_link,
+                'poster' => $posterPath,
+                'duration' => $a->audio_duration,
+            );
+        }
+
+        $flagCount = Flag::where('NarrativeID', $n->NarrativeID)->count();
+        $commentCount = Comment::where('NarrativeID', $n->NarrativeID)->where('Deleted', 0)->count();
+
+        // Put this narrative into the array.
+        $narrative = array(
+            'id'        => $n->NarrativeID,
+            'name'      => $n->Name,
+            'stance'    => $n->category()->first()->Description,
+            'lang'      => $n->language()->first()->Description,
+            'views'     => $n->Views,
+            'yays'      => $n->Agrees,
+            'nays'      => $n->Disagrees,
+            'mehs'      => $n->Indifferents,
+            'createdAt' => $n->DateCreated,
+            'published' => $n->Published,
+            'images'    => $imagesArray,
+            'audio'     => $audioArray,
+            'flags'     => $flagCount,
+            'comments'  => $commentCount,
+            'topic'     => $n->topic()->first()->toResponseArray(),
+            'language'  => $n->language()->first()->Description,
+        );
+
+        return $narrative;
     }
 
 }

@@ -3,6 +3,13 @@
 class CategoryTest extends TestCase
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        Artisan::call('migrate');
+    }
+
     /**
      * Ensure Category gets created.
      * @covers Category::save
@@ -37,9 +44,7 @@ class CategoryTest extends TestCase
     public function testCategoryNarrativesRelation()
     {
         $categoryCreated = new Category;
-        $categoryCreated->CategoryID = 1;
         $categoryCreated->Description = "Test";
-
         $categoryCreated->save();
 
         $narrativeCreated = new Narrative;
@@ -47,7 +52,7 @@ class CategoryTest extends TestCase
         $date = date('Y-m-d H:i:s');
 
         $narrativeCreated->TopicID = 1;
-        $narrativeCreated->CategoryID = 1;
+        $narrativeCreated->CategoryID = $categoryCreated->CategoryID;
         $narrativeCreated->LanguageID = 1;
         $narrativeCreated->DateCreated = $date;
         $narrativeCreated->Name = "Test";
@@ -58,7 +63,7 @@ class CategoryTest extends TestCase
 
         $narrativeCreated->save();
 
-        $narratives = Category::find(1)->narrative();
+        $narratives = $categoryCreated->narrative();
         $this->assertTrue($narratives->count() > 0);
     }
 

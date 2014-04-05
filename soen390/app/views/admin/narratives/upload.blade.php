@@ -75,6 +75,14 @@
             </div>
 
             <div class="form-group">
+                {{ Form::label('topic', trans('admin.narratives.upload.form.topic'), array('class' => 'col-sm-3 control-label')) }}
+                <div class="col-sm-9">
+                    {{ Form::select('topic', $topicArray, null, array('class' => 'form-control', 'required' => 'required')) }}
+                    <span class="help-block"><small>{{ trans('admin.narratives.upload.help.topic') }}</small></span>
+                </div>
+            </div>
+
+            <div class="form-group">
                 {{ Form::label('publish', trans('admin.narratives.upload.form.publish'), array('class' => 'col-sm-3 control-label')) }}
                 <div class="col-sm-9">
                     <div class="checkbox">

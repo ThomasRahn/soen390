@@ -7,19 +7,16 @@ class UserTableSeeder extends Seeder
     {
         DB::table('User')->delete();
 
+        // Create the default administrator user
         User::create(array(
-                'Email'       => 'thomas@rahn.ca',
-                'Password'    => Hash::make('Thomas1'),
-                'Name'        => 'Thomas Rahn',
-                'LanguageID'  => 1,
-            ));
+            'Email'      => 'admin@user.local',
+            'Password'   => Hash::make('admin'),
+            'Name'       => 'Administrator',
+            'LanguageID' => 1,
+        ));
 
-	User::create(array(
-		'Email'	      => 'french@french.ca',
-		'Password'    => Hash::make('French1'),
-		'Name'        => 'Jacque TRrembly',
-		'LanguageID'  => 2
-	));
+        // Set the support email to a default.
+        Configuration::set('supportEmail', 'admin@user.local');
     }
 
 }

@@ -129,7 +129,7 @@
                     </ul>
                     <ul class="nav nav-sidebar">
                         <li{{ Request::is('admin') ? ' class="active"' : '' }}><a href="{{ route('dashboard') }}"><i class="fa fa-bar-chart-o fa-fw"></i> {{ trans('admin.sidebar.dashboard') }}</a></li>
-                        <li{{ Request::is('admin/category*') ? ' class="active"' : '' }}><a href="#"><i class="fa fa-folder-open-o fa-fw"></i> {{ trans('admin.sidebar.categories') }}</a></li>
+                        <li{{ Request::is('admin/topic*') ? ' class="active"' : '' }}><a href="{{ action('AdminTopicController@getIndex') }}"><i class="fa fa-folder-open-o fa-fw"></i> {{ trans('admin.sidebar.topics') }}</a></li>
                         <li{{ (Request::is('admin/narrative') && ! Request::is('admin/narrative/upload')) ? ' class="active"' : '' }}><a href="{{ action('AdminNarrativeController@getIndex') }}"><i class="fa fa-bullhorn fa-fw"></i> {{ trans('admin.sidebar.narratives') }}</a></li>
                         <li{{ Request::is('admin/configuration*') ? ' class="active"' : '' }}><a href="{{ action('AdminConfigController@getIndex') }}"><i class="fa fa-cogs fa-fw"></i> {{ trans('admin.sidebar.configuration') }}</a></li>
                     </ul>

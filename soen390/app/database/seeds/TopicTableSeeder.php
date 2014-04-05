@@ -7,11 +7,24 @@ class TopicTableSeeder extends Seeder
     {
         DB::table('Topic')->delete();
 
-		Topic::create(array(
-                "DateCreated" => new DateTime,
-                "Name"        => "Pipes and stuff",
-                "Description" => "Key stone pipeline stuff",
-            ));
+		$topic = Topic::create(array(
+            'Name'      => 'pipeline',
+            'Published' => true,
+        ));
+
+        $topic->translations()->save(
+            new TopicTranslation(array(
+                'language_id' => Language::where('Code', 'en')->first()->LanguageID,
+                'translation' => 'Transporting Oil By Pipelines vs. Trains',
+            ))
+        );
+
+        $topic->translations()->save(
+            new TopicTranslation(array(
+                'language_id' => Language::where('Code', 'fr')->first()->LanguageID,
+                'translation' => 'Le transport de pétrole par pipelines contre les trains.',
+            ))
+        );
     }
 
 }
