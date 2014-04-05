@@ -268,7 +268,7 @@ class ApiNarrativeController extends \BaseController
 			);
 		}
 		$flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
-		$commentCount = Comment::where('NarrativeID',$n->NarrativeID)->count();
+		$commentCount = Comment::where('NarrativeID',$n->NarrativeID)->where('Deleted',0)->count();
 		// Put this narrative into the array.
 		$narrative = array(
 			'id' => $n->NarrativeID,

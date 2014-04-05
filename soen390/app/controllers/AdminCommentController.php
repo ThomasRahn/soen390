@@ -13,7 +13,10 @@ class AdminCommentController extends BaseController {
             return App::abort(404);
 
         $comment->flags()->delete();
-        $comment->delete();
+        $comment->Deleted = true;
+		$comment->Comment = "(DELETED)";
+		$comment->Name = "(DELETED)";
+		$comment->save();
     }
 }
 

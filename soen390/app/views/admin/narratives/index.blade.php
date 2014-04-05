@@ -240,14 +240,27 @@
                 var rows = [];
 
                 $.each(data['return'],function(index,comment){
-                    rows.push("<tr data-comment-id=\"" + comment.comment_id + "\">"
-                            + "<td>" + comment.name + "</td>"
-                            + "<td>" + comment.agrees + "</td>"
-                            + "<td>" + comment.disagrees + "</td>"
-                            + "<td>" + comment.body + "</td>"
-                            + "<td><a href=\"#\" id=\"num_comment_flags_"+comment.comment_id+"\" onclick=\"loadCommentFlags("+comment.comment_id+")\">" + comment.report_count + "</a></td>"
-                            + "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeComment("+ comment.comment_id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td>"
-                            + "</tr>");
+
+            		  if(comment.deleted == 0){
+                            rows.push("<tr data-comment-id=\"" + comment.comment_id + "\">"
+                                    + "<td>" + comment.name + "</td>"
+                                    + "<td>" + comment.agrees + "</td>"
+                                    + "<td>" + comment.disagrees + "</td>"
+                                    + "<td>" + comment.body + "</td>"
+                                    + "<td><a href=\"#\" id=\"num_comment_flags_"+comment.comment_id+"\" onclick=\"loadCommentFlags("+comment.comment_id+")\">" + comment.report_count + "</a></td>"
+                                    + "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeComment("+ comment.comment_id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td>"
+                                    + "</tr>");
+                            $.each(comment.children, function(index,comment){
+                                rows.push("<tr data-comment-id=\"" + comment.comment_id + "\">"
+                                    + "<td>" + comment.name + "</td>"
+                                    + "<td>" + comment.agrees + "</td>"
+                                    + "<td>" + comment.disagrees + "</td>"
+                                    + "<td>" + comment.body + "</td>"
+                                    + "<td><a href=\"#\" id=\"num_comment_flags_"+comment.comment_id+"\" onclick=\"loadCommentFlags("+comment.comment_id+")\">" + comment.report_count + "</a></td>"
+                                    + "<td><button type=\"button\" class=\"btn btn-default\" onclick=\"removeComment("+ comment.comment_id+")\"><i class=\"fa fa-trash-o fa-fw\"></i></button></td>"
+                                    + "</tr>");
+                            });
+            		  }
                 });
             $("<tbody/>", {
                 html: rows.join("")
