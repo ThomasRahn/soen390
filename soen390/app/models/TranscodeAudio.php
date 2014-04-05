@@ -73,12 +73,10 @@ class TranscodeAudio
                     . DIRECTORY_SEPARATOR 
                     . $baseName;
 
-                /**
                 // If the output path already exists then skip.
                 if (File::exists($outputPath)) {
                     continue;
                 }
-                **/
 
                 // If the source file is already in the desired $codec,
                 // then we'll just move it and skip transcoding to $codec.
@@ -97,7 +95,7 @@ class TranscodeAudio
 
                     // If the output doesn't exist, then the transcoding failed.
                     // We will release the job back into the queue and try again.
-                    if (! File::exists($outputPath)) {
+                    if (! File::exists($outputPath) && ! App::environment('test')) {
                         return $job->release(5);
                     }
 
