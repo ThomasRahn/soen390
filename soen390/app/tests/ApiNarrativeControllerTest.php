@@ -121,6 +121,7 @@ class ApiNarrativeControllerTest extends TestCase
      * @covers ApiNarrativeController::narrativeToArray
      * @covers TranscodeAudio::fire
      * @covers TranscodeAudio::createMediaInstance
+     * @uses   Narrative
      */
     public function testShowWithValidNarrative()
     {
@@ -373,6 +374,7 @@ class ApiNarrativeControllerTest extends TestCase
             array(),
             array(
                 'category' => Category::first()->CategoryID,
+                'topic'    => Topic::first()->TopicID,
             ),
             array(
                 'archive' => $file,
@@ -419,6 +421,7 @@ class ApiNarrativeControllerTest extends TestCase
             array(),
             array(
                 'category' => Category::first()->CategoryID,
+                'topic'    => Topic::first()->TopicID,
             ),
             array(
                 'archive' => $file,

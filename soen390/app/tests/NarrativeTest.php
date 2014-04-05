@@ -145,4 +145,29 @@ class NarrativeTest extends TestCase
         File::deleteDirectory($extractedPath);
     }
 
+    /**
+     * @covers Narrative::toResponseArray
+     */
+    public function testToResponseArray()
+    {
+        $this->addNarrativeToDatabase();
+
+        $narrative = Narrative::first();
+
+        $array = $narrative->toResponseArray();
+
+        $this->assertEquals($narrative->NarrativeID, $array['id']);
+        $this->assertEquals($narrative->Name, $array['name']);
+
+        $this->assertCount(
+            $narrative->media()->images()->get()->count(),
+            $array['images']
+        );
+
+        $this->assertCount(
+            $narrative->media()->audio()->get()->count(),
+            $array['audio']
+        );
+    }
+
 }

@@ -11,38 +11,13 @@ class LanguageTest extends TestCase
     }
 
     /**
-     * Ensure Languages gets created.
-     *
-     */
-    public function testLanguageCreation()
-    {
-        $languageCreated = new Language;
-
-        $languageCreated->Description = "Test";
-
-        $languageCreated->save();
-
-        $insertedId = $languageCreated->LanguageID;
-
-        $languageFetched = Language::find($insertedId);
-
-        $this->assertEquals("Test", $languageFetched->Description);
-
-        $languageFetched->delete();
-
-        $languageFetched = Language::find($insertedId);
-
-        $this->assertNull($languageFetched);
-
-    }
-      /**
      * @covers Language::narrative
      */
     public function testLanguageNarrativesRelation()
     {
         $languageCreated = new Language;
         $languageCreated->Description = "Test";
-
+        $languageCreated->Code = "Test";
         $languageCreated->save();
 
         $narrativeCreated = new Narrative;
@@ -62,6 +37,6 @@ class LanguageTest extends TestCase
         $narrativeCreated->save();
 
         $narratives = $languageCreated->narrative();
-        $this->assertTrue($narratives->count() > 0);
+        $this->assertCount(1, $narratives->get());
     }
 }

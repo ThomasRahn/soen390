@@ -134,7 +134,7 @@ class AuthControllerTest extends TestCase
 			'POST',
 			'auth/login',
 			array(
-				'email' => 'admin@user.local',
+				'email' => 'ADMIN@USER.LOCAL',
 				'password' => 'admin',
 				'_token' => csrf_token(),
 				)
@@ -156,7 +156,7 @@ class AuthControllerTest extends TestCase
 			'auth/login',
 			array(
 				'email' => 'admin@user.local',
-				'password' => 'admin',
+				'password' => 'ADMIN',
 				'_token' => csrf_token(),
 				)
 			);
