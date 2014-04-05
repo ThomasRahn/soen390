@@ -9,9 +9,11 @@ class TranscodeAudio
     public function fire($job, $data)
     {
         // Check which attempt this is,
+        // @codeCoverageIgnoreStart
         if ($job->attempts() > 3) {
             return Log::error('Unable to transcode for ' . $data['sourceFilePath']);
         }
+        // @codeCoverageIgnoreEnd
 
     	$transcodeEnabled = Config::get('media.transcode');
 
