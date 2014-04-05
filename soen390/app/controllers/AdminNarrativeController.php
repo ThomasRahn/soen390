@@ -16,10 +16,19 @@ class AdminNarrativeController extends BaseController {
         $categories = Category::all();
         $categoryArray = array();
 
-        foreach($categories as $c)
+        foreach ($categories as $c) {
             $categoryArray[$c->CategoryID] = $c->Description;
+        }
 
-        return View::make('admin.narratives.upload')->with('categoryArray', $categoryArray);
+        $topicArray = array();
+
+        foreach (Topic::orderBy('TopicID', 'desc')->get() as $t) {
+            $topicArray[$t->TopicID] = $t->Name;
+        }
+
+        return View::make('admin.narratives.upload')
+            ->with('categoryArray', $categoryArray)
+            ->with('topicArray', $topicArray);
     }
     /**
      * remove a particular narrative

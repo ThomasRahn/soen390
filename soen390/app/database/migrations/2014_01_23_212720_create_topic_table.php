@@ -14,10 +14,9 @@ class CreateTopicTable extends Migration {
 		Schema::create('Topic', function($table)
 		{
 			$table->increments('TopicID');
-			$table->timestamp('DateCreated');
-			$table->timestamp('DateModified')->nullable();
-			$table->string('Name')->nullable();
-			$table->string('Description');
+			$table->timestamps();
+			$table->string('Name');
+			$table->boolean('Published');
 		});
 	}
 

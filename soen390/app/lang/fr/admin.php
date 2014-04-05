@@ -4,6 +4,7 @@ return array(
 
     'youdeliberate' => 'Vous Délibérez',
     'logo'          => 'Vous <i class="fa fa-comments"></i> Délibérez',
+    
     'sidebar' => array(
             'uploadNarratives' => 'Télécharger les récits',
             'dashboard' => 'Google Analytics',
@@ -14,7 +15,7 @@ return array(
             'openMainSite' => 'Voir la page principale',
             'signOut' => 'Déconnection',
             'profile' => 'Profil',
-            'googleAnal'=>'Ouvrir Google Analytics',
+            'topics' => 'Gérer les sujets',
         ),
 
     'dashboard' => array(

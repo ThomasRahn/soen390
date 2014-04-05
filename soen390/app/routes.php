@@ -14,7 +14,29 @@
 // Route for main front-end view.
 Route::get('/', array('before' => 'maintenance', function()
 {
-	return View::make('cards/listing');
+    $topics = Topic::where('Published', true)->get();
+    $selectedTopic = null;
+
+    if (Input::has('topic')) {
+        $selectedTopic = Topic::where('Published', true)->find(Input::get('topic'));
+
+        if (! $selectedTopic) {
+            App::abort(404, 'Selected topic does not exist.');
+        }
+
+        Session::set('selectedTopic', $selectedTopic);
+    } else {
+        $selectedTopic = Session::get('selectedTopic', Topic::where('Published', true)->get()->last());
+        $selectedTopic = Topic::find($selectedTopic->TopicID);
+    }
+
+    if (! $selectedTopic->Published) {
+        App::abort(404, 'Selected topic no longer exists.');
+    }
+
+	return View::make('cards/listing')
+        ->with('topics', $topics)
+        ->with('selectedTopic', $selectedTopic);
 }));
 
 // Routes for JSON API.
@@ -75,6 +97,8 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth'), function() {
 
     });
 
+    Route::controller('topic', 'AdminTopicController');
+
     // Routing for Configuration
     Route::controller('configuration', 'AdminConfigController');
 
@@ -97,3 +121,9 @@ Route::group(array('prefix' => 'auth'), function() {
 
 // Route for the player interface.
 Route::controller('player', 'PlayerController');
+
+// Route for the trancoding push queue
+Route::any('queue/receive', function()
+{
+    return Queue::marshal();
+});

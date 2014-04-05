@@ -33,10 +33,13 @@ class ApiNarrativeController extends \BaseController
 
 		// Retrieve all published and unpublished narratives if user is
 		// authenticated and requests so.
-		if (Auth::check() && Input::get('withUnpublished', 0) == '1')
+		if (Auth::check() && Input::get('withUnpublished', 0) == '1') {
 			$narratives = Narrative::with('category', 'language', 'media')->get();
-		else
-			$narratives = Narrative::with('category', 'language', 'media')->where('Published', 1)->get();
+		} else {
+			$topic = Session::get('selectedTopic', Topic::get()->last());
+
+			$narratives = $topic->narratives()->with('category', 'language', 'media')->where('Published', 1)->get();
+		}
 
 		// Create an array to hold all the narratives. This array will be converted into a JSON object.
 		$narrativesArray = array();
@@ -89,6 +92,7 @@ class ApiNarrativeController extends \BaseController
 		$validator = Validator::make(Input::all(), array(
 			'archive'  => 'required|mimes:zip',
 			'category' => 'required|exists:Category,CategoryID',
+			'topic'    => 'required|exists:Topic,TopicID',
 		));
 
 		if ($validator->fails())
@@ -124,7 +128,8 @@ class ApiNarrativeController extends \BaseController
 				$hashedName,
 				$destinationPath,
 				Input::get('category'),
-				Input::get('publish') == 'publish'
+				Input::get('publish') == 'publish',
+				Input::get('topic')
 			);
 		} catch (Exception $e) {
 			$errorArray = array($e->getMessage());
@@ -211,83 +216,7 @@ class ApiNarrativeController extends \BaseController
 	 */
 	private function narrativeToArray($n)
 	{
-		// Get all images for this narrative.
-		$images = $n->media()->images()->orderBy('filename')->get();
-		$imagesArray = array();
-
-		foreach ($images as $i)
-			$imagesArray[] = action('ContentController@getContent', array('id' => $i->id));
-
-		// Set default image if there are none.
-		if (count($imagesArray) == 0)
-			$imagesArray[] = asset('img/default_narrative.jpg');
-
-		// Get all the audio for this narrative, in a format compatible with JPlayer.
-		$audio = $n->media()->audio()->groupBy('filename')->orderBy('filename')->get();
-		$audioArray = array();
-
-		foreach ($audio as $a) {
-			
-			// Retrieve the audio and get their media address.
-
-			$a_mpeg = $n->media()->audio()
-				->where('filename', $a->filename)
-				->where('audio_codec', 'mp3')
-				->first();
-
-			$a_ogg  = $n->media()->audio()
-				->where('filename', $a->filename)
-				->where('audio_codec', 'ogg')
-				->first();
-
-			$mpeg_link = (! $a_mpeg) ? '' : action('ContentController@getContent', array('id' => $a_mpeg->id));
-
-			$ogg_link = (! $a_ogg) ? '' : action('ContentController@getContent', array('id' => $a_ogg->id));
-
-			// Determine an appropriate poster for this track.
-			$tracknumber = intval($a->filename);
-			$posterPath = $imagesArray[0];
-
-			while ($tracknumber > 0) {
-				$poster = $n->media()->images()->where('filename', $tracknumber)->first();
-
-				if ($poster != null) {
-					$posterPath = action('ContentController@getContent', array('id' => $poster->id));
-					break;
-				}
-
-				$tracknumber--;
-			}
-
-			$audioArray[] = array(
-				'title' => $a->filename,
-				'mp3' => $mpeg_link,
-				'oga' => $ogg_link,
-				'poster' => $posterPath,
-				'duration' => $a->audio_duration,
-			);
-		}
-		$flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
-		$commentCount = Comment::where('NarrativeID',$n->NarrativeID)->count();
-		// Put this narrative into the array.
-		$narrative = array(
-			'id' => $n->NarrativeID,
-			'name' => $n->Name,
-			'stance' => $n->category()->first()->Description,
-			'lang' => $n->language()->first()->Description,
-			'views' => $n->Views,
-			'yays' => $n->Agrees,
-			'nays' => $n->Disagrees,
-			'mehs' => $n->Indifferents,
-			'createdAt' => $n->DateCreated,
-			'published' => $n->Published,
-			'images' => $imagesArray,
-			'audio' => $audioArray,
-			'flags' => $flagCount,
-			'comments' => $commentCount,
-		);
-
-		return $narrative;
+		return $n->toResponseArray();
 	}
 
 }

@@ -96,6 +96,9 @@
             .narrative-radios .indifferent {
                 color #333;
             }
+            .current-topic {
+                padding-left: 3px;
+            }
         </style>
     </head>
     <body>
@@ -111,12 +114,50 @@
                         <button type="button" class="btn btn-default" data-lang="fr" data-toggle="tooltip" data-placement="bottom" title="Highlight French Narratives"><img src="img/fr.png"> FR</button>
                     </div>
 
-                    <button type="button" class="btn btn-sm btn-default stance-btn" data-toggle="tooltip" data-placement="bottom" title="Separate Narratives by Opinion"><i class="fa fa-thumbs-up fa-fw"></i><i class="fa fa-thumbs-down fa-fw"></i> <span class="stance">Stance</span></button>
+                    <button type="button" class="btn btn-sm btn-default stance-btn" data-toggle="tooltip" data-placement="bottom" title="Separate Narratives by Opinion">
+                        <i class="fa fa-thumbs-o-up fa-fw"></i>
+                        <i class="fa fa-thumbs-o-down fa-fw"></i>
+                        <span class="stance">Stance</span>
+                    </button>
 
-                    <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views"><i class="fa fa-signal fa-fw"></i> <span class="popularity">Popularity</span></button>
-                    <button type="button" class="btn btn-sm btn-default agree-disagree-btn" data-toggle="tooltip" data-placement="bottom" title="Show agrees and disagrees"><i class="fa fa-thumbs-up fa-fw"></i><span class="agree-disagree">Agrees/Disagrees</span><i class="fa fa-thumbs-down fa-fw"></i> </button>
+                    <button type="button" class="btn btn-sm btn-default popularity-btn" data-toggle="tooltip" data-placement="bottom" title="Organize Narratives by Number of Views">
+                        <i class="fa fa-signal fa-fw"></i>
+                        <span class="popularity">Popularity</span>
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-default agree-disagree-btn" data-toggle="tooltip" data-placement="bottom" title="Show Agree/Disagree Split">
+                        <i class="fa fa-thumbs-up fa-fw"></i>
+                        <i class="fa fa-thumbs-down fa-fw"></i>
+                        <span class="agree-disagree">Agree/Disagree</span>
+                    </button>
                 </div>
-              
+
+                <div class="col-sm-6">
+                    <div class="dropdown pull-right topic-dropdown en">
+                        <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="topic-dropdown" data-toggle="dropdown">
+                            <i class="fa fa-level-down"></i>
+                            <span class="current-topic">{{{ $selectedTopic->translations()->inLocale('en')->first()->translation }}}</span>
+                        </button>
+
+                        <ul class="dropdown-menu topic-list" role="menu">
+                            @foreach ($topics as $t)
+                            <li><a href="/?topic={{{ $t->TopicID }}}"><i class="fa fa-fw fa-caret-right"></i> {{{ $t->translations()->inLocale('en')->first()->translation }}}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="dropdown pull-right topic-dropdown fr">
+                        <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="topic-dropdown" data-toggle="dropdown">
+                            <i class="fa fa-level-down"></i>
+                            <span class="current-topic">{{{ $selectedTopic->translations()->inLocale('fr')->first()->translation }}}</span>
+                        </button>
+
+                        <ul class="dropdown-menu topic-list" role="menu">
+                            @foreach ($topics as $t)
+                            <li><a href="/?topic={{{ $t->TopicID }}}"><i class="fa fa-fw fa-caret-right"></i> {{{ $t->translations()->inLocale('fr')->first()->translation }}}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </nav>
         </div>
 
@@ -159,20 +200,142 @@
         <script src="{{ asset('js/d3animate.js') }}"></script>
         <script src="{{ asset('js/dictionary.js') }}"></script>
         <script>
-            var currentLanguage = '',
+            var currentLanguage = 'fr',
                 konamiMode      = false,
-                stanceGravityCenters  = {
-                    'For': { x: (width / 4), y: (height / 2) },
-                    'Indifferent': { x: (width / 2), y: (height / 2) },
+                stanceGravityCenters = 
+                {
+                    'For': 
+                        { x: (width / 4),
+                          y: (height / 2) 
+                        },
+
+                    'Indifferent':
+                        { 
+                          x: (width / 2),
+                          y: (height / 2)
+                        },
                     'Against': { x: (2.83 * (width / 4)), y: (height / 2) }
                 };
 
             /**
-             * Translate all text on page based on given language code.
+             * Set narrative thumbnail sizing based on number of views.
              *
-             * @param langCode string
+             * @param enable boolean
              */
-            function setTranslation(langCode) {
+            function setSizeByViews(enable) {
+                var narrative_ids = [];
+                viewFilter = enable;
+                var debug = true;
+                rectangles.selectAll(".child").transition()
+                          .duration(750)
+                          .attr('width', function(node) {
+
+                            if (enable){
+                                var width = 0;
+                                if (!debug)
+                                {
+                                    var increment = (node.views / z) *1.5;
+                                    width = getWidth(node.id) + increment;
+                                 }
+                                 else
+                                 {
+                                     var z = totalViews / numberOfNarr;
+                                     var y = node.views / z;
+                                     width = node.width + y;
+                                 }
+                                return width;
+                            }
+
+                            return stdThumbW;
+                          })
+                          .attr('height', function(node) {
+                            if (enable){
+                                var height = 0;
+                                if (!debug)
+                                {
+                                    var increment = (node.views / z) *1.5;
+                                    var increment = (node.views / z) *1.5;
+                                    height = getHeight(node.id) + increment;
+                                    narrative_ids[node.id] = height;
+                                }
+                                else
+                                {
+                                    var z = totalViews / numberOfNarr;
+                                    var y = node.views / z;
+                                    height = node.width + y;
+                                }
+                                narrative_ids[node.id] = height;
+                                return height;
+                            }
+                            narrative_ids[node.id] = stdThumbH;
+                            return stdThumbH;
+                          });
+
+                    rectangles.selectAll(".agree").transition()
+                          .duration(300)
+                          .attr('width', function(node) {
+                            var likes = parseInt(node.yays);
+                            var dislikes = parseInt(node.nays);
+                            var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
+                            var dislikesRatio = dislikes / numberOfVotes;
+                            if (enable){
+                                //var tempW = getWidth(node.id);
+                                var tempW = narrative_ids[node.id];
+                                var dislikesRectangleWidth = (dislikesRatio * tempW) + (likes / numberOfVotes) * tempW;
+                                return dislikesRectangleWidth;
+                            }
+                            var dislikesRectangleWidth = (dislikesRatio * stdThumbW) + (likes / numberOfVotes) * stdThumbW;
+                            return dislikesRectangleWidth;
+                          })
+                          .attr('height', function(node) {
+                            return  narrative_ids[node.id] * 0.1;
+                            //return getHeight(node.id) * 0.10;
+                          })
+                          .attr("y", function(node){
+                            return narrative_ids[node.id] * 0.9;
+                          });
+
+                   rectangles.selectAll(".disagree").transition()
+                          .duration(300)
+                          .attr('width', function(node) {
+                            var likes = parseInt(node.yays);
+                            var dislikes = parseInt(node.nays);
+                            var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
+                            var likesRatio = likes / numberOfVotes;
+                            if (enable){
+                                //var tempW = getWidth(node.id);
+                                var tempW = narrative_ids[node.id];
+                                var dislikesRectangleWidth = likesRatio * tempW;
+                                return dislikesRectangleWidth;
+                            }
+                            var likesRectangleWidth = likesRatio * stdThumbW;
+                            return likesRectangleWidth;
+                          })
+                          .attr('height', function(node) {
+                            return  narrative_ids[node.id] * 0.1;
+                            //return getHeight(node.id) * 0.10;
+                          })
+                          .attr("y", function(node){
+                            return narrative_ids[node.id] * 0.9;
+                          });
+
+                force.gravity(layoutGravity)
+                     .charge(charge)
+                     .friction(0.9);
+                force.start();
+            }
+
+            /**
+            * Translate all text on page based on given language code.
+            *
+            * @param langCode string
+            */
+            function setTranslation(langCode)
+            {
+                // Hide the opposite language.
+                $('.' + currentLanguage).css('display', 'none');
+                $('.' + langCode).css('display', '');
+                
                 // Set Current Language
                 currentLanguage = langCode;
 
@@ -199,55 +362,56 @@
             }
 
             /**
-             * Filter narratives based on language depending on given language code.
-             *
-             * @param langCode string
-             */
-            function setLanguageFilter(langCode) {
-        		var lang = null;
+            * Filter narratives based on language depending on given language code.
+            *
+            * @param langCode string
+            */
+            function setLanguageFilter(langCode)
+            {
+                var lang = null;
 
-        		if (langCode == "en") lang = "English";
+                if (langCode == "en") lang = "English";
 
-        		if (langCode == "fr") lang = "French";
+                if (langCode == "fr") lang = "French";
 
                 rectangles.transition()
                           .duration(500)
-                          .style('opacity', function(node) {
+                          .style('opacity', function (node)
+                          {
                               return (lang === null || lang === node.lang) ? 1 : 0.2;
                           });
             }
             /**
-             * Sort narratives on page based on narrative stance value.
-             *
-             * @param enableSort boolean
-             */
-            function setStanceSorting(enableSort) {
-
-               force.gravity(layoutGravity)
-                     .charge(function(node){
-                        if(viewFilter){
-                             return -Math.pow(node.width * 6, 2.0) / 22;
-                        }
-                        return charge(node);
-
-                     })
+            * Sort narratives on page based on narrative stance value.
+            *
+            * @param enableSort boolean
+            */
+            function setStanceSorting(enableSort)
+            {
+                force.gravity(layoutGravity)
+                     .charge(charge)
+                //.charge(function(node) { return charge(node) - 250; })
                      .friction(0.9)
-                     .on('tick', function(e) {
-                         rectangles.selectAll(".child").each(function(node) {
-                                    var target = (enableSort ? stanceGravityCenters[node.stance] : center);
-                                    node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
-                                    node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
-                                  })
-                             .attr('x', function(node){return node.x})
-                             .attr('y', function(node){return node.y});
+                     .on('tick', function (e)
+                     {
+                         var q = d3.geom.quadtree(nodes);
+                         var i = 0;
+                         var n = nodes.length;
+                         while (++i < n) q.visit(collide(nodes[i]));
 
-                         rectangles.selectAll(".rect").each(function(node) {
-                                    var target = (enableSort ? stanceGravityCenters[node.stance] : center);
-                                    node.x = node.x + (target.x - node.x) * (damper + 0.02) * e.alpha;
-                                    node.y = node.y + (target.y - node.y) * (damper + 0.02) * e.alpha;
-                                  })
-                             .attr('x', function(node){return node.x })
-                             .attr('y', function(node){return node.y + (narrative_ids[node.id] *0.85)});
+                         rectangles.attr("transform", function (d)
+                         {
+                             var target = (enableSort ? stanceGravityCenters[d.stance] : center);
+
+                             d.x = d.x + (target.x - d.x) * (damper + 0.02) * e.alpha;
+                             d.y = d.y + (target.y - d.y) * (damper + 0.02) * e.alpha;
+                             
+                             return "translate(" + d.x + "," + d.y + ")";
+                         });
+
+                         rectangles.selectAll("circle")
+                                .attr("cx", function (d) { return d.centerX; })
+                                .attr("cy", function (d) { return d.centerY; });
                      });
 
                 force.start();
@@ -258,112 +422,33 @@
                     $('#stance-heading').css('display', 'none');
             }
 
-            function showBar(enable){
-                if(enable){
+            function showBar(enable)
+            {
+                if (enable)
+                {
                     rectangles.selectAll(".rect")
-                        .style("display","block");
+                        .style("display", "block");
                 }
-                else{
+                else
+                {
                     rectangles.selectAll(".rect")
-                        .style("display","none");   
+                        .style("display", "none");
                 }
             }
-            /**
-             * Set narrative thumbnail sizing based on number of views.
-             *
-             * @param enable boolean
-             */
-            function setSizeByViews(enable) {
-                viewFilter = enable;
-                rectangles.selectAll(".child").transition()
-                          .duration(750)
-                          .attr('width', function(node) {
-                            if (enable){
-                                var width = (parseInt(node.views) * 3) + minWidth;
-                                return (width > 250? 250: width);
-                            }
-                            return stdThumbW;
-                          })
-                          .attr('height', function(node) {
-                            if (enable){
-                                var height = (parseInt(node.views) * 3) + minWidth;
-                                height = height > 250 ? 250: height;
-                                narrative_ids[node.id] = height;
-                                return height;
-                            }
-                            narrative_ids[node.id] = stdThumbH;
-                            return stdThumbH;
-                          });
 
-                    rectangles.selectAll(".agree").transition()
-                          .duration(300)
-                          .attr('width', function(node) {
-                            var likes = parseInt(node.yays);
-                            var dislikes = parseInt(node.nays);
-                            var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
-                            var likesRatio = likes / numberOfVotes;
-                            if (enable){
-                                var width = (parseInt(node.views) * 3) + minWidth;
-                                var tempW = width > 250 ? 250 : width;
-                                var likesRectangleWidth = (likesRatio * tempW) + (dislikes / numberOfVotes) * tempW;
-                                return likesRectangleWidth;
-                            }
-                            var likesRectangleWidth = (likesRatio * stdThumbW) + (dislikes / numberOfVotes) * stdThumbW;
-                            return likesRectangleWidth;
-                          })
-                          .attr('height', function(node) {
-                            /*if (enable){
-                                return (parseInt(node.views) * .3);
-                               
-                            }
-                            return stdThumbH * 0.1;*/
-                            return narrative_ids[node.id] * 0.10;
-                          });
-
-                   rectangles.selectAll(".disagree").transition()
-                          .duration(300)
-                          .attr('width', function(node) {
-                            var likes = parseInt(node.yays);
-                            var dislikes = parseInt(node.nays);
-                            var numberOfVotes = (likes + dislikes == 0 ? 1 : likes + dislikes);
-                            var dislikesRatio = dislikes / numberOfVotes;
-                            if (enable){
-                                var width = (parseInt(node.views) * 3) + minWidth;
-                                var tempW = width > 250 ? 250 : width;
-                                var dislikesRectangleWidth = dislikesRatio * tempW;
-                                return dislikesRectangleWidth;
-                            }
-                         
-                            var dislikesRectangleWidth = dislikesRatio * stdThumbW;
-                            return dislikesRectangleWidth;
-                          })
-                          .attr('height', function(node) {
-                            /*if (enable){
-                               return (parseInt(node.views) * .3);
-                            }
-                            return stdThumbH * 0.1;*/
-                            return narrative_ids[node.id] * 0.10;
-                          });
-
-                force.gravity(layoutGravity)
-                     .charge(function(node) {
-                        if (enable){
-                            return -Math.pow(node.width * 6, 2.0) / 22;
-                        }
-                        return charge(node);
-                     })
-                     .friction(0.9);
-                force.start();
+            function printObject(o)
+            {
+                var out = '';
+                for (var p in o)
+                {
+                    out += p + ': ' + o[p] + '\n';
+                }
+                alert(out);
             }
-function printObject(o) {
-  var out = '';
-  for (var p in o) {
-    out += p + ': ' + o[p] + '\n';
-  }
-  alert(out);
-}
-            $(document).ready(function() {
-                $('button').tooltip({'container': 'body'});
+
+            $(document).ready(function ()
+            {
+                $('button').tooltip({ 'container': 'body' });
 
                 // Set default language to load.
                 setTranslation('en');
@@ -371,21 +456,25 @@ function printObject(o) {
                 // Show cards
                 initializeCards();
 
-                $('input, button').focus(function() {
+                $('input, button').focus(function ()
+                {
                     this.blur();
                 });
 
                 /**
-                 * Handle button click for language filter.
-                 */
-                $('.lang-btn-group button').click(function(e) {
+                * Handle button click for language filter.
+                */
+                $('.lang-btn-group button').click(function (e)
+                {
                     // Check if the user wants to deselect the language filter.
-                    if ($(this).hasClass('active')) {
+                    if ($(this).hasClass('active'))
+                    {
                         $(this).removeClass('active');
                         setLanguageFilter(null);
-                    } else {
+                    } else
+                    {
                         // Set translation
-                        setTranslation( $(this).data('lang') );
+                        setTranslation($(this).data('lang'));
 
                         // Set filter
                         setLanguageFilter(currentLanguage);
@@ -397,13 +486,16 @@ function printObject(o) {
                 });
 
                 /**
-                 * Handle button click for stance filter.
-                 */
-                $('.stance-btn').click(function(e) {
-                    if ($(this).hasClass('active')) {
+                * Handle button click for stance filter.
+                */
+                $('.stance-btn').click(function (e)
+                {
+                    if ($(this).hasClass('active'))
+                    {
                         $(this).removeClass('active');
                         setStanceSorting(false);
-                    } else {
+                    } else
+                    {
                         $(this).addClass('active');
                         setStanceSorting(true);
 
@@ -411,43 +503,62 @@ function printObject(o) {
                 });
 
                 /**
-                 * Handle button click for popularity transformation.
-                 */
-                $('.popularity-btn').click(function(e) {
-                    if ($(this).hasClass('active')) {
+                * Handle button click for popularity transformation.
+                */
+                $('.popularity-btn').click(function (e)
+                {
+                    if ($(this).hasClass('active'))
+                    {
                         $(this).removeClass('active');
                         setSizeByViews(false);
-                    } else {
+                    } else
+                    {
                         $(this).addClass('active');
                         setSizeByViews(true);
                     }
 
                 });
-                $(".agree-disagree-btn").click(function(e){
-                    if ($(this).hasClass('active')) {
+                $(".agree-disagree-btn").click(function (e)
+                {
+                    if ($(this).hasClass('active'))
+                    {
                         $(this).removeClass('active');
                         showBar(false);
-                    } else {
+                    } else
+                    {
                         $(this).addClass('active');
                         showBar(true);
-                    }                    
+                    }
                 });
 
                 // Handle Konami code.
-                var konami = new Konami(function() {
-                    if (konamiMode) {
+                var konami = new Konami(function ()
+                {
+                    if (konamiMode)
+                    {
                         document.getElementById('konami').src = 'about:blank';
                         $('.spaghetti').html(dictionary[currentLanguage].spaghetti);
                         konamiMode = false;
-                    } else {
+                    } else
+                    {
                         document.getElementById('konami').src = 'http://momspaghetti.ytmnd.com/';
                         $('.spaghetti').html(dictionary[currentLanguage].momSpaghetti);
                         konamiMode = true;
                     }
                 });
 
+                $('.topic-dropdown').on('show.bs.dropdown', function(e){
+                    $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+                });
+
+                // ADD SLIDEUP ANIMATION TO DROPDOWN //
+                $('.topic-dropdown').on('hide.bs.dropdown', function(e){
+                    $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+                });
+
             });
         </script>
+
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-48518812-1']);

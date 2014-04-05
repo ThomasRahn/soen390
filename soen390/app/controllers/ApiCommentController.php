@@ -95,6 +95,7 @@ class ApiCommentController extends \BaseController
             'CommentParentID' => Input::get('parent', null),
             'DateCreated'     => Carbon::now(),
             'Name'            => ($name == '') ? 'Anonymous' : $name,
+	    'Deleted'	      => 0,
             'Comment'         => Input::get('comment'),
         );
 
@@ -246,7 +247,7 @@ class ApiCommentController extends \BaseController
             'narrative_id' => $comment->NarrativeID,
             'parent_id'    => $comment->CommentParentID,
             'created_at'   => with(new Carbon($comment->DateCreated))->diffForHumans(),
-            'deleted_at'   => $comment->deleted_at,
+            'deleted'  	   => $comment->Deleted,
             'name'         => e($comment->Name),
             'agrees'       => $comment->Agrees,
             'disagrees'    => $comment->Disagrees,

@@ -30,11 +30,10 @@ class AdminCommentControllerTest extends TestCase
 
         $narrativeCreated->save();
 
-        $commentCreated = Comment::create(array('NarrativeID'=>1,'Name'=>'test','Agrees'=>0,'Indifferents'=>1,'Disagrees'=>1,'DateCreated'=>date('Y-m-d H:i:s'), 'Comment'=>'TEST'));
+        $commentCreated = Comment::create(array('NarrativeID'=>1,'Name'=>'test','Agrees'=>0,'Indifferents'=>1,'Disagrees'=>1,'DateCreated'=>date('Y-m-d H:i:s'), 'Comment'=>'TEST','Deleted'=>0));
 
 
         $response = $this->call('DELETE', 'admin/narrative/comment/1');
-
-        $this->assertNull(Comment::find(1));
+        $this->assertNull(Comment::where('Deleted',0)->first());
     }
 }
