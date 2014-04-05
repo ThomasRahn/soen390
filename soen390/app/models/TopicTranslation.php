@@ -19,7 +19,7 @@ class TopicTranslation extends \Eloquent
      */
     public function language()
     {
-        $this->belongsTo('Language', 'language_id', 'LanguageID');
+        return $this->belongsTo('Language', 'language_id', 'LanguageID');
     }
 
     /**
@@ -27,7 +27,7 @@ class TopicTranslation extends \Eloquent
      */
     public function topic()
     {
-        $this->belongsTo('Topic', 'topic_id', 'TopicID');
+        return $this->belongsTo('Topic', 'topic_id', 'TopicID');
     }
 
     /**

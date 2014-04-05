@@ -198,4 +198,84 @@ class AdminTopicController extends \BaseController
             );
         }
     }
+
+    /**
+     * @param  int  $id
+     * @return Response
+     */
+    public function getSingle($id)
+    {
+        $topic = Topic::find($id);
+
+        if (! $topic) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'The requested Topic could not be found.',
+            ), 404);
+        }
+
+        return Response::json(array(
+            'success' => true,
+            'return'  => $topic->toResponseArray(),
+        ));
+    }
+
+    /**
+     * @param  int  $id
+     * @return Response
+     */
+    public function postSingle($id)
+    {
+        $validator = Validator::make(
+            Input::all(),
+            array(
+                'code' => 'required|alpha_dash|max:255',
+                'descEn' => 'required',
+                'descFr' => 'required',
+            )
+        );
+
+        if ($validator->fails()) {
+            return Response::json(
+                array(
+                    'success' => false,
+                    'return' => array(
+                        'validator' => $validator->errors()->toArray(),
+                    ),
+                ),
+                400
+            );
+        }
+
+        $topic = Topic::find($id);
+
+        if (! $topic) {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'The requested Topic [' . $id . '] could not be found.',
+            ), 404);
+        }
+
+        $updateSuccess = true;
+
+        $updateSuccess = $updateSuccess && $topic->update(array('Name' => Input::get('code')));
+
+        $updateSuccess = $updateSuccess && $topic->translations()->inLocale('en')->first()
+            ->update(array('translation' => Input::get('descEn')));
+
+        $updateSuccess = $updateSuccess && $topic->translations()->inLocale('fr')->first()
+            ->update(array('translation' => Input::get('descFr')));
+
+        if ($updateSuccess) {
+            return Response::json(array(
+                'success' => true,
+                'return'  => $topic->toResponseArray(),
+            ));
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'Unable to save changes to Topic due to server side error.',
+            ), 500);
+        }
+    }
 }
