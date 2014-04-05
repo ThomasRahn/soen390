@@ -224,7 +224,7 @@ class AdminTopicController extends \BaseController
      * @param  int  $id
      * @return Response
      */
-    public function postSingle($id)
+    public function putSingle($id)
     {
         $validator = Validator::make(
             Input::all(),

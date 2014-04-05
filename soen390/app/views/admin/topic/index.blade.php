@@ -261,10 +261,11 @@
         $("#edit-topic-form").submit(function(e) {
             e.preventDefault();
 
-            $.post(
-                "/admin/topic/single/" + editTopicID,
-                $("#edit-topic-form").serialize()
-            ).done(function(data) {
+            $.ajax({
+                type: "PUT",
+                url: "/admin/topic/single/" + editTopicID,
+                data: $("#edit-topic-form").serialize()
+            }).done(function(data) {
                 data = data.return;
 
                 $("tr[data-topic-id='" + editTopicID + "'] .topic-code code").html(data.name);
