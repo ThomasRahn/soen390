@@ -152,11 +152,17 @@ return array(
             ),
 
             'addModal' => array(
-                'title'     => 'Add a New Topic',
-                'code'      => 'Topic Code',
-                'descEn'    => 'Description (English)',
-                'descFr'    => 'Description (French)',
-                'addButton' => 'Add Topic',
+                'title'        => 'Add a New Topic',
+                'code'         => 'Topic Code',
+                'descEn'       => 'Description (English)',
+                'descFr'       => 'Description (French)',
+                'addButton'    => 'Add Topic',
+                'cancelButton' => 'Cancel',
+            ),
+
+            'editModal' => array(
+                'title'      => 'Edit a Topic',
+                'saveButton' => 'Save Changes',
             ),
         ),
 

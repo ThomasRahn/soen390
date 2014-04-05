@@ -10,6 +10,9 @@
         font-weight: 400;
         cursor: pointer;
     }
+    tr,td {
+        transition-duration: 0.6s;
+    }
 </style>
 @stop
 
@@ -78,21 +81,21 @@
                     <div class="form-group">
                         <label for="topic-code" class="col-sm-3 control-label">@lang('admin.topic.index.addModal.code')</label>
                         <div class="col-sm-4">
-                            <input type="text" name="code" class="form-control" id="topic-code" placeholder="e.g. `oil-transport`" maxlength="255" required>
+                            <input type="text" name="code" class="form-control topic-code" placeholder="e.g. `oil-transport`" maxlength="255" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="topic-description-en" class="col-sm-3 control-label">@lang('admin.topic.index.addModal.descEn')</label>
                         <div class="col-sm-9">
-                            <input type="text" name="descEn" class="form-control" id="topic-description-en" placeholder="e.g. `Pipelines vs. Rail`" required>
+                            <input type="text" name="descEn" class="form-control topic-description-en" placeholder="e.g. `Pipelines vs. Rail`" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="topic-description-fr" class="col-sm-3 control-label">@lang('admin.topic.index.addModal.descFr')</label>
                         <div class="col-sm-9">
-                            <input type="text" name="descFr" class="form-control" id="topic-description-fr" placeholder="e.g. `Pipelines contre Trains`" required>
+                            <input type="text" name="descFr" class="form-control topic-description-fr" placeholder="e.g. `Pipelines contre Trains`" required>
                         </div>
                     </div>
 
@@ -108,6 +111,51 @@
         </div>
     </div>
 </div>
+
+<div id="edit-topic-modal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">@lang('admin.topic.index.editModal.title')</h4>
+            </div>
+            <div class="modal-body">
+                <form id="edit-topic-form" class="form-horizontal">
+                    {{ Form::token() }}
+                    <div class="form-group">
+                        <label for="topic-code" class="col-sm-3 control-label">@lang('admin.topic.index.addModal.code')</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="code" class="form-control topic-code" placeholder="e.g. `oil-transport`" maxlength="255" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topic-description-en" class="col-sm-3 control-label">@lang('admin.topic.index.addModal.descEn')</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="descEn" class="form-control topic-description-en" placeholder="e.g. `Pipelines vs. Rail`" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topic-description-fr" class="col-sm-3 control-label">@lang('admin.topic.index.addModal.descFr')</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="descFr" class="form-control topic-description-fr" placeholder="e.g. `Pipelines contre Trains`" required>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="form-group">
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-primary">@lang('admin.topic.index.editModal.saveButton')</button>
+                            <button type="reset" class="btn btn-default" data-dismiss="modal">@lang('admin.topic.index.addModal.cancelButton')</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('scripts')
@@ -115,6 +163,7 @@
 <script src="//cdn.jsdelivr.net/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//cdn.jsdelivr.net/tablesorter/2.13.3/js/jquery.tablesorter.min.js"></script>
 <script>
+    var editTopicID = 0;
 
     $(document).ready(function() {
 
@@ -184,6 +233,55 @@
                 }
             }).fail(function(jqxhr, textStatus, errorThrown) {
                 
+            });
+        });
+
+        // Handle edit click
+        $(".btn-edit-topic").click(function(e) {
+            e.preventDefault();
+
+            var topicID = $(this).data("topic-id");
+            editTopicID = topicID;
+
+            $.getJSON(
+                "/admin/topic/single/" + topicID
+            ).done(function(data) {
+                $("#edit-topic-form input.topic-code").val(data.return.name);
+                $("#edit-topic-form input.topic-description-en").val(data.return.descriptions["en"].translation);
+                $("#edit-topic-form input.topic-description-fr").val(data.return.descriptions["fr"].translation);
+
+                $("#edit-topic-modal").modal("show");
+            }).fail(function(jqxhr, textStatus, errorThrown) {
+                // Handle Fail
+                console.log(jqxhr.responseText);
+            });
+        });
+
+        // Handle saving changes
+        $("#edit-topic-form").submit(function(e) {
+            e.preventDefault();
+
+            $.post(
+                "/admin/topic/single/" + editTopicID,
+                $("#edit-topic-form").serialize()
+            ).done(function(data) {
+                data = data.return;
+
+                $("tr[data-topic-id='" + editTopicID + "'] .topic-code code").html(data.name);
+                $("tr[data-topic-id='" + editTopicID + "'] .topic-description").html(data.description);
+                $("tr[data-topic-id='" + editTopicID + "'] .topic-narratives").html(data.narrativeCount);
+
+                $("#edit-topic-modal").modal("hide");
+                $("#edit-topic-form")[0].reset();
+
+                $("tr[data-topic-id='" + editTopicID + "']").addClass("success");
+
+                window.setTimeout(function() {
+                    $("tr[data-topic-id='" + editTopicID + "']").removeClass("success");                    
+                }, 1250);
+            }).fail(function(jqxhr, textStatus, errorThrown) {
+                // Handle fail
+                console.log(jqxhr.responseText);
             });
         });
 
