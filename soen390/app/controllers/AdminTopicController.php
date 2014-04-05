@@ -108,7 +108,10 @@ class AdminTopicController extends \BaseController
         $topicCode = $topic->Name;
 
         if (! $topic) {
-            App::abort(404, 'Unable to find specified topic.');
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'The requested Topic could not be found.',
+            ), 404);
         }
 
         // If there is only 1 remaining topic, enforce the rule that there
@@ -170,7 +173,10 @@ class AdminTopicController extends \BaseController
         $topic = Topic::find($id);
 
         if (! $topic) {
-            App::abort(404, 'The requested Topic instance could not be found.');
+            return Response::json(array(
+                'success' => false,
+                'return'  => 'The requested Topic could not be found.',
+            ), 404);
         }
 
         $topic->Published = ! $topic->Published;
