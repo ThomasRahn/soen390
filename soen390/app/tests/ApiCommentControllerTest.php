@@ -72,6 +72,7 @@ class ApiCommentControllerTest extends TestCase
             'NarrativeID' => $id,
             'DateCreated' => new DateTime,
             'Name'        => 'Test User',
+	    'Deleted'     => 'Deleted',
             'Comment'     => 'testGetNarrativeWithSingleComment',
         ));
 
@@ -101,7 +102,6 @@ class ApiCommentControllerTest extends TestCase
             $expectedDateString,
             $data->created_at
         );
-        $this->assertNull($data->deleted_at);
         $this->assertEquals($c->Name, $data->name);
         $this->assertEquals(0, $data->agrees);
         $this->assertEquals(0, $data->disagrees);
@@ -128,6 +128,7 @@ class ApiCommentControllerTest extends TestCase
             'NarrativeID' => $id,
             'DateCreated' => new DateTime,
             'Name'        => 'Test User',
+	    'Deleted'     => 'Deleted',
             'Comment'     => 'testGetNarrativeWithSingleComment',
         ));
 
@@ -138,6 +139,7 @@ class ApiCommentControllerTest extends TestCase
             'CommentParentID' => $c->CommentID,
             'DateCreated'     => new DateTime,
             'Name'            => 'Test User 2',
+	    'Deleted'         => 'Deleted',
             'Comment'         => 'Test getNarrative with child comments.',
         ));
 
@@ -146,7 +148,8 @@ class ApiCommentControllerTest extends TestCase
             'CommentParentID' => $c->CommentID,
             'DateCreated'     => new DateTime,
             'Name'            => 'Test User 3',
-            'Comment'         => 'Test getNarrative with child comments.',
+	    'Deleted'         => 'Deleted',            
+  	    'Comment'         => 'Test getNarrative with child comments.',
         ));
 
         $response = $this->action(
@@ -183,6 +186,7 @@ class ApiCommentControllerTest extends TestCase
             'NarrativeID' => $id,
             'DateCreated' => new DateTime,
             'Name'        => 'Test User',
+	    'Deleted'     => 'Deleted',
             'Comment'     => 'testGetNarrativeWithSingleComment',
         ));
 
@@ -210,6 +214,7 @@ class ApiCommentControllerTest extends TestCase
             'NarrativeID' => $id,
             'DateCreated' => new DateTime,
             'Name'        => 'Test User',
+	    'Deleted'     => 'Deleted',
             'Comment'     => 'testGetNarrativeWithSingleComment',
         ));
 
@@ -261,6 +266,7 @@ class ApiCommentControllerTest extends TestCase
 
         $comment = new Comment(array(
             'Name'    => 'Test User',
+	    'Deleted'     => 'Deleted',
             'Comment' => 'Test comments.',
         ));
 
@@ -345,6 +351,7 @@ class ApiCommentControllerTest extends TestCase
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
             'Comment'     => 'Test postFlag success.',
+    	    'Deleted'     => 'Deleted',
             'DateCreated' => new DateTime,
         )));
 
@@ -392,6 +399,7 @@ class ApiCommentControllerTest extends TestCase
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
             'Comment'     => 'Test postFlag success.',
+            'Deleted'     => 'Deleted',
             'DateCreated' => new DateTime,
         )));
 
@@ -448,6 +456,7 @@ class ApiCommentControllerTest extends TestCase
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
             'Comment'     => 'Test postFlag success.',
+	    'Deleted'     => 'Deleted',
             'DateCreated' => new DateTime,
         )));
 
@@ -484,6 +493,7 @@ class ApiCommentControllerTest extends TestCase
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
             'Comment'     => 'Test postFlag success.',
+	    'Deleted'     => 'Deleted',
             'DateCreated' => new DateTime,
         )));
 
@@ -523,6 +533,7 @@ class ApiCommentControllerTest extends TestCase
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
             'Comment'     => 'Test postFlag success.',
+ 	    'Deleted'     => 'Deleted',
             'DateCreated' => new DateTime,
         )));
 
@@ -561,6 +572,7 @@ class ApiCommentControllerTest extends TestCase
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
             'Comment'     => 'Test postFlag success.',
+	    'Deleted'     => 'Deleted',
             'DateCreated' => new DateTime,
         )));
 
@@ -599,6 +611,7 @@ class ApiCommentControllerTest extends TestCase
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
             'Comment'     => 'Test postFlag success.',
+	   'Deleted'     => 'Deleted',
             'DateCreated' => new DateTime,
             'Agrees'      => 5,
             'Disagrees'   => 3,
@@ -641,6 +654,7 @@ class ApiCommentControllerTest extends TestCase
             'Comment'     => 'Test postFlag success.',
             'DateCreated' => new DateTime,
             'Agrees'      => 5,
+	    'Deleted'     => 'Deleted',
             'Disagrees'   => 3,
         )));
 
@@ -678,6 +692,7 @@ class ApiCommentControllerTest extends TestCase
 
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
+	    'Deleted'     => 'Deleted',
             'Comment'     => 'Test postFlag success.',
             'DateCreated' => new DateTime,
             'Agrees'      => 10,
@@ -721,6 +736,7 @@ class ApiCommentControllerTest extends TestCase
             'Comment'     => 'Test postFlag success.',
             'DateCreated' => new DateTime,
             'Agrees'      => 10,
+	    'Deleted'     => 'Deleted',
             'Disagrees'   => 7,
         )));
 
@@ -775,6 +791,7 @@ class ApiCommentControllerTest extends TestCase
         $n->comments()->save(new Comment(array(
             'Name'        => 'Unit Test User 1',
             'Comment'     => 'Test postFlag success.',
+	    'Deleted'     => 'Deleted',
             'DateCreated' => new DateTime,
         )));
 

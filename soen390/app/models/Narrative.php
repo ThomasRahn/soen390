@@ -483,8 +483,8 @@ class Narrative extends Eloquent
             );
         }
 
-        $flagCount = Flag::where('NarrativeID',$n->NarrativeID)->count();
-        $commentCount = Comment::where('NarrativeID',$n->NarrativeID)->count();
+        $flagCount = Flag::where('NarrativeID', $n->NarrativeID)->count();
+        $commentCount = Comment::where('NarrativeID', $n->NarrativeID)->where('Deleted', 0)->count();
 
         // Put this narrative into the array.
         $narrative = array(
