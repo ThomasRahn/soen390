@@ -53,17 +53,20 @@ function generateCommentMediaObject(comment) {
     html += "<p class=\"media-heading\">"
     html += comment.name + "<small>" + comment.created_at + "</small>";
 
-    html += "<a href=\"#\" class=\"flag-link";
+    if(comment.deleted == 0){
 
-    if (sessionStorage.commentFlags) {
-        var flags = JSON.parse(sessionStorage.commentFlags);
+     html += "<a href=\"#\" class=\"flag-link";
 
-        if (flags[comment.comment_id] === true) {
-            html += " flagged";
+        if (sessionStorage.commentFlags) {
+            var flags = JSON.parse(sessionStorage.commentFlags);
+
+            if (flags[comment.comment_id] === true) {
+                html += " flagged";
+            }
         }
+    
+        html += "\" title=\"Flag spam or abusive comment.\"><i class=\"fa fa-fw fa-flag\"></i></a>";
     }
-
-    html += "\" title=\"Flag spam or abusive comment.\"><i class=\"fa fa-fw fa-flag\"></i></a>";
     html += "</p>";
     html += comment.body;
 
@@ -71,7 +74,7 @@ function generateCommentMediaObject(comment) {
 
     html += "<div class=\"media-footer\">";
 
-    if (comment.parent_id === null) {
+    if (comment.parent_id === null && comment.deleted == 0) {
         html += "<a href=\"#\" class=\"comment-reply-link\" title=\"Reply to this comment?\">Reply</a>&mdash;";
     }
 
@@ -81,12 +84,13 @@ function generateCommentMediaObject(comment) {
         votedAgrees = (JSON.parse(sessionStorage.commentVote))[comment.comment_id];
     }
 
-    html += "<a href=\"#\" class=\"comment-agree-link" + (votedAgrees === true ? " voted" : "");
-    html += "\" title=\"Agree with this comment?\"><i class=\"fa fa-fw fa-thumbs-up\"></i> " + comment.agrees + "</a>";
-    html += "<a href=\"#\" class=\"comment-disagree-link" + (votedAgrees === false ? " voted" : "");
-    html += "\" title=\"Disagree with this comment?\"><i class=\"fa fa-fw fa-thumbs-down\"></i> " + comment.disagrees + "</a>";
+    if(comment.deleted == 0) {
+        html += "<a href=\"#\" class=\"comment-agree-link" + (votedAgrees === true ? " voted" : "");
+        html += "\" title=\"Agree with this comment?\"><i class=\"fa fa-fw fa-thumbs-up\"></i> " + comment.agrees + "</a>";
+        html += "<a href=\"#\" class=\"comment-disagree-link" + (votedAgrees === false ? " voted" : "");
+        html += "\" title=\"Disagree with this comment?\"><i class=\"fa fa-fw fa-thumbs-down\"></i> " + comment.disagrees + "</a>";
+    }
     html += "</div>";
-
     // Child comments
 
     $.each(children, function(index, c) {
