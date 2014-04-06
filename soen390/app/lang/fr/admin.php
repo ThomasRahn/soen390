@@ -50,6 +50,8 @@ return array(
                     'totalFlags' => 'Nombre total de signalement(s).',
                     'narrativeName'=> 'Nom du récit',
                     'flags' => 'Signalements',
+		    'topic' => 'Sujet',
+		    'language' => 'Language',
                 ),
 
             'tips' => array(
@@ -133,5 +135,45 @@ return array(
                 ),
 
         ),
+ 'topic' => array(
+        'index' => array(
+            'table' => array(
+                'code'        => 'Code',
+                'description' => 'Description',
+                'narratives'  => 'Recits associer',
+                'manage'      => 'Gérer',
+                'add'         => 'Ajouter une sujet',
+                'published'   => 'Publier?',
+            ),
+
+            'addModal' => array(
+                'title'        => 'Ajouter une sujet',
+                'code'         => 'Code du suject',
+                'descEn'       => 'Description (English)',
+                'descFr'       => 'Description (French)',
+                'addButton'    => 'Ajouter',
+                'cancelButton' => 'Annuler',
+            ),
+
+            'editModal' => array(
+                'title'      => 'Modifier une sujet',
+                'saveButton' => 'Sauvegarder les changement',
+            ),
+        ),
+
+        'add' => array(
+            'saveFailed' => 'Unable to save Topic instance due to server error.',
+        ),
+
+        'delete' => array(
+            'success'    => 'Topic <code>:code</code> has been deleted. All previously narratives have been moved into the <code>:first</code> topic.',
+            'failure'    => 'Failed to delete topic <code>:code</code> due to a server side error. Changes have not been saved.',
+            'atleastOne' => 'There needs to be at least <strong>one</strong> remaining topic.',
+        ),
+
+        'togglePublish' => array(
+            'failure' => 'Failed to toggle publication status on topic <code>:code</code> due to a server side error. Please try again later.',
+        ),
+    ),
 
 );
