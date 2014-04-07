@@ -14,6 +14,7 @@ class PlayerController extends \BaseController
      */
     public function __construct(Narrative $narrative)
     {
+        $this->beforeFilter('maintenance');
         $this->narrative = $narrative;
     }
 
