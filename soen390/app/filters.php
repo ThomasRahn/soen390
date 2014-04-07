@@ -109,7 +109,7 @@ Route::filter('csrf', function()
 */
 Route::filter('maintenance', function()
 {
-	if (Configuration::get('maintenance') == 'true')
+	if (! Auth::check() && Configuration::get('maintenance') == 'true')
 	{
 		return Response::view('maintenance', array(), 503);
 	}
