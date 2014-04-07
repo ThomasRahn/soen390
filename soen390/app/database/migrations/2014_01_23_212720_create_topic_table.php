@@ -13,6 +13,8 @@ class CreateTopicTable extends Migration {
 	{
 		Schema::create('Topic', function($table)
 		{
+			$table->engine = 'InnoDB';
+			
 			$table->increments('TopicID');
 			$table->timestamps();
 			$table->string('Name');

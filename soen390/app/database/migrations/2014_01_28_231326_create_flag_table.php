@@ -13,6 +13,8 @@ class CreateFlagTable extends Migration {
 	{
 		Schema::create('Flag', function($table)
 		{
+			$table->engine = 'InnoDB';
+			
 			$table->increments('FlagID');
 			$table->integer('NarrativeID')->nullable();
 			$table->integer('CommentID')->nullable();
