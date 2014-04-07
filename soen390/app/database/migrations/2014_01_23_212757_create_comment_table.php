@@ -13,6 +13,8 @@ class CreateCommentTable extends Migration {
 	{
 		Schema::create('Comment', function($table)
 		{
+			$table->engine = 'InnoDB';
+			
 			$table->increments('CommentID');
 			$table->integer('NarrativeID');
 			$table->integer('CommentParentID')->nullable();

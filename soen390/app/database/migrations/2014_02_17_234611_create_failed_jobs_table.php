@@ -13,6 +13,8 @@ class CreateFailedJobsTable extends Migration {
 	{
 		Schema::create('failed_jobs', function($t)
 		{
+			$t->engine = 'InnoDB';
+
 			$t->increments('id');
 			$t->text('connection');
 			$t->text('queue');
