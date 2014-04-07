@@ -67,7 +67,8 @@ return array(
                     'form' => array(
                             'archive'  => 'Fichier d\'archive',
                             'category' => 'Catégorie défaut',
-                            'publish'  => 'Publier sur téléchargement?',
+                            'publish'  => 'Publier sur téléchargemen',
+                            'topic' => 'Sujet',
                         ),
                     'help' => array(
                             'archive' => 'Sélectionner le fichier contenant le(s) récit(s) que vous souhaitez télécharger. Seuls les fichiers .ZIP sont acceptés pour le moment. Le fichier doit être de <strong>:limit</strong> ou moins.',
