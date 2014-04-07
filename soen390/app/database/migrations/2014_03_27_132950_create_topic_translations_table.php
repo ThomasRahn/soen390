@@ -14,6 +14,8 @@ class CreateTopicTranslationsTable extends Migration {
 	{
 		Schema::create('topic_translations', function(Blueprint $table)
 		{
+			$table->engine = 'InnoDB';
+			
 			$table->increments('id');
 			$table->timestamps();
 			$table->integer('language_id')->unsigned();

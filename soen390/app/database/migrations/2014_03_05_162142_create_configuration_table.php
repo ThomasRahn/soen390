@@ -14,6 +14,8 @@ class CreateConfigurationTable extends Migration {
 	{
 		Schema::create('configuration', function(Blueprint $table)
 		{
+			$table->engine = 'InnoDB';
+			
 			$table->timestamps();
 			$table->string('key');
 			$table->text('value');
