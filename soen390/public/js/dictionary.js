@@ -9,7 +9,8 @@ var dictionary = {
                         "agrees": "Agrees",
                         "disagrees": "Disagrees",
                         "indifferent": "Indifferent",
-                        "language": "Language"
+                        "language": "Language",
+                        "agreeDisagree" : "Agree/Disagree"
                     },
                     "fr": {
                         "brand": 'Vous <i class="fa fa-comments"></i> D&eacute;lib&eacute;rez',
@@ -21,6 +22,7 @@ var dictionary = {
                         "agrees": "Approuver",
                         "disagrees": "Contre",
                         "indifferent": "Neutre",
-                        "language": "Langue"
+                        "language": "Langue",
+                        "agreeDisagree" : "D'accord/Contre"
                     }
                 }

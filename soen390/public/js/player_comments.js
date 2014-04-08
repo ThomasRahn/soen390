@@ -21,7 +21,7 @@ function loadComments() {
         // Hide the empty comments message if necessary.
         if (jsonReturn.length === 0) {
             $(".placeholder-comment").empty().show();
-            $("<p/>").html("This narrative does not have any comments yet.").appendTo(".placeholder-comment");
+            $("<p/>").html("This narrative does not have any comments yet. / Ce r&eacute;cit a pas du commentaire.").appendTo(".placeholder-comment");
             return;
         } else {
             $(".placeholder-comment").hide();
