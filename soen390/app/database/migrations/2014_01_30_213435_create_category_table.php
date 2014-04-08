@@ -13,6 +13,8 @@ class CreateCategoryTable extends Migration {
 	{
 		Schema::create('Category', function($table)
 		{
+			$table->engine = 'InnoDB';
+			
 			$table->increments('CategoryID');
 			$table->string('Description');
 		});

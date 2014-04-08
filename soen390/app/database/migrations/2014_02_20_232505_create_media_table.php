@@ -14,6 +14,8 @@ class CreateMediaTable extends Migration {
 	{
 		Schema::create('media', function(Blueprint $table)
 		{
+			$table->engine = 'InnoDB';
+			
 			$table->increments('id');
 			$table->timestamps();
 			$table->integer('narrative_id')->nullable();

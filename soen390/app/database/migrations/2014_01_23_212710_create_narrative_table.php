@@ -14,6 +14,8 @@ class CreateNarrativeTable extends Migration {
 	{
 		Schema::create('Narrative', function($table)
 		{
+			$table->engine = 'InnoDB';
+			
 			$table->increments('NarrativeID');
 			$table->integer('CategoryID');
 			$table->integer('TopicID');
