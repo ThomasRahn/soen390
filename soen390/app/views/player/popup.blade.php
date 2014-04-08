@@ -245,7 +245,7 @@
         <div class="container-fluid">
             <div class="row">
                 <header class="row brand-header">
-                    <span class="brand">You <i class="fa fa-comments"></i> Deliberate</span>
+                    <span class="brand"><i class="fa fa-comments"></i></span>
                 </header>
             </div>
             <div class="row">
@@ -276,11 +276,11 @@
                         </div>
 
                         <article class="controls">
-                            <div class="btn-group vote-btn-group" data-toggle="tooltip" title="You may vote after viewing the narrative.">
-                                <button type="button" class="btn btn-default agree-btn" id="agree" onclick="expressOpinion(1, this)" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative.">
+                            <div class="btn-group vote-btn-group" data-toggle="tooltip" title="You may vote after viewing the narrative./ Vous pouvez voter apres regarder ce r&eacute;cit">
+                                <button type="button" class="btn btn-default agree-btn" id="agree" onclick="expressOpinion(1, this)" disabled="disabled" data-toggle="tooltip" title="Agree with this narrative. / Je suis d'accord avec ce r&eacute;cit">
                                     <i class="fa fa-thumbs-up fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default disagree-btn" id="disagree" onclick="expressOpinion(2, this)" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative.">
+                                <button type="button" class="btn btn-default disagree-btn" id="disagree" onclick="expressOpinion(2, this)" disabled="disabled" data-toggle="tooltip" title="Disagree with this narrative. / je suis contre ce r&eacute;cit">
                                     <i class="fa fa-thumbs-down fa-fw"></i>
                                 </button>
                             </div>
@@ -297,11 +297,11 @@
                                 </button>
                             </div>
 
-                            <div class="btn-group tertiary-btn-group" data-toggle="tooltip" title="You may report and/or share after viewing the narrative.">
-                                <button type="button" class="btn btn-default flag-btn" disabled="disabled" title="Report this narrative." data-toggle="modal" data-target="#report-narrative">
+                            <div class="btn-group tertiary-btn-group" data-toggle="tooltip" title="You may report and/or share after viewing the narrative. / Vous pouvez signaler ou partarger apres regarder tous la r&eacute;cit">
+                                <button type="button" class="btn btn-default flag-btn" disabled="disabled" title="Report this narrative. / Signaler ce r&eacute;cit" data-toggle="modal" data-target="#report-narrative">
                                     <i class="fa fa-flag fa-fw"></i>
                                 </button>
-                                <button type="button" class="btn btn-default share-btn" disabled="disabled" data-toggle="tooltip" title="Share this narrative.">
+                                <button type="button" class="btn btn-default share-btn" disabled="disabled" data-toggle="tooltip" title="Share this narrative. / Partarger ce r&eacute;cit">
                                     <i class="fa fa-mail-forward fa-fw"></i>
                                 </button>
                             </div>
@@ -317,7 +317,7 @@
                 <div class="col-sm-6">
                     {{ Form::open(array('class' => 'form-horizontal comment-form')) }}
                         <fieldset class="comments-fieldset">
-                            <legend>Discuss This Narrative</legend>
+                            <legend>Discuss This Narrative / Discuter ce récit</legend>
 
                             <div class="form-group">
                                 <div class="col-xs-12">
@@ -335,8 +335,8 @@
                                 <div class="col-xs-12">
                                     <div class="pull-right">
                                         <span class="comment-post-result"></span>
-                                        {{ Form::submit('Post Comment', array('class' => 'btn btn-primary btn-sm')) }}
-                                        {{ Form::button('Clear', array('type' => 'reset', 'class' => 'btn btn-default btn-sm')) }}
+                                        {{ Form::submit('Post/Poste', array('class' => 'btn btn-primary btn-sm')) }}
+                                        {{ Form::button('Clear/D&eacute;barrasser', array('type' => 'reset', 'class' => 'btn btn-default btn-sm')) }}
                                     </div>
                                 </div>
                             </div>
@@ -359,7 +359,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Report an inappropriate narrative</h4>
+                        <h4 class="modal-title">Report an inappropriate narrative / Signaler un r&eacute;cit inappropri&eacute; </h4>
                     </div>
 
                     <div class="modal-body">
@@ -374,8 +374,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="report-submit-btn">Send Report</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="report-submit-btn">Send Report / Envoi</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel / Annuler </button>
                     </div>
                 </div>
             </div>
@@ -386,14 +386,16 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Share this narrative</h4>
+                        <h4 class="modal-title">Share this narrative / partager ce r&eacute;cit</h4>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="row">
                                 <input type="text" class="form-control text-center" id="href-text">
                                 <br>
-                                <p class="text-center text-muted">You can share this narrative by giving out the link above.<br>Copy by selecting the link and pressing <code>Ctrl + C</code> or <code> &#8984; + C</code>.</p>
+                                <p class="text-center text-muted">You can share this narrative by giving out the link above.<br>Copy by selecting the link and pressing <code>Ctrl + C</code> or <code> &#8984; + C</code>.
+                                    Vous pouvez partager ce r&eacute;cit en donnant le lien ci-dessus.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -450,7 +452,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Report an inappropriate comment</h4>
+                        <h4 class="modal-title">Report an inappropriate comment / Report un commentaire inappropri&eacute; </h4>
                     </div>
 
                     <div class="modal-body">
@@ -467,8 +469,8 @@
 
                             <div class="form-group">
                                 <div class="col-sm-12 text-right">
-                                    <button type="submit" class="btn btn-primary">Send Report</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Send Report / Envoi raport</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel / Annuler</button>
                                 </div>
                             </div>
                         </form>
@@ -542,7 +544,7 @@
                             old : old
                         },
                         success: function() {
-                            $.bootstrapGrowl("Opinion saved!", {type: "success", align: "left", offset: {from: "bottom", amount: 20}});
+                            $.bootstrapGrowl("Opinion saved! / Sauvegarder", {type: "success", align: "left", offset: {from: "bottom", amount: 20}});
                             $("#"+stance).attr("disabled","disabled")
 
                             if (stance === "agree") {

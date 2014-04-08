@@ -349,6 +349,7 @@
                 // Set Popularity
                 $('.popularity').html(dictionary[langCode].popularity);
 
+                $(".agree-disagree").html(dictionary[langCode].agreeDisagree)
                 // Set Spaghetti
                 $('.spaghetti').html(dictionary[langCode].spaghetti);
 
